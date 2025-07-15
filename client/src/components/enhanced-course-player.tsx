@@ -22,8 +22,11 @@ import {
   Award,
   FileText,
   Clock,
-  Target
+  Target,
+  Beaker,
+  X
 } from "lucide-react";
+import InteractiveLab from "./interactive-lab";
 
 interface CourseModule {
   id: string;
@@ -73,9 +76,18 @@ export default function EnhancedCoursePlayer() {
     complianceFramework: '',
     industry: ''
   });
+  const [showLab, setShowLab] = useState(false);
+  const [labCompleted, setLabCompleted] = useState(false);
   const [courseProgress, setCourseProgress] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isPlaying, setIsPlaying] = useState(false);
+  
+  // Handle lab completion
+  const handleLabComplete = (score: number) => {
+    setLabCompleted(true);
+    setShowLab(false);
+    // You can add score tracking here if needed
+  };
 
   // Sample course: Cyber Security Basics with branching
   const courseModules: CourseModule[] = [
@@ -391,6 +403,17 @@ export default function EnhancedCoursePlayer() {
   const module = getCurrentModule();
   const personalizedContent = getPersonalizedContent(module);
 
+  // Show lab if requested
+  if (showLab) {
+    return (
+      <InteractiveLab 
+        courseId={1} // This should be dynamic based on actual course
+        onComplete={handleLabComplete}
+        onClose={() => setShowLab(false)}
+      />
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <Card>
@@ -411,6 +434,12 @@ export default function EnhancedCoursePlayer() {
                 <Clock className="w-3 h-3 mr-1" />
                 {module.duration} min
               </Badge>
+              {labCompleted && (
+                <Badge variant="default" className="bg-purple-500">
+                  <Beaker className="w-3 h-3 mr-1" />
+                  Lab Complete
+                </Badge>
+              )}
             </div>
           </div>
           
@@ -700,12 +729,22 @@ export default function EnhancedCoursePlayer() {
                 )}
                 
                 {module.type !== 'personalization' && module.type !== 'completion' && (
-                  <Button 
-                    onClick={nextModule}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    Next Module
-                  </Button>
+                  <>
+                    <Button 
+                      onClick={() => setShowLab(true)}
+                      variant="outline"
+                      className="border-purple-500 text-purple-600 hover:bg-purple-50"
+                    >
+                      <Beaker className="w-4 h-4 mr-2" />
+                      {labCompleted ? 'Lab Completed' : 'Start Lab'}
+                    </Button>
+                    <Button 
+                      onClick={nextModule}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      Next Module
+                    </Button>
+                  </>
                 )}
                 
                 {module.type === 'completion' && (

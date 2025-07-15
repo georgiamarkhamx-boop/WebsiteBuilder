@@ -6,21 +6,26 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Clock, Users, BookOpen, Award, Search, Filter, Star, ChevronRight, Play } from "lucide-react";
+import { Clock, Users, BookOpen, Award, Search, Filter, Star, ChevronRight, Play, Beaker } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Course } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { courseCategories, getCourseBadge, getTagColors, getDifficultyColor } from "@/lib/course-data";
 import CoursePlayer from "./course-player";
+import InteractiveLab from "./interactive-lab";
 
 interface CoursesSectionProps {
   onShowSignup: () => void;
 }
 
+interface ExtendedCourse extends Course {
+  showLab?: boolean;
+}
+
 export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<ExtendedCourse | null>(null);
   const queryClient = useQueryClient();
 
   const { data: courses = [], isLoading } = useQuery<Course[]>({
@@ -86,6 +91,20 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
   const stats = getCourseStats();
 
   if (selectedCourse) {
+    // Show interactive lab if requested
+    if (selectedCourse.showLab) {
+      return (
+        <InteractiveLab 
+          courseId={selectedCourse.id}
+          onComplete={(score) => {
+            console.log(`Lab completed with score: ${score}`);
+            setSelectedCourse(null);
+          }}
+          onClose={() => setSelectedCourse(null)}
+        />
+      );
+    }
+    
     return (
       <CoursePlayer
         course={selectedCourse}
@@ -275,19 +294,29 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                               )}
                             </div>
                             
-                            {/* Action Button */}
-                            <Button 
-                              onClick={() => handleStartCourse(course)}
-                              className={cn(
-                                "w-full font-medium btn-touch transition-all duration-200",
-                                course.difficulty === 'Beginner' && "bg-pink-500 hover:bg-pink-600",
-                                course.difficulty === 'Intermediate' && "bg-purple-500 hover:bg-purple-600",
-                                course.difficulty === 'Advanced' && "bg-blue-500 hover:bg-blue-600"
-                              )}
-                              disabled={enrollMutation.isPending}
-                            >
-                              Try Sample
-                            </Button>
+                            {/* Action Buttons */}
+                            <div className="flex gap-2">
+                              <Button 
+                                onClick={() => handleStartCourse(course)}
+                                className={cn(
+                                  "flex-1 font-medium btn-touch transition-all duration-200",
+                                  course.difficulty === 'Beginner' && "bg-pink-500 hover:bg-pink-600",
+                                  course.difficulty === 'Intermediate' && "bg-purple-500 hover:bg-purple-600",
+                                  course.difficulty === 'Advanced' && "bg-blue-500 hover:bg-blue-600"
+                                )}
+                                disabled={enrollMutation.isPending}
+                              >
+                                Try Sample
+                              </Button>
+                              <Button 
+                                onClick={() => setSelectedCourse({ ...course, showLab: true })}
+                                variant="outline"
+                                className="px-4 border-purple-500 text-purple-600 hover:bg-purple-50"
+                                disabled={enrollMutation.isPending}
+                              >
+                                <Beaker className="w-4 h-4" />
+                              </Button>
+                            </div>
                           </div>
                         </CardContent>
                       </Card>
