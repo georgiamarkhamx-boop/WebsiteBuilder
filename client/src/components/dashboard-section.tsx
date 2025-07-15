@@ -1,156 +1,379 @@
+import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Trophy, 
+  BookOpen, 
+  Clock, 
+  Target, 
+  TrendingUp, 
+  Award, 
+  Users, 
+  Shield,
+  CheckCircle,
+  PlayCircle,
+  Calendar,
+  BarChart3
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function DashboardSection() {
-  const handleDashboardDemo = () => {
-    alert('Dashboard demo would be shown here. This would include a full interactive tour of the analytics and reporting features.');
-  };
+  const { data: courses = [] } = useQuery({
+    queryKey: ['/api/courses'],
+    queryFn: () => apiRequest("GET", "/api/courses").then(res => res.json())
+  });
 
-  const dashboardData = {
-    overallCompletion: 78,
-    averageScore: 82,
-    maturityScore: 3.7,
-    departments: [
-      { name: "IT Department", completion: 92 },
-      { name: "Marketing", completion: 68 },
-      { name: "Finance", completion: 85 },
-      { name: "HR", completion: 74 }
-    ],
-    recentCertifications: [
-      { name: "Sarah Johnson", course: "Cyber Basics", date: "Today" },
-      { name: "Michael Chen", course: "Phishing Defense", date: "Yesterday" },
-      { name: "Emma Wilson", course: "Data Protection", date: "Yesterday" },
-      { name: "James Taylor", course: "Remote Work Security", date: "2 days ago" }
-    ]
-  };
+  const { data: enrollments = [] } = useQuery({
+    queryKey: ['/api/enrollments', 'user', 1],
+    queryFn: () => apiRequest("GET", "/api/enrollments/user/1").then(res => res.json())
+  });
+
+  const { data: assessments = [] } = useQuery({
+    queryKey: ['/api/assessments', 'user', 1],
+    queryFn: () => apiRequest("GET", "/api/assessments/user/1").then(res => res.json())
+  });
+
+  // Calculate dashboard metrics
+  const totalCourses = courses.length;
+  const completedCourses = enrollments.filter(e => e.completed).length;
+  const inProgressCourses = enrollments.filter(e => !e.completed && e.progress > 0).length;
+  const overallProgress = enrollments.length > 0 
+    ? Math.round((completedCourses / enrollments.length) * 100)
+    : 0;
+
+  const recentAssessments = assessments.slice(0, 3);
+  const averageScore = assessments.length > 0 
+    ? Math.round(assessments.reduce((sum, a) => sum + (a.score || 0), 0) / assessments.length)
+    : 0;
+
+  const upcomingDeadlines = [
+    { course: "Cyber Basics", deadline: "2024-01-25", type: "completion" },
+    { course: "Data Protection", deadline: "2024-01-30", type: "assessment" },
+    { course: "Email Security", deadline: "2024-02-05", type: "quiz" }
+  ];
+
+  const leaderboard = [
+    { name: "Sarah Johnson", score: 95, department: "IT", avatar: "👩‍💻" },
+    { name: "Mike Chen", score: 92, department: "Operations", avatar: "👨‍💼" },
+    { name: "Emma Davis", score: 88, department: "HR", avatar: "👩‍💼" },
+    { name: "Alex Kumar", score: 85, department: "Finance", avatar: "👨‍💻" },
+    { name: "Lisa Wang", score: 82, department: "Marketing", avatar: "👩‍🎨" }
+  ];
 
   return (
-    <section id="dashboard" className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Comprehensive Business Dashboard</h2>
-          <p className="text-lg text-gray-600">Track employee progress, identify knowledge gaps, and measure your organization's security maturity with our intuitive dashboard.</p>
+    <div className="bg-gradient-to-br from-slate-50 via-white to-blue-50 py-16">
+      <div className="container mx-auto px-4">
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Security Training Dashboard
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl">
+            Track your progress, view analytics, and stay on top of your cybersecurity training goals.
+          </p>
         </div>
-        
-        <div className="grid md:grid-cols-2 gap-8 mb-12">
-          <div className="space-y-6">
-            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-              <h4 className="font-semibold text-gray-900 mb-2">Employee Progress Tracking</h4>
-              <p className="text-gray-600 mb-4">Monitor completion rates, quiz scores, and engagement metrics across your organization.</p>
-              <img 
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=300" 
-                alt="Employee dashboard showing progress tracking" 
-                className="w-full h-32 object-cover rounded-md" 
-              />
-            </div>
-            
-            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-              <h4 className="font-semibold text-gray-900 mb-2">Security Maturity Assessment</h4>
-              <p className="text-gray-600 mb-4">Visualize your organization's security posture and track improvements over time.</p>
-              <img 
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=300" 
-                alt="Security maturity assessment dashboard" 
-                className="w-full h-32 object-cover rounded-md" 
-              />
-            </div>
-          </div>
-          
-          <div className="space-y-6">
-            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-              <h4 className="font-semibold text-gray-900 mb-2">Department Heatmaps</h4>
-              <p className="text-gray-600 mb-4">Identify vulnerable departments and target additional training where it's needed most.</p>
-              <img 
-                src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=300" 
-                alt="Department security heatmap" 
-                className="w-full h-32 object-cover rounded-md" 
-              />
-            </div>
-            
-            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-              <h4 className="font-semibold text-gray-900 mb-2">Compliance Reporting</h4>
-              <p className="text-gray-600 mb-4">Generate reports for regulatory compliance and cyber insurance requirements.</p>
-              <img 
-                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=300" 
-                alt="Compliance reporting dashboard" 
-                className="w-full h-32 object-cover rounded-md" 
-              />
-            </div>
-          </div>
-        </div>
-        
-        <div className="text-center mb-12">
-          <Button size="lg" onClick={handleDashboardDemo}>
-            Request Dashboard Demo
-          </Button>
-        </div>
-        
-        {/* Dashboard Preview */}
-        <div className="bg-gray-100 rounded-lg p-6">
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="gradient-bg text-white p-4">
-              <h3 className="text-xl font-bold">Security Enhance Dashboard</h3>
-              <p className="text-sm opacity-90">Organization Security Overview</p>
-            </div>
-            
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h4 className="text-lg font-semibold">Last updated: Today, 9:41 AM</h4>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">{dashboardData.overallCompletion}%</div>
-                  <div className="text-sm text-gray-600">Overall Completion</div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Overview Cards */}
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-blue-600" />
+                Training Overview
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600">{completedCourses}</div>
+                  <div className="text-sm text-gray-600">Completed</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">{dashboardData.averageScore}%</div>
-                  <div className="text-sm text-gray-600">Average Score</div>
+                <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                  <div className="text-2xl font-bold text-yellow-600">{inProgressCourses}</div>
+                  <div className="text-sm text-gray-600">In Progress</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">{dashboardData.maturityScore}/5</div>
-                  <div className="text-sm text-gray-600">Maturity Score</div>
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">{averageScore}%</div>
+                  <div className="text-sm text-gray-600">Avg Score</div>
+                </div>
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-600">{totalCourses}</div>
+                  <div className="text-sm text-gray-600">Available</div>
                 </div>
               </div>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h5 className="font-semibold mb-4">Department Completion</h5>
-                  <div className="space-y-3">
-                    {dashboardData.departments.map((dept, index) => (
-                      <div key={index}>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">{dept.name}</span>
-                          <span className="font-medium">{dept.completion}%</span>
-                        </div>
-                        <div className="progress-bar">
-                          <div 
-                            className="progress-fill" 
-                            style={{ width: `${dept.completion}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    ))}
+            </CardContent>
+          </Card>
+
+          {/* Progress Ring */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-green-600" />
+                Overall Progress
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-center">
+                <div className="relative w-32 h-32">
+                  <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
+                    <path
+                      className="text-gray-200"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      fill="none"
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className="text-blue-600"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      fill="none"
+                      strokeDasharray={`${overallProgress}, 100`}
+                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-blue-600">{overallProgress}%</div>
+                      <div className="text-xs text-gray-600">Complete</div>
+                    </div>
                   </div>
                 </div>
-                
-                <div>
-                  <h5 className="font-semibold mb-4">Recent Certifications</h5>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Tabs defaultValue="courses" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="courses">My Courses</TabsTrigger>
+            <TabsTrigger value="assessments">Assessments</TabsTrigger>
+            <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="courses">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Current Courses */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-blue-600" />
+                    Current Courses
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {courses.slice(0, 3).map((course) => {
+                      const enrollment = enrollments.find(e => e.courseId === course.id);
+                      const progress = enrollment?.progress || 0;
+                      const isCompleted = enrollment?.completed || false;
+                      
+                      return (
+                        <div key={course.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                          <div className="text-2xl">{course.icon}</div>
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900">{course.title}</div>
+                            <div className="text-sm text-gray-600">{course.duration} minutes</div>
+                            <Progress value={progress} className="mt-2 h-2" />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {isCompleted ? (
+                              <CheckCircle className="w-5 h-5 text-green-600" />
+                            ) : (
+                              <PlayCircle className="w-5 h-5 text-blue-600" />
+                            )}
+                            <Badge variant={isCompleted ? "default" : "secondary"}>
+                              {isCompleted ? "Complete" : `${progress}%`}
+                            </Badge>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Upcoming Deadlines */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-orange-600" />
+                    Upcoming Deadlines
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
                   <div className="space-y-3">
-                    {dashboardData.recentCertifications.map((cert, index) => (
-                      <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100">
+                    {upcomingDeadlines.map((item, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
                         <div>
-                          <div className="font-medium text-sm">{cert.name}</div>
-                          <div className="text-xs text-gray-500">{cert.course}</div>
+                          <div className="font-medium text-gray-900">{item.course}</div>
+                          <div className="text-sm text-gray-600 capitalize">{item.type}</div>
                         </div>
-                        <div className="text-xs text-gray-500">{cert.date}</div>
+                        <div className="text-right">
+                          <div className="text-sm font-medium text-orange-600">{item.deadline}</div>
+                          <Badge variant="outline" className="text-xs">
+                            Due Soon
+                          </Badge>
+                        </div>
                       </div>
                     ))}
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
-          </div>
-        </div>
+          </TabsContent>
+
+          <TabsContent value="assessments">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Trophy className="w-5 h-5 text-yellow-600" />
+                  Recent Assessments
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentAssessments.map((assessment, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Award className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900">{assessment.type}</div>
+                          <div className="text-sm text-gray-600">
+                            {new Date(assessment.completedAt || '').toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-gray-900">{assessment.score || 0}%</div>
+                        <Badge 
+                          variant={assessment.score >= 80 ? "default" : "secondary"}
+                          className={assessment.score >= 80 ? "bg-green-500" : ""}
+                        >
+                          {assessment.score >= 80 ? "Passed" : "Review"}
+                        </Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="leaderboard">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-purple-600" />
+                  Company Leaderboard
+                </CardTitle>
+                <CardDescription>
+                  Top performers in security training across all departments
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {leaderboard.map((person, index) => (
+                    <div key={index} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className={cn(
+                          "w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold",
+                          index === 0 && "bg-yellow-500 text-white",
+                          index === 1 && "bg-gray-400 text-white",
+                          index === 2 && "bg-orange-500 text-white",
+                          index > 2 && "bg-gray-200 text-gray-600"
+                        )}>
+                          {index + 1}
+                        </div>
+                        <div className="text-2xl">{person.avatar}</div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">{person.name}</div>
+                        <div className="text-sm text-gray-600">{person.department}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-gray-900">{person.score}%</div>
+                        <div className="text-sm text-gray-600">Score</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-green-600" />
+                    Learning Trends
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">This Week</span>
+                      <span className="font-medium">3 hours</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">This Month</span>
+                      <span className="font-medium">12 hours</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Total Time</span>
+                      <span className="font-medium">48 hours</span>
+                    </div>
+                    <div className="pt-4 border-t">
+                      <div className="flex items-center gap-2 text-green-600">
+                        <TrendingUp className="w-4 h-4" />
+                        <span className="text-sm">+15% from last month</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-blue-600" />
+                    Security Maturity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Current Level</span>
+                      <Badge variant="default">Intermediate</Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Risk Score</span>
+                      <span className="font-medium text-green-600">Low</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">Next Milestone</span>
+                      <span className="font-medium">Advanced</span>
+                    </div>
+                    <div className="pt-4 border-t">
+                      <Button variant="outline" className="w-full">
+                        Take Assessment
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
-    </section>
+    </div>
   );
 }

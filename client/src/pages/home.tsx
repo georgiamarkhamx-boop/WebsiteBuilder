@@ -61,7 +61,7 @@ export default function Home() {
         <DashboardSection />
         <SpecializedSolutions />
         <CertificationSection />
-        <CoursesSection />
+        <CoursesSection onShowSignup={handleShowSignup} />
         <PricingSection onShowSignup={handleShowSignup} />
         <CTASection 
           onShowTryIt={() => setShowTryItModal(true)}

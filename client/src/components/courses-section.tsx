@@ -1,144 +1,315 @@
 import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useCourses } from "@/hooks/use-courses";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Clock, Users, BookOpen, Award, Search, Filter, Star, ChevronRight, Play } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Course } from "@shared/schema";
+import { apiRequest } from "@/lib/queryClient";
+import { courseCategories, getCourseBadge, getTagColors, getDifficultyColor } from "@/lib/course-data";
+import CoursePlayer from "./course-player";
 
-export default function CoursesSection() {
+interface CoursesSectionProps {
+  onShowSignup: () => void;
+}
+
+export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const { data: courses = [], isLoading } = useCourses(selectedCategory);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const queryClient = useQueryClient();
 
-  const categories = [
-    { id: "all", label: "All Courses" },
-    { id: "general", label: "General Employee" },
-    { id: "technical", label: "Technical Staff" },
-    { id: "leadership", label: "Leadership" },
-    { id: "compliance", label: "Compliance" }
-  ];
+  const { data: courses = [], isLoading } = useQuery<Course[]>({
+    queryKey: ['/api/courses'],
+    queryFn: () => apiRequest("GET", "/api/courses").then(res => res.json())
+  });
 
-  const handleCourseDemo = (courseId: string) => {
-    alert(`${courseId} course demo would be shown here with interactive content, quizzes, and scenarios.`);
-  };
-
-  const getBadgeVariant = (tag: string) => {
-    switch (tag.toLowerCase()) {
-      case "quizzes":
-      case "certificate":
-        return "bg-green-100 text-green-800";
-      case "videos":
-      case "tutorials":
-        return "bg-blue-100 text-blue-800";
-      case "games":
-      case "simulations":
-      case "scenarios":
-        return "bg-pink-100 text-pink-800";
-      case "hands-on":
-      case "labs":
-        return "bg-purple-100 text-purple-800";
-      default:
-        return "bg-gray-100 text-gray-800";
+  const enrollMutation = useMutation({
+    mutationFn: async (courseId: number) => {
+      return apiRequest("POST", "/api/enrollments", { courseId }).then(res => res.json());
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/enrollments'] });
     }
+  });
+
+  const completeMutation = useMutation({
+    mutationFn: async ({ courseId, score }: { courseId: number; score: number }) => {
+      return apiRequest("POST", "/api/assessments", {
+        type: "course_completion",
+        courseId,
+        score,
+        answers: {},
+        results: { score, completed: true }
+      }).then(res => res.json());
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/assessments'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/certificates'] });
+    }
+  });
+
+  const filteredCourses = courses.filter(course => {
+    const matchesCategory = selectedCategory === "all" || course.category.includes(selectedCategory);
+    const matchesSearch = !searchQuery || 
+      course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const handleStartCourse = (course: Course) => {
+    setSelectedCourse(course);
+    enrollMutation.mutate(course.id);
   };
 
-  const getCourseBadge = (course: any) => {
-    if (course.isPopular) return { text: "Popular", class: "badge-popular" };
-    if (course.isNew) return { text: "New", class: "badge-new" };
-    if (course.difficulty === "Advanced") return { text: "Advanced", class: "badge-advanced" };
-    return null;
+  const handleCompleteCourse = (courseId: number, score: number) => {
+    completeMutation.mutate({ courseId, score });
+    setSelectedCourse(null);
   };
 
-  if (isLoading) {
+  const getCourseStats = () => {
+    const stats = {
+      total: courses.length,
+      beginner: courses.filter(c => c.difficulty === 'Beginner').length,
+      intermediate: courses.filter(c => c.difficulty === 'Intermediate').length,
+      advanced: courses.filter(c => c.difficulty === 'Advanced').length,
+      popular: courses.filter(c => c.isPopular).length,
+      new: courses.filter(c => c.isNew).length
+    };
+    return stats;
+  };
+
+  const stats = getCourseStats();
+
+  if (selectedCourse) {
     return (
-      <section id="courses" className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="animate-pulse">
-              <div className="h-8 bg-gray-300 rounded w-1/3 mx-auto mb-4"></div>
-              <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto"></div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CoursePlayer
+        course={selectedCourse}
+        onComplete={handleCompleteCourse}
+        onClose={() => setSelectedCourse(null)}
+      />
     );
   }
 
   return (
-    <section id="courses" className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16">
+      <div className="container mx-auto px-4">
+        {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Learning Modules</h2>
-          <p className="text-lg text-gray-600">Comprehensive training solutions designed for different roles and skill levels within your organization.</p>
-        </div>
-        
-        {/* Course Categories */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          {categories.map((category) => (
-            <Button
-              key={category.id}
-              variant={selectedCategory === category.id ? "default" : "outline"}
-              onClick={() => setSelectedCategory(category.id)}
-              className="rounded-full"
-            >
-              {category.label}
-            </Button>
-          ))}
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course: any, index: number) => {
-            const badge = getCourseBadge(course);
-            
-            return (
-              <div 
-                key={course.id} 
-                className="bg-white rounded-lg shadow-sm card-hover relative animate-fadeIn"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {badge && (
-                  <div className={`course-badge ${badge.class}`}>
-                    {badge.text}
-                  </div>
-                )}
-                
-                <div className="p-6">
-                  <div className="feature-icon feature-icon-purple mb-4">
-                    {course.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">{course.title}</h3>
-                  <p className="text-gray-600 mb-4">{course.description}</p>
-                  
-                  <div className="flex items-center text-sm text-gray-500 mb-4">
-                    <span>{course.duration} minutes</span>
-                    <span className="mx-2">•</span>
-                    <span>{course.difficulty}</span>
-                  </div>
-                  
-                  <div className="flex gap-2 mb-4 flex-wrap">
-                    {course.tags?.map((tag: string, tagIndex: number) => (
-                      <Badge key={tagIndex} variant="secondary" className={getBadgeVariant(tag)}>
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  
-                  <Button 
-                    variant="ghost" 
-                    className="text-primary hover:text-purple-800 p-0"
-                    onClick={() => handleCourseDemo(course.title)}
-                  >
-                    Try Sample
-                  </Button>
-                </div>
-              </div>
-            );
-          })}
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Interactive Training Courses
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Comprehensive cybersecurity training designed to reduce human error and strengthen your organization's security posture.
+          </p>
         </div>
 
-        {courses.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500">No courses found for the selected category.</p>
+        {/* Stats Overview */}
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+          <Card className="text-center">
+            <CardContent className="pt-6">
+              <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
+              <div className="text-sm text-gray-600">Total Courses</div>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="pt-6">
+              <div className="text-2xl font-bold text-green-600">{stats.beginner}</div>
+              <div className="text-sm text-gray-600">Beginner</div>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="pt-6">
+              <div className="text-2xl font-bold text-yellow-600">{stats.intermediate}</div>
+              <div className="text-sm text-gray-600">Intermediate</div>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="pt-6">
+              <div className="text-2xl font-bold text-red-600">{stats.advanced}</div>
+              <div className="text-sm text-gray-600">Advanced</div>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="pt-6">
+              <div className="text-2xl font-bold text-purple-600">{stats.popular}</div>
+              <div className="text-sm text-gray-600">Popular</div>
+            </CardContent>
+          </Card>
+          <Card className="text-center">
+            <CardContent className="pt-6">
+              <div className="text-2xl font-bold text-pink-600">{stats.new}</div>
+              <div className="text-sm text-gray-600">New</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Search and Filter */}
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              placeholder="Search courses..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
           </div>
-        )}
+          <Button variant="outline" className="flex items-center gap-2">
+            <Filter className="w-4 h-4" />
+            Filter
+          </Button>
+        </div>
+
+        {/* Category Tabs */}
+        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-8">
+          <TabsList className="grid w-full grid-cols-5">
+            {courseCategories.map(category => (
+              <TabsTrigger key={category.id} value={category.id}>
+                {category.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          
+          {courseCategories.map(category => (
+            <TabsContent key={category.id} value={category.id} className="mt-8">
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-2">{category.label}</h3>
+                <p className="text-gray-600">{category.description}</p>
+              </div>
+              
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(6)].map((_, i) => (
+                    <Card key={i} className="animate-pulse">
+                      <div className="h-48 bg-gray-200 rounded-t-lg"></div>
+                      <CardHeader>
+                        <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                        <div className="h-3 bg-gray-200 rounded w-full"></div>
+                      </CardHeader>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredCourses.map(course => {
+                    const badge = getCourseBadge(course);
+                    const tags = course.tags || [];
+                    
+                    return (
+                      <Card key={course.id} className="group hover:shadow-lg transition-all duration-300 border-l-4 border-blue-200 hover:border-blue-400">
+                        <div className="relative">
+                          <div className="h-48 bg-gradient-to-br from-blue-100 to-purple-100 rounded-t-lg flex items-center justify-center">
+                            <div className="text-4xl">{course.icon}</div>
+                          </div>
+                          {badge && (
+                            <Badge 
+                              className={cn(
+                                "absolute top-2 right-2",
+                                badge.type === 'popular' && "bg-purple-500 hover:bg-purple-600",
+                                badge.type === 'new' && "bg-green-500 hover:bg-green-600",
+                                badge.type === 'advanced' && "bg-red-500 hover:bg-red-600"
+                              )}
+                            >
+                              {badge.text}
+                            </Badge>
+                          )}
+                        </div>
+                        
+                        <CardHeader>
+                          <div className="flex items-start justify-between">
+                            <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
+                              {course.title}
+                            </CardTitle>
+                            <Badge variant="outline" className={getDifficultyColor(course.difficulty)}>
+                              {course.difficulty}
+                            </Badge>
+                          </div>
+                          <CardDescription className="text-sm">
+                            {course.description}
+                          </CardDescription>
+                        </CardHeader>
+                        
+                        <CardContent>
+                          <div className="space-y-4">
+                            {/* Course Info */}
+                            <div className="flex items-center justify-between text-sm text-gray-600">
+                              <div className="flex items-center gap-1">
+                                <Clock className="w-4 h-4" />
+                                {course.duration} min
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <BookOpen className="w-4 h-4" />
+                                5 modules
+                              </div>
+                            </div>
+                            
+                            {/* Tags */}
+                            <div className="flex flex-wrap gap-1">
+                              {tags.slice(0, 3).map((tag, index) => {
+                                const tagColors = getTagColors(tag);
+                                return (
+                                  <Badge 
+                                    key={index} 
+                                    variant="secondary" 
+                                    className={cn(tagColors.bgColor, tagColors.color, "text-xs")}
+                                  >
+                                    {tag}
+                                  </Badge>
+                                );
+                              })}
+                              {tags.length > 3 && (
+                                <Badge variant="secondary" className="text-xs">
+                                  +{tags.length - 3} more
+                                </Badge>
+                              )}
+                            </div>
+                            
+                            {/* Action Button */}
+                            <Button 
+                              onClick={() => handleStartCourse(course)}
+                              className="w-full group-hover:bg-blue-600 transition-colors"
+                              disabled={enrollMutation.isPending}
+                            >
+                              <Play className="w-4 h-4 mr-2" />
+                              Start Course
+                              <ChevronRight className="w-4 h-4 ml-2" />
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
+            </TabsContent>
+          ))}
+        </Tabs>
+
+        {/* Call to Action */}
+        <div className="text-center mt-12">
+          <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+            <CardContent className="pt-8 pb-8">
+              <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Join thousands of organizations improving their security posture with our comprehensive training platform.
+              </p>
+              <Button 
+                onClick={onShowSignup}
+                variant="secondary"
+                size="lg"
+                className="bg-white text-blue-600 hover:bg-gray-100"
+              >
+                Start Your Free Trial
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

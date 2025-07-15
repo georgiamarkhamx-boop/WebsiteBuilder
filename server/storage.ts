@@ -249,7 +249,9 @@ export class MemStorage implements IStorage {
     const user: User = { 
       ...insertUser, 
       id,
-      createdAt: new Date()
+      createdAt: new Date(),
+      companyName: insertUser.companyName || null,
+      employeeCount: insertUser.employeeCount || null
     };
     this.users.set(id, user);
     return user;
@@ -272,7 +274,15 @@ export class MemStorage implements IStorage {
 
   async createCourse(insertCourse: InsertCourse): Promise<Course> {
     const id = this.currentCourseId++;
-    const course: Course = { ...insertCourse, id };
+    const course: Course = { 
+      ...insertCourse, 
+      id,
+      content: insertCourse.content || {},
+      tags: insertCourse.tags || null,
+      icon: insertCourse.icon || null,
+      isPopular: insertCourse.isPopular || false,
+      isNew: insertCourse.isNew || false
+    };
     this.courses.set(id, course);
     return course;
   }
@@ -296,7 +306,12 @@ export class MemStorage implements IStorage {
       ...insertEnrollment, 
       id,
       enrolledAt: new Date(),
-      completedAt: insertEnrollment.completed ? new Date() : null
+      completedAt: insertEnrollment.completed ? new Date() : null,
+      userId: insertEnrollment.userId || null,
+      courseId: insertEnrollment.courseId || null,
+      progress: insertEnrollment.progress || null,
+      completed: insertEnrollment.completed || false,
+      score: insertEnrollment.score || null
     };
     this.enrollments.set(id, enrollment);
     return enrollment;
@@ -330,7 +345,11 @@ export class MemStorage implements IStorage {
     const assessment: Assessment = { 
       ...insertAssessment, 
       id,
-      completedAt: new Date()
+      completedAt: new Date(),
+      userId: insertAssessment.userId || null,
+      score: insertAssessment.score || null,
+      answers: insertAssessment.answers || {},
+      results: insertAssessment.results || {}
     };
     this.assessments.set(id, assessment);
     return assessment;
@@ -354,7 +373,9 @@ export class MemStorage implements IStorage {
     const certificate: Certificate = { 
       ...insertCertificate, 
       id,
-      issuedAt: new Date()
+      issuedAt: new Date(),
+      userId: insertCertificate.userId || null,
+      courseId: insertCertificate.courseId || null
     };
     this.certificates.set(id, certificate);
     return certificate;

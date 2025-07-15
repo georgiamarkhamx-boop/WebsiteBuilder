@@ -31,6 +31,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Enrollment routes
+  app.post("/api/enrollments", async (req, res) => {
+    try {
+      const enrollmentData = {
+        userId: req.body.userId || 1, // Default user for demo
+        courseId: req.body.courseId,
+        progress: 0,
+        completed: false
+      };
+
+      const validatedData = insertEnrollmentSchema.parse(enrollmentData);
+      const enrollment = await storage.createEnrollment(validatedData);
+      res.json(enrollment);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid enrollment data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create enrollment" });
+    }
+  });
+
+  app.get("/api/enrollments/user/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const enrollments = await storage.getUserEnrollments(userId);
+      res.json(enrollments);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch enrollments" });
+    }
+  });
+
+  app.patch("/api/enrollments/:id", async (req, res) => {
+    try {
+      const enrollmentId = parseInt(req.params.id);
+      const { progress, completed, score } = req.body;
+      
+      const enrollment = await storage.updateEnrollmentProgress(enrollmentId, progress, completed, score);
+      if (!enrollment) {
+        return res.status(404).json({ message: "Enrollment not found" });
+      }
+      res.json(enrollment);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update enrollment" });
+    }
+  });
+
   // Assessment routes
   app.post("/api/assessments", async (req, res) => {
     try {
