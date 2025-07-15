@@ -72,15 +72,17 @@
 
 /* Ensure outline buttons are visible on gradient backgrounds */
 .gradient-bg .btn-outline {
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.9);
   color: white;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .gradient-bg .btn-outline:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   border-color: rgba(255, 255, 255, 1);
+  color: hsl(270, 50%, 50%);
 }
 
 .card-hover {

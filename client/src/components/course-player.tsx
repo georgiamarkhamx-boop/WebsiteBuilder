@@ -36,6 +36,7 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
   const [showQuizResults, setShowQuizResults] = useState(false);
   const [courseScore, setCourseScore] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   // Generate course modules based on course content
   const modules: Module[] = [
@@ -246,71 +247,126 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
             
             {currentModuleData.questions && (
               <div className="space-y-6">
-                {currentModuleData.questions.map((question, index) => (
-                  <Card key={question.id} className="border-l-4 border-blue-500">
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        Question {index + 1}
-                      </CardTitle>
-                      <CardDescription>
-                        {question.question}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        {question.options.map((option, optionIndex) => {
-                          const isSelected = quizAnswers[question.id] === optionIndex;
-                          return (
-                            <Button
-                              key={optionIndex}
-                              variant={isSelected ? "default" : "outline"}
-                              className={cn(
-                                "w-full text-left justify-start btn-touch p-4 h-auto text-sm transition-all duration-200",
-                                isSelected ? "bg-blue-600 hover:bg-blue-700 text-white" : "hover:bg-blue-50"
-                              )}
-                              onClick={() => handleQuizAnswer(question.id, optionIndex)}
-                            >
-                              <span className="font-medium mr-2">{String.fromCharCode(65 + optionIndex)}.</span>
-                              <span className="flex-1">{option}</span>
-                              {isSelected && <CheckCircle className="w-4 h-4 ml-2 text-white" />}
-                            </Button>
-                          );
-                        })}
-                      </div>
-                      
-                      {showQuizResults && (
-                        <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                          <div className="flex items-center space-x-2 mb-2">
-                            <CheckCircle className={cn(
-                              "w-4 h-4",
-                              quizAnswers[question.id] === question.correctAnswer 
-                                ? "text-green-600" 
-                                : "text-red-600"
-                            )} />
-                            <span className={cn(
-                              "text-sm font-medium",
-                              quizAnswers[question.id] === question.correctAnswer 
-                                ? "text-green-600" 
-                                : "text-red-600"
-                            )}>
-                              {quizAnswers[question.id] === question.correctAnswer ? "Correct" : "Incorrect"}
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-600">{question.explanation}</p>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
+                {/* Question Progress */}
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span>Question {currentQuestionIndex + 1} of {currentModuleData.questions.length}</span>
+                  <span>{Object.keys(quizAnswers).length}/{currentModuleData.questions.length} answered</span>
+                </div>
                 
-                {!showQuizResults && (
+                {/* Current Question */}
+                {(() => {
+                  const question = currentModuleData.questions[currentQuestionIndex];
+                  return (
+                    <Card className="border-l-4 border-blue-500">
+                      <CardHeader>
+                        <CardTitle className="text-lg">
+                          Question {currentQuestionIndex + 1}
+                        </CardTitle>
+                        <CardDescription>
+                          {question.question}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          {question.options.map((option, optionIndex) => {
+                            const isSelected = quizAnswers[question.id] === optionIndex;
+                            return (
+                              <button
+                                key={optionIndex}
+                                className={cn(
+                                  "w-full text-left p-4 rounded-lg border-2 transition-all duration-200 btn-touch",
+                                  "flex items-center justify-between min-h-[60px]",
+                                  isSelected 
+                                    ? "bg-blue-600 border-blue-600 text-white shadow-lg" 
+                                    : "bg-white border-gray-300 text-gray-800 hover:border-blue-400 hover:bg-blue-50"
+                                )}
+                                onClick={() => handleQuizAnswer(question.id, optionIndex)}
+                              >
+                                <div className="flex items-center">
+                                  <span className="font-bold text-lg mr-3 flex-shrink-0">
+                                    {String.fromCharCode(65 + optionIndex)}.
+                                  </span>
+                                  <span className="flex-1 text-sm font-medium">{option}</span>
+                                </div>
+                                {isSelected && (
+                                  <CheckCircle className="w-5 h-5 text-white flex-shrink-0 ml-2" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        
+                        {showQuizResults && quizAnswers[question.id] !== undefined && (
+                          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <CheckCircle className={cn(
+                                "w-4 h-4",
+                                quizAnswers[question.id] === question.correctAnswer 
+                                  ? "text-green-600" 
+                                  : "text-red-600"
+                              )} />
+                              <span className={cn(
+                                "text-sm font-medium",
+                                quizAnswers[question.id] === question.correctAnswer 
+                                  ? "text-green-600" 
+                                  : "text-red-600"
+                              )}>
+                                {quizAnswers[question.id] === question.correctAnswer ? "Correct" : "Incorrect"}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600">{question.explanation}</p>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  );
+                })()}
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center">
                   <Button 
-                    onClick={handleQuizSubmit} 
-                    className="w-full btn-touch"
-                    disabled={Object.keys(quizAnswers).length < currentModuleData.questions.length}
+                    variant="outline"
+                    onClick={() => setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1))}
+                    disabled={currentQuestionIndex === 0}
+                    className="btn-touch"
                   >
-                    Submit Quiz
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Previous
                   </Button>
+                  
+                  {currentQuestionIndex < currentModuleData.questions.length - 1 ? (
+                    <Button 
+                      onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
+                      disabled={quizAnswers[currentModuleData.questions[currentQuestionIndex].id] === undefined}
+                      className="btn-touch"
+                    >
+                      Next
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  ) : (
+                    <Button 
+                      onClick={handleQuizSubmit} 
+                      className="btn-touch bg-green-600 hover:bg-green-700 text-white font-medium"
+                      disabled={Object.keys(quizAnswers).length < currentModuleData.questions.length}
+                    >
+                      Submit Quiz
+                    </Button>
+                  )}
+                </div>
+                
+                {showQuizResults && (
+                  <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <h3 className="font-semibold text-green-800 mb-2">Quiz Results</h3>
+                    <p className="text-green-700">
+                      You scored {Math.round(calculateFinalScore())}% on this assessment.
+                    </p>
+                    <Button 
+                      onClick={handleModuleComplete} 
+                      className="w-full mt-4 btn-touch bg-green-600 hover:bg-green-700"
+                    >
+                      Continue to Next Module
+                    </Button>
+                  </div>
                 )}
               </div>
             )}
