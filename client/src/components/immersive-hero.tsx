@@ -280,7 +280,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
       </div>
 
       {/* 3D Cyber Environment */}
-      <div className="absolute inset-0 perspective-1000">
+      <div className="absolute inset-0 perspective-1000 hidden md:block">
         <div className={`relative w-full h-full transition-transform duration-1000 ${isActive ? 'transform-gpu' : ''}`}>
           
           {/* Security Nodes */}
@@ -313,7 +313,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
                 {node.type === 'server' && <Network className="w-8 h-8 text-white" />}
                 {node.type === 'user' && <Users className="w-8 h-8 text-white" />}
               </div>
-              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-white text-center whitespace-nowrap">
+              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-white text-center whitespace-nowrap hidden md:block">
                 {node.name}
               </div>
             </div>
