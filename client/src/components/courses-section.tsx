@@ -186,9 +186,13 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
 
         {/* Category Tabs */}
         <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-6 md:mb-8">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-1 md:gap-0">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-1 md:gap-0 h-auto">
             {courseCategories.map(category => (
-              <TabsTrigger key={category.id} value={category.id} className="btn-touch text-xs md:text-sm">
+              <TabsTrigger 
+                key={category.id} 
+                value={category.id} 
+                className="btn-touch text-xs md:text-sm px-2 py-2 h-auto leading-tight whitespace-nowrap overflow-hidden text-ellipsis"
+              >
                 {category.label}
               </TabsTrigger>
             ))}
@@ -197,8 +201,8 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
           {courseCategories.map(category => (
             <TabsContent key={category.id} value={category.id} className="mt-8">
               <div className="mb-6">
-                <h3 className="text-xl font-semibold mb-2">{category.label}</h3>
-                <p className="text-gray-600">{category.description}</p>
+                <h3 className="text-lg md:text-xl font-semibold mb-2">{category.label}</h3>
+                <p className="text-gray-600 text-sm md:text-base">{category.description}</p>
               </div>
               
               {isLoading ? (

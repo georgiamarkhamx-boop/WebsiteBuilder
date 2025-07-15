@@ -263,6 +263,16 @@ export default function SecurityAssessment() {
     }
   };
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'excellent': return 'Excellent';
+      case 'good': return 'Good';
+      case 'needs_improvement': return 'Needs Improvement';
+      case 'critical': return 'Critical';
+      default: return status;
+    }
+  };
+
   const getImpactColor = (impact: string) => {
     switch (impact) {
       case 'low': return 'text-green-600';
@@ -331,13 +341,13 @@ export default function SecurityAssessment() {
       </div>
 
       <Tabs defaultValue="continuous" className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="continuous">Continuous</TabsTrigger>
-          <TabsTrigger value="predictive">Predictive</TabsTrigger>
-          <TabsTrigger value="industry">Industry</TabsTrigger>
-          <TabsTrigger value="roadmap">AI Roadmap</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance</TabsTrigger>
-          <TabsTrigger value="vciso">vCISO</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 text-xs sm:text-sm">
+          <TabsTrigger value="continuous" className="px-2 sm:px-3">Continuous</TabsTrigger>
+          <TabsTrigger value="predictive" className="px-2 sm:px-3">Predictive</TabsTrigger>
+          <TabsTrigger value="industry" className="px-2 sm:px-3">Industry</TabsTrigger>
+          <TabsTrigger value="roadmap" className="px-2 sm:px-3">AI Roadmap</TabsTrigger>
+          <TabsTrigger value="compliance" className="px-2 sm:px-3">Compliance</TabsTrigger>
+          <TabsTrigger value="vciso" className="px-2 sm:px-3">vCISO</TabsTrigger>
         </TabsList>
 
         <TabsContent value="continuous" className="space-y-6">
@@ -355,22 +365,22 @@ export default function SecurityAssessment() {
               <div className="space-y-6">
                 {assessmentResults.map((result, index) => (
                   <div key={index} className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold text-lg">{result.category}</h3>
-                      <div className="flex items-center gap-2">
-                        <Badge className={getStatusColor(result.status)}>
-                          {result.status.replace('_', ' ')}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                      <h3 className="font-semibold text-base sm:text-lg">{result.category}</h3>
+                      <div className="flex items-center gap-2 justify-between sm:justify-end">
+                        <Badge className={`${getStatusColor(result.status)} text-white text-xs px-2 py-1`}>
+                          {getStatusText(result.status)}
                         </Badge>
-                        <span className="text-2xl font-bold">{result.score}%</span>
+                        <span className="text-xl sm:text-2xl font-bold">{result.score}%</span>
                       </div>
                     </div>
                     
                     <Progress value={result.score} className="mb-4" />
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       <div>
-                        <h4 className="font-medium mb-2">Recommendations</h4>
-                        <ul className="text-sm space-y-1">
+                        <h4 className="font-medium mb-2 text-sm sm:text-base">Recommendations</h4>
+                        <ul className="text-xs sm:text-sm space-y-1">
                           {result.recommendations.map((rec, i) => (
                             <li key={i} className="flex items-start gap-2">
                               <span className="text-blue-500">•</span>

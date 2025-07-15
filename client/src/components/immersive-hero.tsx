@@ -325,7 +325,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
               key={threat.id}
               className={`absolute cursor-pointer transition-all duration-500 ${
                 threat.active ? 'animate-pulse' : 'opacity-50'
-              } ${hoveredElement === threat.id ? 'scale-125' : 'scale-100'}`}
+              } ${hoveredElement === threat.id ? 'scale-125' : 'scale-100'} hidden md:block`}
               style={{
                 left: `${threat.position.x}%`,
                 top: `${threat.position.y}%`,
@@ -397,7 +397,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Immersive Cyber Defense
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto px-4">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto px-4 text-shadow-strong">
               Experience cybersecurity like never before. Step into a 3D virtual environment where you'll face real-world threats, 
               make critical decisions, and learn through interactive simulations that adapt to your responses.
             </p>
@@ -559,30 +559,30 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
           )}
 
           {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-12 px-4">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-400 mb-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-12 px-4 sm:px-6">
+            <div className="text-center p-3 sm:p-4">
+              <div className="text-2xl sm:text-3xl font-bold text-blue-400 mb-2">
                 {detectedThreats.length}
               </div>
-              <div className="text-gray-400">Threats Detected</div>
+              <div className="text-gray-400 text-xs sm:text-sm">Threats Detected</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-400 mb-2">
+            <div className="text-center p-3 sm:p-4">
+              <div className="text-2xl sm:text-3xl font-bold text-green-400 mb-2">
                 {securityNodes.filter(n => n.status === 'secure').length}
               </div>
-              <div className="text-gray-400">Secure Nodes</div>
+              <div className="text-gray-400 text-xs sm:text-sm">Secure Nodes</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-orange-400 mb-2">
+            <div className="text-center p-3 sm:p-4">
+              <div className="text-2xl sm:text-3xl font-bold text-orange-400 mb-2">
                 {securityNodes.filter(n => n.status === 'warning').length}
               </div>
-              <div className="text-gray-400">Warnings</div>
+              <div className="text-gray-400 text-xs sm:text-sm">Warnings</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-red-400 mb-2">
+            <div className="text-center p-3 sm:p-4">
+              <div className="text-2xl sm:text-3xl font-bold text-red-400 mb-2">
                 {securityNodes.filter(n => n.status === 'compromised').length}
               </div>
-              <div className="text-gray-400 px-2">Compromised</div>
+              <div className="text-gray-400 text-xs sm:text-sm px-2">Compromised</div>
             </div>
           </div>
         </div>
