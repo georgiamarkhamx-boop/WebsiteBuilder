@@ -442,24 +442,24 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
             {scenarios.map((scenario, index) => (
               <Card 
                 key={index} 
-                className={`bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer ${
-                  currentScenario === index ? 'ring-2 ring-blue-400' : ''
+                className={`bg-black/60 backdrop-blur-md border-white/30 hover:bg-black/70 transition-all duration-300 cursor-pointer ${
+                  currentScenario === index ? 'ring-2 ring-green-400' : ''
                 }`}
                 onClick={() => setCurrentScenario(index)}
               >
-                <CardContent className="p-6">
-                  <h3 className="text-white font-semibold mb-2">{scenario.name}</h3>
-                  <p className="text-gray-400 text-sm mb-4">{scenario.description}</p>
+                <CardContent className="p-4 sm:p-6">
+                  <h3 className="text-white font-semibold mb-2 text-sm sm:text-base">{scenario.name}</h3>
+                  <p className="text-gray-200 text-xs sm:text-sm mb-4 leading-relaxed">{scenario.description}</p>
                   <div className="flex justify-between items-center">
-                    <Badge variant="outline" className="text-xs border-gray-500 text-gray-300">
+                    <Badge variant="outline" className="text-xs border-gray-400 text-gray-200 bg-black/30">
                       {scenario.duration}
                     </Badge>
                     <Badge 
                       variant="outline" 
-                      className={`text-xs ${
-                        scenario.complexity === 'Expert' ? 'border-red-500 text-red-400' :
-                        scenario.complexity === 'Advanced' ? 'border-orange-500 text-orange-400' :
-                        'border-green-500 text-green-400'
+                      className={`text-xs bg-black/30 ${
+                        scenario.complexity === 'Expert' ? 'border-red-400 text-red-300' :
+                        scenario.complexity === 'Advanced' ? 'border-orange-400 text-orange-300' :
+                        'border-green-400 text-green-300'
                       }`}
                     >
                       {scenario.complexity}
@@ -472,8 +472,8 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
 
           {/* Real-time Threat Panel */}
           {(selectedThreat || selectedNode) && (
-            <Card className="bg-black/60 backdrop-blur-sm border-gray-700 max-w-2xl mx-auto">
-              <CardContent className="p-6">
+            <Card className="bg-black/70 backdrop-blur-md border-gray-500 max-w-2xl mx-auto">
+              <CardContent className="p-4 sm:p-6">
                 {selectedThreat && (
                   <div>
                     <div className="flex items-center gap-3 mb-4">
