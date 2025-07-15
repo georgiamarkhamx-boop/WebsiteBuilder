@@ -184,7 +184,7 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
               <p className="text-gray-700 mb-4">{currentModuleData.content}</p>
               <p className="text-sm text-gray-500">Duration: {currentModuleData.duration} minutes</p>
             </div>
-            <Button onClick={handleModuleComplete} className="w-full">
+            <Button onClick={handleModuleComplete} className="w-full btn-touch">
               Mark as Watched <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
@@ -211,23 +211,23 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                     The email looks legitimate but has some suspicious elements. What should you do?
                   </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <Button variant="outline" className="text-left justify-start">
+                <div className="grid grid-cols-1 gap-3">
+                  <Button variant="outline" className="text-left justify-start btn-touch p-4 h-auto">
                     Click the link and verify credentials
                   </Button>
-                  <Button variant="outline" className="text-left justify-start">
+                  <Button variant="outline" className="text-left justify-start btn-touch p-4 h-auto">
                     Forward to a colleague for verification
                   </Button>
-                  <Button variant="outline" className="text-left justify-start">
+                  <Button variant="outline" className="text-left justify-start btn-touch p-4 h-auto">
                     Contact IT department directly
                   </Button>
-                  <Button variant="outline" className="text-left justify-start">
+                  <Button variant="outline" className="text-left justify-start btn-touch p-4 h-auto">
                     Delete the email immediately
                   </Button>
                 </div>
               </div>
             </div>
-            <Button onClick={handleModuleComplete} className="w-full">
+            <Button onClick={handleModuleComplete} className="w-full btn-touch">
               Complete Simulation <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
@@ -254,15 +254,16 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         {question.options.map((option, optionIndex) => (
                           <Button
                             key={optionIndex}
                             variant={quizAnswers[question.id] === optionIndex ? "default" : "outline"}
-                            className="w-full text-left justify-start"
+                            className="w-full text-left justify-start btn-touch p-4 h-auto text-sm"
                             onClick={() => handleQuizAnswer(question.id, optionIndex)}
                           >
-                            {String.fromCharCode(65 + optionIndex)}. {option}
+                            <span className="font-medium mr-2">{String.fromCharCode(65 + optionIndex)}.</span>
+                            <span className="flex-1">{option}</span>
                           </Button>
                         ))}
                       </div>
@@ -295,7 +296,7 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                 {!showQuizResults && (
                   <Button 
                     onClick={handleQuizSubmit} 
-                    className="w-full"
+                    className="w-full btn-touch"
                     disabled={Object.keys(quizAnswers).length < currentModuleData.questions.length}
                   >
                     Submit Quiz

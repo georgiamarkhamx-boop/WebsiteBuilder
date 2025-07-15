@@ -154,7 +154,7 @@ export default function PricingSection({ onShowSignup }: PricingSectionProps) {
                 
                 <Button 
                   variant={plan.popular ? "default" : "outline"}
-                  className="w-full"
+                  className="w-full btn-touch"
                   onClick={() => plan.isCustom ? handleContactSales() : onShowSignup(plan.id)}
                 >
                   {plan.isCustom ? "Contact Sales" : "Get Started"}

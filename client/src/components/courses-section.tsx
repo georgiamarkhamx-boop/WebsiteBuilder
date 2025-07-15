@@ -99,51 +99,51 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
     <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
             Interactive Training Courses
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto">
             Comprehensive cybersecurity training designed to reduce human error and strengthen your organization's security posture.
           </p>
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+        <div className="stats-grid grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 mb-6 md:mb-8">
           <Card className="text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
-              <div className="text-sm text-gray-600">Total Courses</div>
+            <CardContent className="pt-4 md:pt-6">
+              <div className="text-xl md:text-2xl font-bold text-blue-600">{stats.total}</div>
+              <div className="text-xs md:text-sm text-gray-600">Total Courses</div>
             </CardContent>
           </Card>
           <Card className="text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-green-600">{stats.beginner}</div>
-              <div className="text-sm text-gray-600">Beginner</div>
+            <CardContent className="pt-4 md:pt-6">
+              <div className="text-xl md:text-2xl font-bold text-green-600">{stats.beginner}</div>
+              <div className="text-xs md:text-sm text-gray-600">Beginner</div>
             </CardContent>
           </Card>
           <Card className="text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-yellow-600">{stats.intermediate}</div>
-              <div className="text-sm text-gray-600">Intermediate</div>
+            <CardContent className="pt-4 md:pt-6">
+              <div className="text-xl md:text-2xl font-bold text-yellow-600">{stats.intermediate}</div>
+              <div className="text-xs md:text-sm text-gray-600">Intermediate</div>
             </CardContent>
           </Card>
           <Card className="text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-red-600">{stats.advanced}</div>
-              <div className="text-sm text-gray-600">Advanced</div>
+            <CardContent className="pt-4 md:pt-6">
+              <div className="text-xl md:text-2xl font-bold text-red-600">{stats.advanced}</div>
+              <div className="text-xs md:text-sm text-gray-600">Advanced</div>
             </CardContent>
           </Card>
           <Card className="text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-purple-600">{stats.popular}</div>
-              <div className="text-sm text-gray-600">Popular</div>
+            <CardContent className="pt-4 md:pt-6">
+              <div className="text-xl md:text-2xl font-bold text-purple-600">{stats.popular}</div>
+              <div className="text-xs md:text-sm text-gray-600">Popular</div>
             </CardContent>
           </Card>
           <Card className="text-center">
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-pink-600">{stats.new}</div>
-              <div className="text-sm text-gray-600">New</div>
+            <CardContent className="pt-4 md:pt-6">
+              <div className="text-xl md:text-2xl font-bold text-pink-600">{stats.new}</div>
+              <div className="text-xs md:text-sm text-gray-600">New</div>
             </CardContent>
           </Card>
         </div>
@@ -159,17 +159,17 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" className="flex items-center gap-2">
+          <Button variant="outline" className="flex items-center gap-2 btn-touch">
             <Filter className="w-4 h-4" />
             Filter
           </Button>
         </div>
 
         {/* Category Tabs */}
-        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-8">
-          <TabsList className="grid w-full grid-cols-5">
+        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="mb-6 md:mb-8">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-1 md:gap-0">
             {courseCategories.map(category => (
-              <TabsTrigger key={category.id} value={category.id}>
+              <TabsTrigger key={category.id} value={category.id} className="btn-touch text-xs md:text-sm">
                 {category.label}
               </TabsTrigger>
             ))}
@@ -195,7 +195,7 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                   ))}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="course-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                   {filteredCourses.map(course => {
                     const badge = getCourseBadge(course);
                     const tags = course.tags || [];
@@ -272,7 +272,7 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                             {/* Action Button */}
                             <Button 
                               onClick={() => handleStartCourse(course)}
-                              className="w-full group-hover:bg-blue-600 transition-colors"
+                              className="w-full group-hover:bg-blue-600 transition-colors btn-touch"
                               disabled={enrollMutation.isPending}
                             >
                               <Play className="w-4 h-4 mr-2" />
@@ -291,18 +291,18 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
         </Tabs>
 
         {/* Call to Action */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 md:mt-12">
           <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-            <CardContent className="pt-8 pb-8">
-              <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
-              <p className="text-lg mb-6 opacity-90">
+            <CardContent className="pt-6 pb-6 md:pt-8 md:pb-8">
+              <h3 className="text-xl md:text-2xl font-bold mb-4">Ready to Get Started?</h3>
+              <p className="text-base md:text-lg mb-6 opacity-90">
                 Join thousands of organizations improving their security posture with our comprehensive training platform.
               </p>
               <Button 
                 onClick={onShowSignup}
                 variant="secondary"
                 size="lg"
-                className="bg-white text-blue-600 hover:bg-gray-100"
+                className="bg-white text-blue-600 hover:bg-gray-100 btn-touch"
               >
                 Start Your Free Trial
               </Button>

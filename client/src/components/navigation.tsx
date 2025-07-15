@@ -31,7 +31,7 @@ export default function Navigation({ onShowLogin, onShowTryIt }: NavigationProps
   const MobileNavLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
     <button
       onClick={() => scrollToSection(href.replace('#', ''))}
-      className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-primary w-full text-left"
+      className="block px-3 py-3 text-base font-medium text-gray-600 hover:text-primary w-full text-left btn-touch rounded-md hover:bg-gray-50"
     >
       {children}
     </button>
@@ -70,18 +70,27 @@ export default function Navigation({ onShowLogin, onShowTryIt }: NavigationProps
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right">
-                <div className="flex flex-col space-y-4 mt-8">
+              <SheetContent side="right" className="w-80">
+                <div className="flex flex-col space-y-3 mt-8">
                   <MobileNavLink href="#courses">Courses</MobileNavLink>
                   <MobileNavLink href="#services">Services</MobileNavLink>
                   <MobileNavLink href="#dashboard">Dashboard</MobileNavLink>
                   <MobileNavLink href="#pricing">Pricing</MobileNavLink>
-                  <Button variant="ghost" onClick={onShowLogin} className="justify-start">
-                    Login
-                  </Button>
-                  <Button onClick={onShowTryIt} className="justify-start">
-                    Try It Free
-                  </Button>
+                  <div className="pt-4 border-t border-gray-200">
+                    <Button 
+                      variant="ghost" 
+                      onClick={onShowLogin} 
+                      className="justify-start w-full btn-touch mb-2"
+                    >
+                      Login
+                    </Button>
+                    <Button 
+                      onClick={onShowTryIt} 
+                      className="justify-start w-full btn-touch"
+                    >
+                      Try It Free
+                    </Button>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
