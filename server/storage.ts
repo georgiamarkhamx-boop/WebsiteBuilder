@@ -253,7 +253,14 @@ export class MemStorage implements IStorage {
       id,
       createdAt: new Date(),
       companyName: insertUser.companyName || null,
-      employeeCount: insertUser.employeeCount || null
+      employeeCount: insertUser.employeeCount || null,
+      mfaSecret: null,
+      mfaEnabled: false,
+      lastLogin: null,
+      loginAttempts: 0,
+      lockedUntil: null,
+      passwordResetToken: null,
+      passwordResetExpires: null
     };
     this.users.set(id, user);
     return user;

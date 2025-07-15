@@ -80,19 +80,19 @@ export default function PricingSection({ onShowSignup }: PricingSectionProps) {
   ];
 
   return (
-    <section id="pricing" className="py-16 bg-white">
+    <section id="pricing" className="section-padding py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-          <p className="text-lg text-gray-600">Choose the plan that fits your organization's needs</p>
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">Choose the plan that fits your organization's needs</p>
           
           {/* Pricing Toggle */}
-          <div className="flex justify-center mt-8">
-            <div className="pricing-toggle w-64 h-12 relative">
+          <div className="flex justify-center mt-6 md:mt-8">
+            <div className="pricing-toggle w-56 md:w-64 h-12 relative">
               <div className={`pricing-toggle-slider ${isYearly ? 'yearly' : ''}`}></div>
               <button 
                 onClick={() => setIsYearly(false)}
-                className={`absolute left-0 top-0 w-1/2 h-full flex items-center justify-center text-sm font-medium z-10 ${
+                className={`btn-touch absolute left-0 top-0 w-1/2 h-full flex items-center justify-center text-sm font-medium z-10 ${
                   !isYearly ? 'text-white' : 'text-gray-600'
                 }`}
               >
@@ -100,7 +100,7 @@ export default function PricingSection({ onShowSignup }: PricingSectionProps) {
               </button>
               <button 
                 onClick={() => setIsYearly(true)}
-                className={`absolute right-0 top-0 w-1/2 h-full flex items-center justify-center text-sm font-medium z-10 ${
+                className={`btn-touch absolute right-0 top-0 w-1/2 h-full flex items-center justify-center text-xs md:text-sm font-medium z-10 ${
                   isYearly ? 'text-white' : 'text-gray-600'
                 }`}
               >
@@ -110,27 +110,27 @@ export default function PricingSection({ onShowSignup }: PricingSectionProps) {
           </div>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="pricing-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {plans.map((plan) => {
             const price = plan.isCustom ? null : (isYearly ? plan.yearlyPrice : plan.monthlyPrice);
             
             return (
               <div 
                 key={plan.id}
-                className={`bg-white rounded-lg p-6 card-hover relative ${
+                className={`bg-white rounded-lg mobile-spacing p-4 md:p-6 card-hover relative ${
                   plan.popular ? 'border-2 border-primary' : 'border-2 border-gray-200'
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-full text-sm">
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-full text-xs md:text-sm">
                     Most Popular
                   </div>
                 )}
                 
                 <div className="text-center">
-                  <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-                  <p className="text-gray-600 mb-4">{plan.description}</p>
-                  <div className="text-3xl font-bold text-gray-900 mb-2">
+                  <h3 className="text-lg md:text-xl font-semibold mb-2">{plan.name}</h3>
+                  <p className="text-gray-600 mb-4 text-sm md:text-base">{plan.description}</p>
+                  <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                     {plan.isCustom ? (
                       <span>Custom</span>
                     ) : (

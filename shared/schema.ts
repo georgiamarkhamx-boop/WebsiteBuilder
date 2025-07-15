@@ -6,9 +6,16 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
-  password: text("password").notNull(),
+  password: text("password").notNull(), // bcrypt hashed
   companyName: text("company_name"),
   employeeCount: text("employee_count"),
+  mfaSecret: text("mfa_secret"), // TOTP secret for MFA
+  mfaEnabled: boolean("mfa_enabled").default(false),
+  lastLogin: timestamp("last_login"),
+  loginAttempts: integer("login_attempts").default(0),
+  lockedUntil: timestamp("locked_until"),
+  passwordResetToken: text("password_reset_token"),
+  passwordResetExpires: timestamp("password_reset_expires"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

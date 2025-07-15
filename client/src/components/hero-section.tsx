@@ -14,26 +14,26 @@ export default function HeroSection({ onShowDemo }: HeroSectionProps) {
 
   return (
     <div className="gradient-bg text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          <div className="animate-fadeIn">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className="animate-fadeIn text-center md:text-left">
+            <h1 className="hero-title text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">
               Making Cybersecurity Fun, Interactive & Effective
             </h1>
-            <p className="text-lg md:text-xl mb-6 opacity-90">
+            <p className="hero-subtitle text-base md:text-lg lg:text-xl mb-6 opacity-90 max-w-lg mx-auto md:mx-0">
               Bridging the human gap in security through engaging, interactive learning experiences that reduce incidents caused by human error.
             </p>
-            <div className="bg-white/20 backdrop-blur-sm p-4 rounded-lg mb-8">
-              <p className="font-medium">
+            <div className="bg-white/20 backdrop-blur-sm p-4 rounded-lg mb-6 md:mb-8">
+              <p className="font-medium text-sm md:text-base">
                 <span className="text-yellow-200 font-bold">Did you know?</span> 95% of cybersecurity breaches are caused by human error. Our interactive training reduces this risk by up to 70%.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 max-w-md mx-auto md:mx-0">
               <Button 
                 size="lg" 
                 variant="secondary" 
                 onClick={onShowDemo}
-                className="bg-white text-primary hover:bg-gray-100"
+                className="bg-white text-primary hover:bg-gray-100 btn-touch w-full sm:w-auto"
               >
                 Try Demo Module
               </Button>
@@ -41,14 +41,14 @@ export default function HeroSection({ onShowDemo }: HeroSectionProps) {
                 size="lg" 
                 variant="outline" 
                 onClick={scrollToPricing}
-                className="border-white text-white hover:bg-white hover:text-primary"
+                className="border-white text-white hover:bg-white hover:text-primary btn-touch w-full sm:w-auto"
               >
                 View Pricing
               </Button>
             </div>
           </div>
           
-          <div className="hidden md:block animate-slideIn">
+          <div className="hidden lg:block animate-slideIn">
             <div className="bg-white p-6 rounded-lg shadow-xl">
               <div className="flex items-center mb-4">
                 <div className="h-3 w-3 bg-red-400 rounded-full mr-2"></div>

@@ -39,25 +39,25 @@ export default function FeaturesSection() {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="section-padding py-12 md:py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Security Enhance?</h2>
-          <p className="text-lg text-gray-600">Our platform combines engaging content with proven learning techniques to make cybersecurity training effective and enjoyable.</p>
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Why Choose Security Enhance?</h2>
+          <p className="text-base md:text-lg text-gray-600 max-w-3xl mx-auto">Our platform combines engaging content with proven learning techniques to make cybersecurity training effective and enjoyable.</p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="feature-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className="bg-white p-6 rounded-lg shadow-sm card-hover animate-fadeIn"
+              className="bg-white mobile-spacing p-4 md:p-6 rounded-lg shadow-sm card-hover animate-fadeIn"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className={`feature-icon ${feature.gradient} mb-4`}>
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <h3 className="text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+              <p className="text-gray-600 text-sm md:text-base">{feature.description}</p>
             </div>
           ))}
         </div>

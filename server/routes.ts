@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { AuthService } from "./auth";
 import { insertUserSchema, insertEnrollmentSchema, insertAssessmentSchema } from "@shared/schema";
 import { z } from "zod";
 
@@ -109,7 +110,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User registration route
+  // Secure user registration
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const validatedData = insertUserSchema.parse(req.body);
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(validatedData.email) || 
+                           await storage.getUserByUsername(validatedData.username);
+      
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists" });
+      }
+
+      // Hash password
+      const hashedPassword = await AuthService.hashPassword(validatedData.password);
+      
+      // Create user
+      const user = await storage.createUser({
+        ...validatedData,
+        password: hashedPassword
+      });
+
+      res.status(201).json({ 
+        message: "User created successfully",
+        userId: user.id 
+      });
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid user data", errors: error.errors });
+      }
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Legacy registration route
   app.post("/api/users/register", async (req, res) => {
     try {
       const validatedData = insertUserSchema.parse(req.body);
@@ -130,7 +165,84 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User login route
+  // Secure authentication routes
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password, mfaToken } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password required" });
+      }
+
+      const { user, error } = await AuthService.authenticateUser(username, password);
+      
+      if (error || !user) {
+        return res.status(401).json({ message: error || "Authentication failed" });
+      }
+
+      // Check MFA if enabled
+      if (user.mfaEnabled && user.mfaSecret) {
+        if (!mfaToken) {
+          return res.status(200).json({ requireMFA: true });
+        }
+        
+        const mfaValid = AuthService.verifyMFAToken(user.mfaSecret, mfaToken);
+        if (!mfaValid) {
+          return res.status(401).json({ message: "Invalid MFA token" });
+        }
+      }
+
+      res.json({ 
+        message: "Login successful",
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          mfaEnabled: user.mfaEnabled
+        }
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/auth/setup-mfa", async (req, res) => {
+    try {
+      const { userId } = req.body;
+      
+      if (!userId) {
+        return res.status(400).json({ message: "User ID required" });
+      }
+
+      const { secret, qrCodeUrl } = await AuthService.setupMFA(userId);
+      
+      res.json({ secret, qrCodeUrl });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/auth/enable-mfa", async (req, res) => {
+    try {
+      const { userId, secret, token } = req.body;
+      
+      if (!userId || !secret || !token) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const success = await AuthService.enableMFA(userId, secret, token);
+      
+      if (!success) {
+        return res.status(400).json({ message: "Invalid verification token" });
+      }
+
+      res.json({ message: "MFA enabled successfully" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Legacy login route (less secure)
   app.post("/api/users/login", async (req, res) => {
     try {
       const { email, password } = req.body;

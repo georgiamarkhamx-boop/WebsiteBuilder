@@ -1,10 +1,65 @@
 import express, { type Request, Response, NextFunction } from "express";
+import helmet from "helmet";
+import { RateLimiterMemory } from "rate-limiter-flexible";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+// Security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: ["'self'", "wss:", "https:"],
+      frameSrc: ["'self'", "https://js.stripe.com"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }
+}));
+
+// Rate limiting
+const rateLimiter = new RateLimiterMemory({
+  points: 100, // Number of requests
+  duration: 60, // Per 60 seconds
+});
+
+const authRateLimiter = new RateLimiterMemory({
+  points: 5, // Number of login attempts
+  duration: 900, // Per 15 minutes
+});
+
+app.use(async (req, res, next) => {
+  try {
+    await rateLimiter.consume(req.ip || 'unknown');
+    next();
+  } catch (rejRes) {
+    res.status(429).json({ message: "Too many requests" });
+  }
+});
+
+// Stricter rate limiting for auth endpoints
+app.use("/api/auth", async (req, res, next) => {
+  try {
+    await authRateLimiter.consume(req.ip || 'unknown');
+    next();
+  } catch (rejRes) {
+    res.status(429).json({ message: "Too many login attempts" });
+  }
+});
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
 app.use((req, res, next) => {
   const start = Date.now();
