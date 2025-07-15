@@ -60,11 +60,15 @@ export default function Home() {
         <HeroSection 
           onShowDemo={() => setShowDemoModal(true)}
         />
-        <StatsSection />
-        <FeaturesSection />
+        <div className="cyber-gradient">
+          <StatsSection />
+        </div>
+        <div className="cyber-section">
+          <FeaturesSection />
+        </div>
         
         {/* Advanced Dashboard Section */}
-        <section id="dashboard" className="bg-gray-50 py-16">
+        <section id="dashboard" className="cyber-dark-section py-16">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Centralized Security Command Center</h2>
@@ -127,20 +131,24 @@ export default function Home() {
           </div>
         </section>
         
-        <section id="services">
+        <section id="services" className="cyber-section">
           <SpecializedSolutions />
         </section>
-        <CertificationSection />
-        <section id="courses">
+        <div className="cyber-dark-section">
+          <CertificationSection />
+        </div>
+        <section id="courses" className="cyber-section">
           <CoursesSection onShowSignup={handleShowSignup} />
         </section>
-        <section id="pricing">
+        <section id="pricing" className="cyber-dark-section">
           <PricingSection onShowSignup={handleShowSignup} />
         </section>
-        <CTASection 
-          onShowTryIt={() => setShowTryItModal(true)}
-          onShowSignup={() => handleShowSignup('growth')}
-        />
+        <div className="cyber-gradient">
+          <CTASection 
+            onShowTryIt={() => setShowTryItModal(true)}
+            onShowSignup={() => handleShowSignup('growth')}
+          />
+        </div>
       </main>
 
       <Footer />

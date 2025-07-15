@@ -70,6 +70,33 @@
   background: linear-gradient(135deg, hsl(270, 50%, 70%) 0%, hsl(210, 50%, 70%) 100%);
 }
 
+/* Cyber theme gradient backgrounds */
+.cyber-gradient {
+  background: linear-gradient(180deg, 
+    rgba(30, 41, 59, 1) 0%,
+    rgba(51, 65, 85, 0.95) 25%,
+    rgba(71, 85, 105, 0.9) 50%,
+    rgba(100, 116, 139, 0.8) 75%,
+    rgba(148, 163, 184, 0.6) 90%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+}
+
+.cyber-section {
+  background: linear-gradient(180deg, 
+    rgba(15, 23, 42, 0.05) 0%,
+    rgba(30, 41, 59, 0.03) 50%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+
+.cyber-dark-section {
+  background: linear-gradient(180deg, 
+    rgba(15, 23, 42, 0.1) 0%,
+    rgba(30, 41, 59, 0.05) 100%
+  );
+}
+
 /* Ensure outline buttons are visible on gradient backgrounds */
 .gradient-bg .btn-outline {
   border: 2px solid rgba(255, 255, 255, 0.9);
