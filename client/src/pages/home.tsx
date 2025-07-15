@@ -67,6 +67,19 @@ export default function Home() {
           <FeaturesSection />
         </div>
         
+        {/* TTX (Tabletop Exercises) Section */}
+        <section id="ttx" className="bg-gradient-to-br from-slate-900 to-indigo-900 py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 text-white">AI-Powered Tabletop Exercises (TTX)</h2>
+              <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+                Experience realistic crisis scenarios with AI-adaptive simulations that test your organization's incident response capabilities.
+              </p>
+            </div>
+            <AITTXSimulator />
+          </div>
+        </section>
+
         {/* Advanced Dashboard Section */}
         <section id="dashboard" className="cyber-dark-section py-16">
           <div className="container mx-auto px-4">

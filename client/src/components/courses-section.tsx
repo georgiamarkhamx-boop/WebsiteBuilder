@@ -59,7 +59,7 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
   });
 
   const filteredCourses = courses.filter(course => {
-    const matchesCategory = selectedCategory === "all" || course.category.includes(selectedCategory);
+    const matchesCategory = selectedCategory === "all" || course.category === selectedCategory || course.category.includes(selectedCategory);
     const matchesSearch = !searchQuery || 
       course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       course.description.toLowerCase().includes(searchQuery.toLowerCase());

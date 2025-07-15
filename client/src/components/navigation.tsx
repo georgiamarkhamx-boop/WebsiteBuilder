@@ -52,6 +52,7 @@ export default function Navigation({ onShowLogin, onShowTryIt }: NavigationProps
           
           <div className="hidden md:flex items-center space-x-6">
             <NavLink href="#courses">Courses</NavLink>
+            <NavLink href="#ttx">TTX</NavLink>
             <NavLink href="#services">Services</NavLink>
             <NavLink href="#dashboard">Dashboard</NavLink>
             <NavLink href="#pricing">Pricing</NavLink>
@@ -80,6 +81,7 @@ export default function Navigation({ onShowLogin, onShowTryIt }: NavigationProps
               <SheetContent side="right" className="w-80 bg-gradient-to-b from-slate-900 to-gray-900 border-l border-green-400/20">
                 <div className="flex flex-col space-y-3 mt-8">
                   <MobileNavLink href="#courses">Courses</MobileNavLink>
+                  <MobileNavLink href="#ttx">TTX</MobileNavLink>
                   <MobileNavLink href="#services">Services</MobileNavLink>
                   <MobileNavLink href="#dashboard">Dashboard</MobileNavLink>
                   <MobileNavLink href="#pricing">Pricing</MobileNavLink>

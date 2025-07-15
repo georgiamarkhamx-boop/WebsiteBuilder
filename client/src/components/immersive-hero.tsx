@@ -589,10 +589,24 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
       </div>
 
       {/* CSS Animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes grid-move {
           0% { transform: translate(0, 0); }
           100% { transform: translate(50px, 50px); }
+        }
+        @keyframes matrix-scan {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(100px); }
+        }
+        @keyframes digital-rain {
+          0% { transform: translateY(-100vh); opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { transform: translateY(100vh); opacity: 0; }
+        }
+        @keyframes circuit-pulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 1; }
         }
         .perspective-1000 {
           perspective: 1000px;
