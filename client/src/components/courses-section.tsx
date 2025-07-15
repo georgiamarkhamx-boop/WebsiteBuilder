@@ -195,21 +195,26 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                   ))}
                 </div>
               ) : (
-                <div className="course-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <div className="space-y-4">
                   {filteredCourses.map(course => {
                     const badge = getCourseBadge(course);
                     const tags = course.tags || [];
                     
                     return (
-                      <Card key={course.id} className="group hover:shadow-lg transition-all duration-300 border-l-4 border-blue-200 hover:border-blue-400">
+                      <Card key={course.id} className="group hover:shadow-lg transition-all duration-300 border-0 bg-white rounded-xl overflow-hidden">
                         <div className="relative">
-                          <div className="h-48 bg-gradient-to-br from-blue-100 to-purple-100 rounded-t-lg flex items-center justify-center">
-                            <div className="text-4xl">{course.icon}</div>
-                          </div>
+                          {/* Colored top bar */}
+                          <div className={cn(
+                            "h-2 w-full",
+                            course.difficulty === 'Beginner' && "bg-gradient-to-r from-pink-400 to-pink-500",
+                            course.difficulty === 'Intermediate' && "bg-gradient-to-r from-purple-400 to-purple-500",
+                            course.difficulty === 'Advanced' && "bg-gradient-to-r from-blue-400 to-blue-500"
+                          )} />
+                          
                           {badge && (
                             <Badge 
                               className={cn(
-                                "absolute top-2 right-2",
+                                "absolute top-4 right-4",
                                 badge.type === 'popular' && "bg-purple-500 hover:bg-purple-600",
                                 badge.type === 'new' && "bg-green-500 hover:bg-green-600",
                                 badge.type === 'advanced' && "bg-red-500 hover:bg-red-600"
@@ -220,50 +225,51 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                           )}
                         </div>
                         
-                        <CardHeader>
-                          <div className="flex items-start justify-between">
-                            <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
-                              {course.title}
-                            </CardTitle>
-                            <Badge variant="outline" className={getDifficultyColor(course.difficulty)}>
-                              {course.difficulty}
-                            </Badge>
-                          </div>
-                          <CardDescription className="text-sm">
-                            {course.description}
-                          </CardDescription>
-                        </CardHeader>
-                        
-                        <CardContent>
+                        <CardContent className="p-6">
                           <div className="space-y-4">
-                            {/* Course Info */}
-                            <div className="flex items-center justify-between text-sm text-gray-600">
+                            {/* Course Title */}
+                            <div>
+                              <CardTitle className="text-xl font-bold text-gray-900 mb-2">
+                                {course.title}
+                              </CardTitle>
+                              <CardDescription className="text-gray-600 leading-relaxed">
+                                {course.description}
+                              </CardDescription>
+                            </div>
+                            
+                            {/* Course Meta Info */}
+                            <div className="flex items-center gap-4 text-sm text-gray-500">
                               <div className="flex items-center gap-1">
                                 <Clock className="w-4 h-4" />
-                                {course.duration} min
+                                {course.duration} minutes
                               </div>
                               <div className="flex items-center gap-1">
                                 <BookOpen className="w-4 h-4" />
-                                5 modules
+                                Interactive
                               </div>
+                              <Badge variant="outline" className={cn(
+                                "text-xs",
+                                course.difficulty === 'Beginner' && "border-green-300 text-green-700",
+                                course.difficulty === 'Intermediate' && "border-yellow-300 text-yellow-700",
+                                course.difficulty === 'Advanced' && "border-red-300 text-red-700"
+                              )}>
+                                {course.difficulty}
+                              </Badge>
                             </div>
                             
                             {/* Tags */}
-                            <div className="flex flex-wrap gap-1">
-                              {tags.slice(0, 3).map((tag, index) => {
-                                const tagColors = getTagColors(tag);
-                                return (
-                                  <Badge 
-                                    key={index} 
-                                    variant="secondary" 
-                                    className={cn(tagColors.bgColor, tagColors.color, "text-xs")}
-                                  >
-                                    {tag}
-                                  </Badge>
-                                );
-                              })}
+                            <div className="flex flex-wrap gap-2">
+                              {tags.slice(0, 3).map((tag, index) => (
+                                <Badge 
+                                  key={index} 
+                                  variant="secondary" 
+                                  className="text-xs bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
                               {tags.length > 3 && (
-                                <Badge variant="secondary" className="text-xs">
+                                <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600">
                                   +{tags.length - 3} more
                                 </Badge>
                               )}
@@ -272,12 +278,15 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                             {/* Action Button */}
                             <Button 
                               onClick={() => handleStartCourse(course)}
-                              className="w-full group-hover:bg-blue-600 transition-colors btn-touch"
+                              className={cn(
+                                "w-full font-medium btn-touch transition-all duration-200",
+                                course.difficulty === 'Beginner' && "bg-pink-500 hover:bg-pink-600",
+                                course.difficulty === 'Intermediate' && "bg-purple-500 hover:bg-purple-600",
+                                course.difficulty === 'Advanced' && "bg-blue-500 hover:bg-blue-600"
+                              )}
                               disabled={enrollMutation.isPending}
                             >
-                              <Play className="w-4 h-4 mr-2" />
-                              Start Course
-                              <ChevronRight className="w-4 h-4 ml-2" />
+                              Try Sample
                             </Button>
                           </div>
                         </CardContent>
