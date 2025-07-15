@@ -745,54 +745,56 @@ export default function InteractiveLab({ courseId, onComplete, onClose }: Intera
       </div>
 
       {/* Lab Controls */}
-      <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-start">
-        <Card className="bg-black/60 backdrop-blur-sm border-gray-700">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-4">
+      <div className="absolute top-2 left-2 right-2 z-20 flex flex-col sm:flex-row justify-between items-start gap-2">
+        <Card className="bg-black/60 backdrop-blur-sm border-gray-700 w-full sm:w-auto">
+          <CardContent className="p-2 sm:p-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
               <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-blue-400" />
-                <span className="text-white font-semibold">{currentEnvironment.name}</span>
+                <Target className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+                <span className="text-white font-semibold text-sm sm:text-base truncate">{currentEnvironment.name}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-gray-300">Time:</span>
-                <span className={`font-mono ${timeRemaining < 60 ? 'text-red-400' : 'text-white'}`}>
-                  {formatTime(timeRemaining)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-gray-300">Score:</span>
-                <span className="text-white font-semibold">{score}%</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-gray-300">Found:</span>
-                <span className="text-white">{foundRisks.length}/{currentEnvironment.risks.length}</span>
+              <div className="flex items-center gap-4 text-xs sm:text-sm">
+                <div className="flex items-center gap-1">
+                  <span className="text-gray-300">Time:</span>
+                  <span className={`font-mono ${timeRemaining < 60 ? 'text-red-400' : 'text-white'}`}>
+                    {formatTime(timeRemaining)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-gray-300">Score:</span>
+                  <span className="text-white font-semibold">{score}%</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-gray-300">Found:</span>
+                  <span className="text-white">{foundRisks.length}/{currentEnvironment.risks.length}</span>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
         
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2 w-full sm:w-auto">
           <Button 
             onClick={() => setShowHints(!showHints)}
             variant={showHints ? "default" : "outline"}
-            className="bg-yellow-600 hover:bg-yellow-700 text-white"
+            className="bg-yellow-600 hover:bg-yellow-700 text-white px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm flex-1 sm:flex-none"
           >
-            <Lightbulb className="w-4 h-4 mr-2" />
-            {showHints ? 'Hide Hints' : 'Show Hints'}
+            <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+            <span className="hidden sm:inline">{showHints ? 'Hide Hints' : 'Show Hints'}</span>
           </Button>
-          <Button onClick={resetLab} variant="outline" className="border-gray-500 text-gray-300">
-            <RotateCcw className="w-4 h-4 mr-2" />
-            Reset
+          <Button onClick={resetLab} variant="outline" className="border-gray-500 text-gray-300 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm flex-1 sm:flex-none">
+            <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Reset</span>
           </Button>
-          <Button onClick={onClose} variant="outline" className="border-gray-500 text-gray-300">
-            <X className="w-4 h-4 mr-2" />
-            Exit
+          <Button onClick={onClose} variant="outline" className="border-gray-500 text-gray-300 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm flex-1 sm:flex-none">
+            <X className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Exit</span>
           </Button>
         </div>
       </div>
 
       {/* 3D Environment */}
-      <div className="absolute inset-0 perspective-1000 pt-20">
+      <div className="absolute inset-0 perspective-1000 pt-24 sm:pt-20">
         <div className="relative w-full h-full">
           
           {/* Security Risks */}
@@ -843,8 +845,8 @@ export default function InteractiveLab({ courseId, onComplete, onClose }: Intera
 
       {/* Risk Details Panel */}
       {selectedRisk && (
-        <Card className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-sm border-gray-700 max-w-2xl mx-auto z-30">
-          <CardContent className="p-6">
+        <Card className="absolute bottom-2 left-2 right-2 bg-black/80 backdrop-blur-sm border-gray-700 max-w-2xl mx-auto z-30">
+          <CardContent className="p-3 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div 

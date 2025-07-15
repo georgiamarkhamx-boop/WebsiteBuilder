@@ -128,7 +128,7 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
         </div>
 
         {/* Stats Overview */}
-        <div className="stats-grid grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 mb-6 md:mb-8">
+        <div className="stats-grid grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4 mb-6 md:mb-8">
           <Card className="text-center">
             <CardContent className="pt-4 md:pt-6">
               <div className="text-xl md:text-2xl font-bold text-blue-600">{stats.total}</div>
@@ -295,11 +295,11 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                             </div>
                             
                             {/* Action Buttons */}
-                            <div className="flex gap-2">
+                            <div className="flex flex-col sm:flex-row gap-2">
                               <Button 
                                 onClick={() => handleStartCourse(course)}
                                 className={cn(
-                                  "flex-1 font-medium btn-touch transition-all duration-200",
+                                  "flex-1 font-medium btn-touch transition-all duration-200 text-sm sm:text-base",
                                   course.difficulty === 'Beginner' && "bg-pink-500 hover:bg-pink-600",
                                   course.difficulty === 'Intermediate' && "bg-purple-500 hover:bg-purple-600",
                                   course.difficulty === 'Advanced' && "bg-blue-500 hover:bg-blue-600"
@@ -311,10 +311,11 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                               <Button 
                                 onClick={() => setSelectedCourse({ ...course, showLab: true })}
                                 variant="outline"
-                                className="px-4 border-purple-500 text-purple-600 hover:bg-purple-50"
+                                className="px-4 border-purple-500 text-purple-600 hover:bg-purple-50 text-sm sm:text-base sm:w-auto w-full"
                                 disabled={enrollMutation.isPending}
                               >
-                                <Beaker className="w-4 h-4" />
+                                <Beaker className="w-4 h-4 mr-2 sm:mr-0" />
+                                <span className="sm:hidden">3D Lab</span>
                               </Button>
                             </div>
                           </div>

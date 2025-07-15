@@ -342,48 +342,51 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
               <Zap className="w-4 h-4 mr-2" />
               Next-Generation Cybersecurity Training
             </Badge>
-            <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Immersive Cyber Defense
             </h1>
-            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto px-4">
               Experience cybersecurity like never before. Step into a 3D virtual environment where you'll face real-world threats, 
               make critical decisions, and learn through interactive simulations that adapt to your responses.
             </p>
           </div>
 
           {/* Interactive Controls */}
-          <div className="flex flex-col lg:flex-row gap-8 items-center justify-center mb-12">
-            <div className="flex gap-4">
+          <div className="flex flex-col gap-4 items-center justify-center mb-8 px-4">
+            <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
               <Button 
                 onClick={startSimulation}
                 disabled={simulationRunning}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base flex-1"
               >
                 {simulationRunning ? (
                   <>
-                    <Activity className="w-5 h-5 mr-2 animate-spin" />
-                    Simulation Running
+                    <Activity className="w-4 h-4 mr-2 animate-spin" />
+                    <span className="hidden sm:inline">Simulation Running</span>
+                    <span className="sm:hidden">Running</span>
                   </>
                 ) : (
                   <>
-                    <Play className="w-5 h-5 mr-2" />
-                    Start Threat Simulation
+                    <Play className="w-4 h-4 mr-2" />
+                    <span className="hidden sm:inline">Start Threat Simulation</span>
+                    <span className="sm:hidden">Start Simulation</span>
                   </>
                 )}
               </Button>
               <Button 
                 onClick={onShowDemo}
                 variant="outline"
-                className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 text-lg"
+                className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base flex-1"
               >
-                <Maximize2 className="w-5 h-5 mr-2" />
-                Enter Virtual World
+                <Maximize2 className="w-4 h-4 mr-2" />
+                <span className="hidden sm:inline">Enter Virtual World</span>
+                <span className="sm:hidden">Virtual World</span>
               </Button>
             </div>
           </div>
 
           {/* Scenario Selection */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 px-4">
             {scenarios.map((scenario, index) => (
               <Card 
                 key={index} 
