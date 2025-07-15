@@ -41,6 +41,16 @@ export const courseCategories: CourseCategory[] = [
     id: "compliance",
     label: "Compliance",
     description: "Regulatory compliance and governance training"
+  },
+  {
+    id: "ai_business",
+    label: "AI & Business",
+    description: "Leverage AI for business growth and competitive advantage"
+  },
+  {
+    id: "founders",
+    label: "Tech for Founders",
+    description: "Essential technology knowledge for startup founders"
   }
 ];
 

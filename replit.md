@@ -2,7 +2,7 @@
 
 ## Overview
 
-Security Enhance is an advanced, AI-driven cybersecurity training platform that revolutionizes security education through gamified learning, adaptive content, and intelligent analytics. The platform features highly interactive modules, AI-driven tabletop exercises (TTX), predictive risk analytics, customizable learning paths, emerging technology coverage, and a centralized dashboard integrating e-learning, assessments, and threat monitoring. The content is designed to be "better than all other courses" with comprehensive, immersive experiences that adapt to user behavior and skill levels.
+Security Enhance is an advanced, AI-driven training platform that has evolved beyond traditional cybersecurity to become a comprehensive business technology education platform. It features cybersecurity training, AI for business growth, tech for founders, and other business technology topics. The platform revolutionizes education through gamified learning, adaptive content, and intelligent analytics, featuring highly interactive modules, AI-driven tabletop exercises (TTX), predictive risk analytics, customizable learning paths, emerging technology coverage, and a centralized dashboard integrating e-learning, assessments, and threat monitoring.
 
 ## User Preferences
 
@@ -64,6 +64,9 @@ Preferred communication style: Simple, everyday language.
    - Zero-to-one security maturity building for organizations
    - Sector-specific training for healthcare, education, and non-profits
    - Advanced interactive content with crisis simulations and decision trees
+   - AI & Business Growth courses covering AI tools, ChatGPT, marketing automation, and ML
+   - Tech for Founders courses including tech stacks, no-code solutions, analytics, and team scaling
+   - Cross-platform business technology training beyond traditional cybersecurity
 
 ## Data Flow
 
@@ -105,7 +108,7 @@ Preferred communication style: Simple, everyday language.
 
 ### Database Schema
 - **users**: User accounts and company information
-- **courses**: Training module definitions and content (seeded with 13 courses)
+- **courses**: Training module definitions and content (seeded with 35+ courses including AI & Business and Tech for Founders)
 - **enrollments**: User course progress and completion
 - **assessments**: Quiz results and maturity scores
 - **certificates**: Generated certificates and verification

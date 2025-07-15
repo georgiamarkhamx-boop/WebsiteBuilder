@@ -438,6 +438,128 @@ export class MemStorage implements IStorage {
         isPopular: false,
         isNew: true,
         content: {}
+      },
+      // AI & Business Growth Courses
+      {
+        title: "AI for Business Growth",
+        description: "Learn how to leverage AI tools and strategies to accelerate business growth, improve efficiency, and gain competitive advantage.",
+        category: "ai_business",
+        duration: 90,
+        difficulty: "Intermediate",
+        tags: ["AI Tools", "Strategy", "ROI", "Automation"],
+        icon: "🤖",
+        isPopular: true,
+        isNew: true,
+        content: {}
+      },
+      {
+        title: "ChatGPT for Business",
+        description: "Master ChatGPT and other AI assistants to streamline workflows, content creation, and decision-making processes.",
+        category: "ai_business",
+        duration: 60,
+        difficulty: "Beginner",
+        tags: ["ChatGPT", "Productivity", "Content Creation"],
+        icon: "💬",
+        isPopular: true,
+        isNew: true,
+        content: {}
+      },
+      {
+        title: "AI-Powered Marketing",
+        description: "Transform your marketing strategy with AI tools for personalization, automation, and data-driven insights.",
+        category: "ai_business",
+        duration: 75,
+        difficulty: "Intermediate",
+        tags: ["Marketing", "Personalization", "Analytics"],
+        icon: "📈",
+        isPopular: false,
+        isNew: true,
+        content: {}
+      },
+      {
+        title: "Machine Learning for Business",
+        description: "Understand how to implement machine learning solutions to solve real business problems and drive innovation.",
+        category: "ai_business",
+        duration: 120,
+        difficulty: "Advanced",
+        tags: ["ML", "Data Science", "Innovation"],
+        icon: "🧠",
+        isPopular: false,
+        isNew: true,
+        content: {}
+      },
+      // Tech for Founders Courses
+      {
+        title: "Tech Stack for Startups",
+        description: "Choose the right technology stack for your startup, from MVP to scale, including cloud architecture and databases.",
+        category: "founders",
+        duration: 90,
+        difficulty: "Intermediate",
+        tags: ["Tech Stack", "MVP", "Cloud", "Databases"],
+        icon: "🏗️",
+        isPopular: true,
+        isNew: true,
+        content: {}
+      },
+      {
+        title: "No-Code Solutions for Founders",
+        description: "Build and scale your business using no-code tools and platforms without hiring developers.",
+        category: "founders",
+        duration: 60,
+        difficulty: "Beginner",
+        tags: ["No-Code", "Automation", "MVP"],
+        icon: "⚡",
+        isPopular: true,
+        isNew: true,
+        content: {}
+      },
+      {
+        title: "Data Analytics for Founders",
+        description: "Make data-driven decisions with analytics tools, KPI tracking, and business intelligence for startups.",
+        category: "founders",
+        duration: 75,
+        difficulty: "Intermediate",
+        tags: ["Analytics", "KPIs", "Business Intelligence"],
+        icon: "📊",
+        isPopular: false,
+        isNew: true,
+        content: {}
+      },
+      {
+        title: "Scaling Tech Teams",
+        description: "Learn how to build, manage, and scale technology teams as your startup grows from 1 to 100+ employees.",
+        category: "founders",
+        duration: 80,
+        difficulty: "Advanced",
+        tags: ["Team Building", "Scaling", "Management"],
+        icon: "👥",
+        isPopular: false,
+        isNew: true,
+        content: {}
+      },
+      {
+        title: "Product Management Fundamentals",
+        description: "Master product management principles, user research, roadmap planning, and feature prioritization.",
+        category: "founders",
+        duration: 100,
+        difficulty: "Intermediate",
+        tags: ["Product Management", "User Research", "Roadmaps"],
+        icon: "🎯",
+        isPopular: true,
+        isNew: true,
+        content: {}
+      },
+      {
+        title: "Cybersecurity for Startups",
+        description: "Essential cybersecurity practices for startups, including data protection, compliance, and risk management.",
+        category: "founders",
+        duration: 60,
+        difficulty: "Beginner",
+        tags: ["Security", "Compliance", "Risk Management"],
+        icon: "🔒",
+        isPopular: false,
+        isNew: true,
+        content: {}
       }
     ];
 
