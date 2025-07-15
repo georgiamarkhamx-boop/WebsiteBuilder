@@ -66,6 +66,12 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
     return matchesCategory && matchesSearch;
   });
 
+  // Debug logging
+  console.log("Selected category:", selectedCategory);
+  console.log("Total courses:", courses.length);
+  console.log("Filtered courses:", filteredCourses.length);
+  console.log("Sample course categories:", courses.slice(0, 5).map(c => c.category));
+
   const handleStartCourse = (course: Course) => {
     setSelectedCourse(course);
     enrollMutation.mutate(course.id);
