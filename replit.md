@@ -100,10 +100,16 @@ Preferred communication style: Simple, everyday language.
 
 ### Database Schema
 - **users**: User accounts and company information
-- **courses**: Training module definitions and content
+- **courses**: Training module definitions and content (seeded with 13 courses)
 - **enrollments**: User course progress and completion
 - **assessments**: Quiz results and maturity scores
 - **certificates**: Generated certificates and verification
+
+### Database Implementation
+- PostgreSQL database with Neon serverless hosting
+- Drizzle ORM for TypeScript-first database operations
+- Database seeded with comprehensive course catalog
+- Real-time data persistence for all user interactions
 
 ## Deployment Strategy
 

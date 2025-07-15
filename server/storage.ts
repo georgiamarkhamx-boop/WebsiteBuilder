@@ -4,6 +4,8 @@ import {
   type Enrollment, type InsertEnrollment, type Assessment, type InsertAssessment,
   type Certificate, type InsertCertificate
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -382,4 +384,111 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async getAllCourses(): Promise<Course[]> {
+    return await db.select().from(courses);
+  }
+
+  async getCourse(id: number): Promise<Course | undefined> {
+    const [course] = await db.select().from(courses).where(eq(courses.id, id));
+    return course || undefined;
+  }
+
+  async getCoursesByCategory(category: string): Promise<Course[]> {
+    return await db.select().from(courses).where(eq(courses.category, category));
+  }
+
+  async createCourse(insertCourse: InsertCourse): Promise<Course> {
+    const [course] = await db
+      .insert(courses)
+      .values(insertCourse)
+      .returning();
+    return course;
+  }
+
+  async getUserEnrollments(userId: number): Promise<Enrollment[]> {
+    return await db.select().from(enrollments).where(eq(enrollments.userId, userId));
+  }
+
+  async getEnrollment(userId: number, courseId: number): Promise<Enrollment | undefined> {
+    const [enrollment] = await db.select().from(enrollments)
+      .where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId)));
+    return enrollment || undefined;
+  }
+
+  async createEnrollment(insertEnrollment: InsertEnrollment): Promise<Enrollment> {
+    const [enrollment] = await db
+      .insert(enrollments)
+      .values(insertEnrollment)
+      .returning();
+    return enrollment;
+  }
+
+  async updateEnrollmentProgress(id: number, progress: number, completed?: boolean, score?: number): Promise<Enrollment | undefined> {
+    const [enrollment] = await db
+      .update(enrollments)
+      .set({ 
+        progress, 
+        completed: completed || false, 
+        score: score || null,
+        completedAt: completed ? new Date() : null 
+      })
+      .where(eq(enrollments.id, id))
+      .returning();
+    return enrollment || undefined;
+  }
+
+  async getUserAssessments(userId: number): Promise<Assessment[]> {
+    return await db.select().from(assessments).where(eq(assessments.userId, userId));
+  }
+
+  async createAssessment(insertAssessment: InsertAssessment): Promise<Assessment> {
+    const [assessment] = await db
+      .insert(assessments)
+      .values(insertAssessment)
+      .returning();
+    return assessment;
+  }
+
+  async getUserCertificates(userId: number): Promise<Certificate[]> {
+    return await db.select().from(certificates).where(eq(certificates.userId, userId));
+  }
+
+  async getCertificate(certificateId: string): Promise<Certificate | undefined> {
+    const [certificate] = await db.select().from(certificates).where(eq(certificates.certificateId, certificateId));
+    return certificate || undefined;
+  }
+
+  async createCertificate(insertCertificate: InsertCertificate): Promise<Certificate> {
+    const [certificate] = await db
+      .insert(certificates)
+      .values(insertCertificate)
+      .returning();
+    return certificate;
+  }
+}
+
+export const storage = new DatabaseStorage();
