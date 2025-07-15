@@ -387,10 +387,10 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center pt-20">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
-            <Badge variant="outline" className="mb-4 bg-green-500/20 border-green-400 text-green-200 px-4 py-2">
+            <Badge variant="outline" className="mb-6 bg-green-500/20 border-green-400 text-green-200 px-4 py-2">
               <Zap className="w-4 h-4 mr-2" />
               Next-Generation Cybersecurity Training
             </Badge>
