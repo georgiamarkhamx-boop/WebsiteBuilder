@@ -534,8 +534,10 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
       [questionId]: answerIndex
     }));
     
-    // Add visual feedback for selection
-    console.log(`Selected answer ${answerIndex} for question ${questionId}`);
+    // Show immediate feedback after selecting answer
+    setTimeout(() => {
+      setShowQuizResults(true);
+    }, 300);
   };
 
   const handleQuizSubmit = () => {
@@ -698,7 +700,7 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                                 key={optionIndex}
                                 className={cn(
                                   "w-full text-left p-4 rounded-lg border-2 transition-all duration-200 btn-touch",
-                                  "flex items-center justify-between min-h-[60px]",
+                                  "flex items-center justify-between min-h-[60px] text-sm sm:text-base",
                                   isSelected 
                                     ? "bg-blue-600 border-blue-600 text-white shadow-lg" 
                                     : "bg-white border-gray-300 text-gray-800 hover:border-blue-400 hover:bg-blue-50"
@@ -706,10 +708,10 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                                 onClick={() => handleQuizAnswer(question.id, optionIndex)}
                               >
                                 <div className="flex items-center">
-                                  <span className="font-bold text-lg mr-3 flex-shrink-0">
+                                  <span className="font-bold text-base sm:text-lg mr-3 flex-shrink-0">
                                     {String.fromCharCode(65 + optionIndex)}.
                                   </span>
-                                  <span className="flex-1 text-sm font-medium">{option}</span>
+                                  <span className="flex-1 text-sm sm:text-base font-medium leading-tight">{option}</span>
                                 </div>
                                 {isSelected && (
                                   <CheckCircle className="w-5 h-5 text-white flex-shrink-0 ml-2" />
@@ -720,24 +722,24 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                         </div>
                         
                         {showQuizResults && quizAnswers[question.id] !== undefined && (
-                          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                            <div className="flex items-center space-x-2 mb-2">
+                          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div className="flex items-center space-x-2 mb-3">
                               <CheckCircle className={cn(
-                                "w-4 h-4",
+                                "w-5 h-5",
                                 quizAnswers[question.id] === question.correctAnswer 
                                   ? "text-green-600" 
                                   : "text-red-600"
                               )} />
                               <span className={cn(
-                                "text-sm font-medium",
+                                "text-base font-semibold",
                                 quizAnswers[question.id] === question.correctAnswer 
                                   ? "text-green-600" 
                                   : "text-red-600"
                               )}>
-                                {quizAnswers[question.id] === question.correctAnswer ? "Correct" : "Incorrect"}
+                                {quizAnswers[question.id] === question.correctAnswer ? "✅ Correct!" : "❌ Incorrect"}
                               </span>
                             </div>
-                            <p className="text-sm text-gray-600">{question.explanation}</p>
+                            <p className="text-sm text-gray-700 leading-relaxed">{question.explanation}</p>
                           </div>
                         )}
                       </CardContent>
