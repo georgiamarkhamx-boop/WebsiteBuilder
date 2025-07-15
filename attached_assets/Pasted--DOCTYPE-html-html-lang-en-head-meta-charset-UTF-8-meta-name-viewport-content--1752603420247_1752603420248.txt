@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Enhance</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      width: 90%;
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- Header -->
+  <header class="bg-black text-white p-6">
+    <h1 class="text-3xl font-bold">Cyber Enhance</h1>
+    <p class="text-sm">Smart security training for smarter businesses.</p>
+  </header>
+
+  <!-- Hero -->
+  <section class="p-10 bg-white text-center">
+    <h2 class="text-2xl md:text-3xl font-bold mb-4">Your starter pack to break into Cyber Security</h2>
+    <p class="text-gray-600 mb-6">Everything you need to know to stay safe online — interactive, engaging, and up-to-date.</p>
+    <button onclick="showCourseDetails('cyber-basics')" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-800">View Course</button>
+  </section>
+
+  <!-- Modal -->
+  <div id="modal-cyber-training" class="modal">
+    <div class="modal-content">
+      <button class="text-right text-gray-500 float-right text-xl" onclick="closeModal('modal-cyber-training')">✕</button>
+      <h2 class="text-2xl font-bold mb-4">Cyber Security Basics</h2>
+      <div id="cyber-training-app" class="space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center p-4 mt-10">
+    <p>&copy; 2025 Cyber Enhance. All rights reserved.</p>
+  </footer>
+
+  <!-- JS Logic -->
+  <script>
+    function showCourseDetails(courseId) {
+      if (courseId === 'cyber-basics') {
+        document.getElementById('modal-cyber-training').style.display = 'block';
+        initCyberTraining();
+      }
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function initCyberTraining() {
+      const container = document.getElementById('cyber-training-app');
+      container.innerHTML = ''; // Clear previous content
+
+      const lesson = document.createElement('div');
+      lesson.innerHTML = `
+        <h3 class="text-xl font-semibold">🚨 Phishing Awareness</h3>
+        <p>Someone claiming to be your CEO sends an urgent email asking for gift cards. What do you do?</p>
+        <div class="space-x-4 mt-2">
+          <button onclick="alert('Correct! Always verify the sender.')" class="bg-green-600 text-white px-4 py-2 rounded">Verify the sender</button>
+          <button onclick="alert('Nope! This is how people get hacked 😬')" class="bg-red-600 text-white px-4 py-2 rounded">Buy the gift cards</button>
+        </div>
+        <hr class="my-4">
+        <p class="text-sm text-gray-500">This is a sample training module. Full training includes password safety, malware, GDPR and more.</p>
+      `;
+      container.appendChild(lesson);
+    }
+  </script>
+</body>
+</html>

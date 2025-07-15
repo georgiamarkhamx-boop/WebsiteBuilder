@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberShield: Interactive Security Training</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f9ff;
+            color: #374151;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+        
+        .content {
+            display: none;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        .option-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-card.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .option-card.correct {
+            border-color: #10b981;
+            background-color: #d1fae5;
+        }
+        
+        .option-card.incorrect {
+            border-color: #ef4444;
+            background-color: #fee2e2;
+        }
+        
+        .security-mistake {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(239, 68, 68, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+        
+        .mistake-tooltip {
+            position: absolute;
+            background-color: #1e293b;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            width: 200px;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .mistake-tooltip.visible {
+            opacity: 1;
+        }
+        
+        .character-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 12px;
+            background-color: #f3f4f6;
+            margin-bottom: 20px;
+        }
+        
+        .office-item {
+            position: absolute;
+            transition: all 0.5s ease;
+        }
+        
+        .desk {
+            width: 120px;
+            height: 60px;
+            background-color: #78350f;
+            border-radius: 5px;
+            bottom: 0;
+        }
+        
+        .computer {
+            width: 60px;
+            height: 50px;
+            background-color: #1e293b;
+            border-radius: 5px;
+            bottom: 60px;
+        }
+        
+        .computer-screen {
+            width: 50px;
+            height: 40px;
+            background-color: #0ea5e9;
+            border-radius: 3px;
+            bottom: 65px;
+            left: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 8px;
+            text-align: center;
+        }
+        
+        .character {
+            position: absolute;
+            bottom: 0;
+            left: 50px;
+            width: 80px;
+            height: 200px;
+            transition: left 1s ease;
+        }
+        
+        .character-body {
+            position: absolute;
+            bottom: 60px;
+            width: 60px;
+            height: 80px;
+            background-color: #3b82f6;
+            border-radius: 30px 30px 0 0;
+        }
+        
+        .character-head {
+            position: absolute;
+            bottom: 140px;
+            left: 10px;
+            width: 40px;
+            height: 40px;
+            background-color: #f59e0b;
+            border-radius: 50%;
+        }
+        
+        .character-legs {
+            position: absolute;
+            bottom: 0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .character-leg {
+            width: 20px;
+            height: 60px;
+            background-color: #1e3a8a;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .phishing-highlight {
+            background-color: rgba(239, 68, 68, 0.2);
+            border-bottom: 2px dotted #ef4444;
+            cursor: help;
+            position: relative;
+        }
+        
+        .phishing-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1e293b;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+        
+        .phishing-highlight:hover .phishing-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .password-strength {
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .password-weak {
+            background-color: #ef4444;
+            width: 33%;
+        }
+        
+        .password-medium {
+            background-color: #f59e0b;
+            width: 66%;
+        }
+        
+        .password-strong {
+            background-color: #10b981;
+            width: 100%;
+        }
+        
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .quiz-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        
+        .quiz-step::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: -50%;
+            width: 100%;
+            height: 2px;
+            background-color: #e5e7eb;
+            z-index: 1;
+        }
+        
+        .quiz-step:first-child::before {
+            display: none;
+        }
+        
+        .quiz-step-number {
+            width: 30px;
+            height: 30px;
+            background-color: #e5e7eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .quiz-step.active .quiz-step-number {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .quiz-step.completed .quiz-step-number {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .quiz-step.completed::before {
+            background-color: #10b981;
+        }
+        
+        .quiz-step.active::before {
+            background-color: #3b82f6;
+        }
+        
+        .quiz-question {
+            display: none;
+        }
+        
+        .quiz-question.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto py-8 px-4 max-w-5xl">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h1 class="text-3xl font-bold text-gray-800">Cyber<span class="text-blue-500">Shield</span></h1>
+                <div class="flex items-center">
+                    <div class="mr-4">
+                        <div class="text-sm text-gray-500">Security Score</div>
+                        <div class="text-xl font-bold text-blue-500" id="security-score">0</div>
+                    </div>
+                    <div class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full">
+                        <span id="progress-percentage">0%</span> Complete
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center mb-2">
+                <div class="h-2 flex-grow bg-gray-200 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-blue-500 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main content area -->
+        <div id="content-area">
+            <!-- Welcome Screen -->
+            <div id="screen-welcome" class="content active">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-2">Welcome to CyberShield</h2>
+                        <p class="text-lg">Interactive Cybersecurity Training for the Modern Workplace</p>
+                    </div>
+                    
+                    <div class="p-8">
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-6">Recent Cybersecurity Incidents</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div class="border-l-4 border-red-500 bg-gray-50 p-4 rounded-r-lg">
+                                    <h4 class="font-bold">Colonial Pipeline Ransomware</h4>
+                                    <p class="text-sm text-gray-600">A major pipeline operator was forced to shut down after a ransomware attack.</p>
+                                </div>
+                                
+                                <div class="border-l-4 border-yellow-500 bg-gray-50 p-4 rounded-r-lg">
+                                    <h4 class="font-bold">SolarWinds Supply Chain Attack</h4>
+                                    <p class="text-sm text-gray-600">Attackers compromised software updates to infiltrate thousands of organizations.</p>
+                                </div>
+                                
+                                <div class="border-l-4 border-purple-500 bg-gray-50 p-4 rounded-r-lg">
+                                    <h4 class="font-bold">Healthcare Ransomware Surge</h4>
+                                    <p class="text-sm text-gray-600">Hospitals faced critical disruptions as ransomware attacks increased 71%.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 p-6 rounded-lg mb-8">
+                                <div class="flex items-start">
+                                    <div class="bg-blue-100 p-2 rounded-full mr-4 mt-1">
+                                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-lg text-blue-800 mb-2">Did You Know?</h4>
+                                        <p class="text-blue-800 mb-2">
+                                            95% of cybersecurity breaches are caused by human error. The good news? 
+                                            With proper training, most of these incidents can be prevented.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Create Your Profile</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 font-medium mb-2">Your Name</label>
+                                        <input type="text" id="user-name" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter your name">
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 font-medium mb-2">Department</label>
+                                        <select id="user-department" class="w-full p-3 border border-gray-300 rounded-lg">
+                                            <option value="it">IT / Technology</option>
+                                            <option value="hr">Human Resources</option>
+                                            <option value="finance">Finance</option>
+                                            <option value="marketing">Marketing</option>
+                                            <option value="operations">Operations</option>
+                                            <option value="executive">Executive</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label class="block text-gray-700 font-medium mb-2">Experience Level</label>
+                                        <div class="grid grid-cols-3 gap-3">
+                                            <div class="option-card" onclick="selectExperience(this, 'beginner')">
+                                                <div class="text-center">
+                                                    <div class="bg-green-100 p-2 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                                                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
+                                                    </div>
+                                                    <div class="font-medium">Beginner</div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="option-card" onclick="selectExperience(this, 'intermediate')">
+                                                <div class="text-center">
+                                                    <div class="bg-yellow-100 p-2 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                                                        <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                                    </div>
+                                                    <div class="font-medium">Intermediate</div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="option-card" onclick="selectExperience(this, 'advanced')">
+                                                <div class="text-center">
+                                                    <div class="bg-blue-100 p-2 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                                                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                                    </div>
+                                                    <div class="font-medium">Advanced</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-bold text-lg mb-4">What You'll Learn</h4>
+                                    
+                                    <div class="flex items-start mb-4 bg-gray-50 p-4 rounded-lg">
+                                        <div class="bg-red-100 p-2 rounded-full mr-3">
+                                            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold">Identify Security Threats</h4>
+                                            <p class="text-sm text-gray-600">Learn to spot phishing emails, social engineering attempts, and other common attack vectors.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start mb-4 bg-gray-50 p-4 rounded-lg">
+                                        <div class="bg-yellow-100 p-2 rounded-full mr-3">
+                                            <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold">Protect Sensitive Data</h4>
+                                            <p class="text-sm text-gray-600">Discover best practices for password management, data handling, and secure communication.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start bg-gray-50 p-4 rounded-lg">
+                                        <div class="bg-green-100 p-2 rounded-full mr-3">
+                                            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold">Respond to Incidents</h4>
+                                            <p class="text-sm text-gray-600">Learn the proper steps to take when you encounter a potential security incident.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button onclick="startTraining()" class="btn btn-primary">Start Training</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 3D Office Simulation -->
+            <div id="screen-simulation" class="content">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Interactive Office Simulation</h2>
+                        
+                        <div class="mb-6">
+                            <p class="mb-4">
+                                Welcome to your first day at the office! As you walk through this typical workday, 
+                                try to identify the security risks and mistakes. Click on the red markers to learn more.
+                            </p>
+                            
+                            <div class="bg-yellow-50 p-4 rounded-lg mb-6">
+                                <div class="flex items-center">
+                                    <svg class="w-6 h-6 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <p class="text-yellow-800">Find all 5 security mistakes to continue to the next section.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="character-container" id="office-scene">
+                            <!-- Office Background Elements -->
+                            <div class="office-item" style="position: absolute; width: 60px; height: 120px; background-color: #78350f; border-radius: 5px 5px 0 0; bottom: 0; left: 50px;">
+                                <div style="position: absolute; width: 10px; height: 10px; background-color: #f59e0b; border-radius: 50%; bottom: 60px; right: 10px;"></div>
+                            </div>
+                            
+                            <div style="position: absolute; width: 80px; height: 100px; background-color: #bfdbfe; border: 5px solid #78350f; border-radius: 5px; top: 50px; right: 100px;"></div>
+                            
+                            <!-- First Desk Setup -->
+                            <div class="office-item desk" style="left: 150px;"></div>
+                            <div class="office-item computer" style="left: 180px;"></div>
+                            <div class="office-item computer-screen" style="left: 185px;">
+                                <span>EMAIL</span>
+                            </div>
+                            
+                            <!-- Security Mistake 1: Sticky note with password -->
+                            <div class="security-mistake" style="left: 220px; bottom: 70px;" onclick="showMistakeTooltip(1)">1</div>
+                            <div class="mistake-tooltip" id="mistake-tooltip-1">
+                                <h4 class="font-bold mb-1">Password on Sticky Note</h4>
+                                <p class="text-sm">Never write down passwords and leave them visible. This makes it easy for anyone to access your accounts.</p>
+                            </div>
+                            
+                            <!-- Second Desk Setup -->
+                            <div class="office-item desk" style="left: 350px;"></div>
+                            <div class="office-item computer" style="left: 380px;"></div>
+                            <div class="office-item computer-screen" style="left: 385px;">
+                                <span>UNLOCKED</span>
+                            </div>
+                            
+                            <!-- Security Mistake 2: Unlocked computer -->
+                            <div class="security-mistake" style="left: 410px; bottom: 70px;" onclick="showMistakeTooltip(2)">2</div>
+                            <div class="mistake-tooltip" id="mistake-tooltip-2">
+                                <h4 class="font-bold mb-1">Unlocked Computer</h4>
+                                <p class="text-sm">Always lock your computer when you step away, even for a minute. Use Windows+L or Ctrl+Cmd+Q to quickly lock your screen.</p>
+                            </div>
+                            
+                            <!-- Third Desk Setup -->
+                            <div class="office-item desk" style="left: 550px;"></div>
+                            <div class="office-item computer" style="left: 580px;"></div>
+                            <div class="office-item computer-screen" style="left: 585px;">
+                                <span>DOCS</span>
+                            </div>
+                            
+                            <!-- Security Mistake 3: Sensitive documents -->
+                            <div class="security-mistake" style="left: 610px; bottom: 70px;" onclick="showMistakeTooltip(3)">3</div>
+                            <div class="mistake-tooltip" id="mistake-tooltip-3">
+                                <h4 class="font-bold mb-1">Exposed Sensitive Documents</h4>
+                                <p class="text-sm">Confidential information should not be left visible on your screen where others can see it. Use privacy screens and be mindful of your surroundings.</p>
+                            </div>
+                            
+                            <!-- Security Mistake 4: Unknown USB drive -->
+                            <div class="security-mistake" style="left: 500px; bottom: 20px;" onclick="showMistakeTooltip(4)">4</div>
+                            <div class="mistake-tooltip" id="mistake-tooltip-4">
+                                <h4 class="font-bold mb-1">Unknown USB Drive</h4>
+                                <p class="text-sm">Never plug in unknown USB drives. They could contain malware that automatically installs when connected.</p>
+                            </div>
+                            
+                            <!-- Security Mistake 5: Visitor without badge -->
+                            <div class="security-mistake" style="left: 700px; bottom: 100px;" onclick="showMistakeTooltip(5)">5</div>
+                            <div class="mistake-tooltip" id="mistake-tooltip-5">
+                                <h4 class="font-bold mb-1">Unauthorized Visitor</h4>
+                                <p class="text-sm">Always verify visitors have proper identification and escort. Unauthorized individuals can steal data or access restricted areas.</p>
+                            </div>
+                            
+                            <!-- Character -->
+                            <div class="character" id="office-character">
+                                <div class="character-body"></div>
+                                <div class="character-head"></div>
+                                <div class="character-legs">
+                                    <div class="character-leg"></div>
+                                    <div class="character-leg"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Visitor Character -->
+                            <div class="character" style="left: 700px;">
+                                <div class="character-body" style="background-color: #9333ea;"></div>
+                                <div class="character-head" style="background-color: #fbbf24;"></div>
+                                <div class="character-legs">
+                                    <div class="character-leg" style="background-color: #4c1d95;"></div>
+                                    <div class="character-leg" style="background-color: #4c1d95;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <h3 class="font-bold text-lg text-blue-800 mb-2">Security Mistakes Found: <span id="mistakes-found">0</span>/5</h3>
+                                <div class="flex flex-wrap gap-2" id="mistake-badges">
+                                    <!-- Badges will be added here as mistakes are found -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button onclick="goToScreen('welcome')" class="btn btn-secondary">Back</button>
+                            <button id="simulation-next-btn" onclick="goToScreen('assessment')" class="btn btn-primary" disabled>Continue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Assessment -->
+            <div id="screen-assessment" class="content">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Security Knowledge Assessment</h2>
+                        
+                        <div class="mb-8">
+                            <p class="mb-6">
+                                Let's see what you already know about cybersecurity. This quick assessment will help 
+                                customize your training experience to focus on the areas where you need it most.
+                            </p>
+                            
+                            <div class="quiz-progress mb-8">
+                                <div class="quiz-step active" id="quiz-step-1">
+                                    <div class="quiz-step-number">1</div>
+                                    <div class="text-sm">Phishing</div>
+                                </div>
+                                <div class="quiz-step" id="quiz-step-2">
+                                    <div class="quiz-step-number">2</div>
+                                    <div class="text-sm">Passwords</div>
+                                </div>
+                                <div class="quiz-step" id="quiz-step-3">
+                                    <div class="quiz-step-number">3</div>
+                                    <div class="text-sm">Data Security</div>
+                                </div>
+                                <div class="quiz-step" id="quiz-step-4">
+                                    <div class="quiz-step-number">4</div>
+                                    <div class="text-sm">Devices</div>
+                                </div>
+                                <div class="quiz-step" id="quiz-step-5">
+                                    <div class="quiz-step-number">5</div>
+                                    <div class="text-sm">Results</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 1 -->
+                            <div class="quiz-question active" id="question-1">
+                                <h3 class="text-xl font-bold text-gray-800 mb-4">Question 1: Phishing Awareness</h3>
+                                <p class="mb-4">Which of the following is NOT a common sign of a phishing email?</p>
+                                
+                                <div class="option-card" onclick="selectAnswer(1, this, false)">
+                                    <p>Urgent requests for personal information</p>
+                                </div>
+                                
+                                <div class="option-card" onclick="selectAnswer(1, this, false)">
+                                    <p>Spelling and grammar errors</p>
+                                </div>
+                                
+                                <div class="option-card" onclick="selectAnswer(1, this, true)">
+                                    <p>Email sent from a colleague you regularly work with</p>
+                                </div>
+                                
+                                <div class="option-card" onclick="selectAnswer(1, this, false)">
+                                    <p>Suspicious links with URLs that don't match the claimed organization</p>
+                                </div>
+                                
+                                <div class="mt-6 flex justify-end">
+                                    <button onclick="nextQuestion(1)" class="btn btn-primary" id="next-btn-1" disabled>Next Question</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Question 2 -->
+                            <div class="quiz-question" id="question-2" style="display: none;">
+                                <h3 class="text-xl font-bold text-gray-800 mb-4">Question 2: Password Security</h3>
+                                <p class="mb-4">Which of these passwords is the most secure?</p>
+                                
+                                <div class="option-card" onclick="selectAnswer(2, this, false)">
+                                    <p>password123</p>
+                                </div>
+                                
+                                <div class="option-card" onclick="selectAnswer(2, this, false)">
+                                    <p>CompanyName2023</p>
+                                </div>
+                                
+                                <div class="option-card" onclick="selectAnswer(2, this, false)">
+                                    <p>Summer2023!</p>
+                                </div>
+                                
+                                <div class="option-card" onclick="selectAnswer(2, this, true)">
+                                    <p>x7K!r2P#9mB@vF3s</p>
+                                </div>
+                                
+                                <div class="mt-6 flex justify-end">
+                                    <button onclick="nextQuestion(2)" class="btn btn-primary" id="next-btn-2" disabled>Next Question</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button onclick="goToScreen('simulation')" class="btn btn-secondary">Back</button>
+                            <button onclick="goToScreen('training')" class="btn btn-primary">Skip to Training</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Training Modules -->
+            <div id="screen-training" class="content">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Personalized Training Path</h2>
+                        
+                        <div class="mb-8">
+                            <p class="mb-6">
+                                Based on your assessment, we've created a customized training path for you. 
+                                Complete each module to improve your cybersecurity knowledge and skills.
+                            </p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Module 1: Phishing -->
+                                <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                                    <div class="bg-red-50 p-4">
+                                        <div class="flex items-center">
+                                            <div class="bg-red-100 p-2 rounded-full mr-3">
+                                                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                            </div>
+                                            <h3 class="text-lg font-bold">Phishing Defense</h3>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <p class="text-gray-600 mb-4">Learn to identify and avoid phishing attempts that target you and your organization.</p>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm text-gray-500">15 minutes</span>
+                                            <button onclick="startModule('phishing')" class="btn btn-primary py-2 px-4">Start Module</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Module 2: Password Security -->
+                                <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                                    <div class="bg-yellow-50 p-4">
+                                        <div class="flex items-center">
+                                            <div class="bg-yellow-100 p-2 rounded-full mr-3">
+                                                <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                            </div>
+                                            <h3 class="text-lg font-bold">Password Security</h3>
+                                        </div>
+                                    </div>
+                                    <div class="p-4">
+                                        <p class="text-gray-600 mb-4">Create strong passwords and learn how to manage them securely across multiple accounts.</p>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm text-gray-500">10 minutes</span>
+                                            <button onclick="startModule('password')" class="btn btn-primary py-2 px-4">Start Module</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button onclick="goToScreen('assessment')" class="btn btn-secondary">Back</button>
+                            <button onclick="goToScreen('final-challenge')" class="btn btn-primary">Skip to Final Challenge</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Phishing Module -->
+            <div id="screen-phishing" class="content">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Phishing Defense Training</h2>
+                        
+                        <div class="mb-8">
+                            <div class="bg-red-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-xl font-bold text-red-800 mb-4">What is Phishing?</h3>
+                                <p class="text-red-800 mb-4">
+                                    Phishing is a type of social engineering attack where attackers disguise themselves as 
+                                    trustworthy entities to trick victims into revealing sensitive information or installing 
+                                    malware.
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="bg-white p-3 rounded-lg shadow-sm">
+                                        <div class="font-bold mb-2">Email Phishing</div>
+                                        <p class="text-sm text-gray-600">Fraudulent emails that appear to come from legitimate organizations</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-lg shadow-sm">
+                                        <div class="font-bold mb-2">Spear Phishing</div>
+                                        <p class="text-sm text-gray-600">Targeted attacks customized for specific individuals</p>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-lg shadow-sm">
+                                        <div class="font-bold mb-2">Smishing & Vishing</div>
+                                        <p class="text-sm text-gray-600">Phishing via SMS texts or voice calls</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Phishing Email Challenge</h3>
+                            <p class="mb-6">
+                                Can you identify the signs of phishing in this email? Click on the suspicious elements.
+                            </p>
+                            
+                            <div class="border border-gray-300 rounded-lg mb-6">
+                                <div class="bg-gray-100 p-4">
+                                    <div class="bg-white rounded-lg shadow-sm p-4">
+                                        <div class="border-b border-gray-200 pb-4 mb-4">
+                                            <div class="mb-2">
+                                                <span class="font-semibold mr-2">From:</span>
+                                                <span class="phishing-highlight" onclick="markPhishingElement(this)">
+                                                    security-alert@amaz0n-support.com
+                                                    <div class="phishing-tooltip">Suspicious domain! Notice the "0" instead of "o" and the unusual subdomain</div>
+                                                </span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <span class="font-semibold mr-2">Subject:</span>
+                                                <span class="phishing-highlight" onclick="markPhishingElement(this)">
+                                                    URGENT: Your account has been compromised - Immediate action required
+                                                    <div class="phishing-tooltip">Creating urgency is a common phishing tactic</div>
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span class="font-semibold mr-2">Date:</span>
+                                                <span>Today, 10:15 AM</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <p class="mb-3">Dear Valued Customer,</p>
+                                            <p class="mb-3 phishing-highlight" onclick="markPhishingElement(this)">
+                                                We have detected unusual activity on your Amazon account. Your account has been temporarily limited until we can verify your information.
+                                                <div class="phishing-tooltip">Generic greeting instead of using your name</div>
+                                            </p>
+                                            <p class="mb-3">To restore full access to your account, please verify your information by clicking the link below:</p>
+                                            <div class="mb-3">
+                                                <a href="#" class="text-blue-600 underline phishing-highlight" onclick="markPhishingElement(this)">
+                                                    https://account-security-verification.amaz0n-support.com/login
+                                                    <div class="phishing-tooltip">Suspicious URL not from the official domain</div>
+                                                </a>
+                                            </div>
+                                            <p class="mb-3 phishing-highlight" onclick="markPhishingElement(this)">
+                                                If you do not verify your account within 24 hours, your account will be permanently suspended.
+                                                <div class="phishing-tooltip">Threatening consequences to pressure you into acting quickly</div>
+                                            </p>
+                                            <p class="mb-3">
+                                                Thank you for your cooperation.
+                                                <br>
+                                                Amazon Security Team
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button onclick="goToScreen('training')" class="btn btn-secondary">Back to Modules</button>
+                            <button onclick="completeModule('phishing')" class="btn btn-primary">Complete Module</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Password Module -->
+            <div id="screen-password" class="content">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Password Security Training</h2>
+                        
+                        <div class="mb-8">
+                            <div class="bg-yellow-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-xl font-bold text-yellow-800 mb-4">The Password Problem</h3>
+                                <p class="text-yellow-800 mb-4">
+                                    Weak passwords are one of the leading causes of security breaches. Yet many people 
+                                    continue to use simple, easily guessable passwords across multiple accounts.
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                                        <h4 class="font-bold mb-2">Common Password Mistakes</h4>
+                                        <ul class="list-disc pl-5 text-sm text-gray-600">
+                                            <li>Using simple, common passwords</li>
+                                            <li>Reusing passwords across multiple sites</li>
+                                            <li>Sharing passwords with colleagues</li>
+                                            <li>Writing passwords on sticky notes</li>
+                                            <li>Not changing default passwords</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                                        <h4 class="font-bold mb-2">Password Facts</h4>
+                                        <ul class="list-disc pl-5 text-sm text-gray-600">
+                                            <li>80% of data breaches involve weak or stolen passwords</li>
+                                            <li>The average person has 100+ online accounts</li>
+                                            <li>51% of people use the same passwords for work and personal accounts</li>
+                                            <li>A 12-character password takes 34,000 years to crack vs. 2.5 hours for an 8-character password</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">Password Strength Test</h3>
+                            <p class="mb-4">
+                                Try creating different passwords to see how strong they are. A strong password is your first line of defense.
+                            </p>
+                            
+                            <div class="mb-6">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 font-medium mb-2">Enter a password to test:</label>
+                                    <input type="text" id="password-test" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter password" oninput="checkPasswordStrength()">
+                                    <div class="password-strength mt-2">
+                                        <div id="password-strength-bar" class="password-strength-bar"></div>
+                                    </div>
+                                    <div id="password-feedback" class="text-sm mt-2 text-gray-500">Enter a password to see its strength</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button onclick="goToScreen('training')" class="btn btn-secondary">Back to Modules</button>
+                            <button onclick="completeModule('password')" class="btn btn-primary">Complete Module</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let userProfile = {
+            name: '',
+            department: '',
+            experience: '',
+            score: 0,
+            completedModules: [],
+            mistakesFound: []
+        };
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+        
+        // Navigation functions
+        function goToScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.content').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show the requested screen
+            document.getElementById('screen-' + screenId).classList.add('active');
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        function startTraining() {
+            // Get user information
+            userProfile.name = document.getElementById('user-name').value || 'User';
+            userProfile.department = document.getElementById('user-department').value;
+            
+            // Navigate to simulation screen
+            goToScreen('simulation');
+            
+            // Start character animation
+            animateCharacter();
+        }
+        
+        function animateCharacter() {
+            const character = document.getElementById('office-character');
+            let position = 50;
+            
+            const moveCharacter = setInterval(() => {
+                position += 5;
+                character.style.left = position + 'px';
+                
+                if (position > 800) {
+                    position = 50;
+                    character.style.left = position + 'px';
+                }
+            }, 200);
+        }
+        
+        // Experience selection
+        function selectExperience(element, level) {
+            // Remove selected class from all options
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Store the experience level
+            userProfile.experience = level;
+        }
+        
+        // Security mistakes in office simulation
+        function showMistakeTooltip(mistakeId) {
+            const tooltip = document.getElementById('mistake-tooltip-' + mistakeId);
+            
+            // Toggle tooltip visibility
+            if (tooltip.classList.contains('visible')) {
+                tooltip.classList.remove('visible');
+            } else {
+                // Hide all tooltips first
+                document.querySelectorAll('.mistake-tooltip').forEach(tip => {
+                    tip.classList.remove('visible');
+                });
+                
+                // Show this tooltip
+                tooltip.classList.add('visible');
+                
+                // Add to found mistakes if not already found
+                if (!userProfile.mistakesFound.includes(mistakeId)) {
+                    userProfile.mistakesFound.push(mistakeId);
+                    document.getElementById('mistakes-found').textContent = userProfile.mistakesFound.length;
+                    
+                    // Add badge
+                    const badge = document.createElement('div');
+                    badge.className = 'bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded';
+                    badge.textContent = getMistakeName(mistakeId);
+                    document.getElementById('mistake-badges').appendChild(badge);
+                    
+                    // Update score
+                    userProfile.score += 5;
+                    updateScore();
+                    
+                    // Enable continue button if all mistakes found
+                    if (userProfile.mistakesFound.length === 5) {
+                        document.getElementById('simulation-next-btn').disabled = false;
+                    }
+                }
+            }
+        }
+        
+        function getMistakeName(mistakeId) {
+            const mistakeNames = {
+                1: 'Password on Sticky Note',
+                2: 'Unlocked Computer',
+                3: 'Exposed Documents',
+                4: 'Unknown USB Drive',
+                5: 'Unauthorized Visitor'
+            };
+            
+            return mistakeNames[mistakeId] || 'Security Risk';
+        }
+        
+        // Quiz functions
+        function selectAnswer(questionId, element, isCorrect) {
+            // Remove selected class from all options
+            const questionElement = document.getElementById('question-' + questionId);
+            questionElement.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Show correct/incorrect feedback
+            if (isCorrect) {
+                element.classList.add('correct');
+                userProfile.score += 10;
+                updateScore();
+            } else {
+                element.classList.add('incorrect');
+            }
+            
+            // Enable next button
+            document.getElementById('next-btn-' + questionId).disabled = false;
+        }
+        
+        function nextQuestion(currentQuestionId) {
+            // Hide current question
+            document.getElementById('question-' + currentQuestionId).style.display = 'none';
+            
+            // Show next question
+            const nextQuestionId = currentQuestionId + 1;
+            const nextQuestion = document.getElementById('question-' + nextQuestionId);
+            
+            if (nextQuestion) {
+                nextQuestion.style.display = 'block';
+                
+                // Update progress steps
+                document.getElementById('quiz-step-' + currentQuestionId).classList.remove('active');
+                document.getElementById('quiz-step-' + currentQuestionId).classList.add('completed');
+                document.getElementById('quiz-step-' + nextQuestionId).classList.add('active');
+            } else {
+                // If no more questions, go to training
+                goToScreen('training');
+            }
+        }
+        
+        // Module functions
+        function startModule(moduleId) {
+            goToScreen(moduleId);
+        }
+        
+        function completeModule(moduleId) {
+            if (!userProfile.completedModules.includes(moduleId)) {
+                userProfile.completedModules.push(moduleId);
+                userProfile.score += 20;
+                updateScore();
+                updateProgress();
+            }
+            
+            goToScreen('training');
+        }
+        
+        // Phishing email challenge
+        function markPhishingElement(element) {
+            if (!element.classList.contains('found')) {
+                element.classList.add('found');
+                element.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+                element.style.borderBottom = '2px solid #10b981';
+                userProfile.score += 5;
+                updateScore();
+            }
+        }
+        
+        // Password strength checker
+        function checkPasswordStrength() {
+            const password = document.getElementById('password-test').value;
+            const strengthBar = document.getElementById('password-strength-bar');
+            const feedback = document.getElementById('password-feedback');
+            
+            if (!password) {
+                strengthBar.className = 'password-strength-bar';
+                strengthBar.style.width = '0%';
+                feedback.textContent = 'Enter a password to see its strength';
+                return;
+            }
+            
+            // Simple password strength calculation
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 12) {
+                strength += 25;
+            } else if (password.length >= 8) {
+                strength += 10;
+            }
+            
+            // Complexity checks
+            if (/[A-Z]/.test(password)) strength += 15; // Uppercase
+            if (/[a-z]/.test(password)) strength += 10; // Lowercase
+            if (/[0-9]/.test(password)) strength += 15; // Numbers
+            if (/[^A-Za-z0-9]/.test(password)) strength += 20; // Special chars
+            
+            // Variety check
+            const uniqueChars = new Set(password).size;
+            strength += Math.min(15, uniqueChars * 2);
+            
+            // Update UI
+            if (strength < 40) {
+                strengthBar.className = 'password-strength-bar password-weak';
+                feedback.textContent = 'Weak: This password could be easily cracked';
+                feedback.className = 'text-sm mt-2 text-red-500';
+            } else if (strength < 70) {
+                strengthBar.className = 'password-strength-bar password-medium';
+                feedback.textContent = 'Medium: This password provides some protection';
+                feedback.className = 'text-sm mt-2 text-yellow-500';
+            } else {
+                strengthBar.className = 'password-strength-bar password-strong';
+                feedback.textContent = 'Strong: This password provides good protection';
+                feedback.className = 'text-sm mt-2 text-green-500';
+            }
+            
+            strengthBar.style.width = Math.min(100, strength) + '%';
+        }
+        
+        // Progress tracking
+        function updateProgress() {
+            const totalSteps = 7; // Welcome, Simulation, Assessment, Training, and 3 modules
+            const completedSteps = 1 + // Welcome is always counted
+                                  (userProfile.mistakesFound.length === 5 ? 1 : 0) + // Simulation
+                                  (document.getElementById('screen-assessment').classList.contains('active') || 
+                                   document.getElementById('screen-training').classList.contains('active') ? 1 : 0) + // Assessment
+                                  (document.getElementById('screen-training').classList.contains('active') ? 1 : 0) + // Training
+                                  userProfile.completedModules.length; // Completed modules
+            
+            const progressPercentage = Math.round((completedSteps / totalSteps) * 100);
+            
+            // Update progress bar
+            document.getElementById('progress-bar').style.width = progressPercentage + '%';
+            document.getElementById('progress-percentage').textContent = progressPercentage + '%';
+            
+            updateScore();
+        }
+        
+        function updateScore() {
+            document.getElementById('security-score').textContent = userProfile.score;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95fb2ddf350493e1',t:'MTc1MjYwMjYzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
