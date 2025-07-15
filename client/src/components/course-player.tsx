@@ -38,82 +38,477 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
   const [courseScore, setCourseScore] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  // Generate course modules based on course content
-  const modules: Module[] = [
-    {
-      id: 1,
-      title: "Introduction",
-      type: 'text',
-      content: `Welcome to "${course.title}". ${course.description}`,
-      duration: 5
-    },
-    {
-      id: 2,
-      title: "Core Concepts",
-      type: 'video',
-      content: `Learn the fundamental concepts of ${course.title.toLowerCase()}. This module covers the essential knowledge you need to understand the topic thoroughly.`,
-      duration: 15
-    },
-    {
-      id: 3,
-      title: "Interactive Scenario",
-      type: 'simulation',
-      content: `Practice your skills with a real-world scenario related to ${course.title.toLowerCase()}. This hands-on exercise will test your understanding.`,
-      duration: 20
-    },
-    {
-      id: 4,
-      title: "Knowledge Check",
-      type: 'quiz',
-      content: "Test your understanding with these questions.",
-      duration: 10,
-      questions: [
-        {
-          id: 1,
-          question: `What is the most important aspect of ${course.title.toLowerCase()}?`,
-          options: [
-            "Following established procedures",
-            "Staying updated with latest threats",
-            "Regular training and awareness",
-            "All of the above"
-          ],
-          correctAnswer: 3,
-          explanation: "All aspects are crucial for effective cybersecurity."
-        },
-        {
-          id: 2,
-          question: "How often should security training be conducted?",
-          options: [
-            "Once a year",
-            "Quarterly",
-            "Monthly",
-            "Continuously"
-          ],
-          correctAnswer: 3,
-          explanation: "Security training should be an ongoing process to stay current with evolving threats."
-        },
-        {
-          id: 3,
-          question: "What is the primary goal of this training?",
-          options: [
-            "Compliance only",
-            "Reducing human error",
-            "Passing audits",
-            "Meeting requirements"
-          ],
-          correctAnswer: 1,
-          explanation: "The main goal is to reduce human error and improve security awareness."
-        }
-      ]
-    },
-    {
-      id: 5,
-      title: "Course Summary",
-      type: 'text',
-      content: `Congratulations! You've completed the "${course.title}" course. You now have the knowledge and skills to apply these concepts in your work environment.`,
-      duration: 5
+  // Generate comprehensive course modules based on course content
+  const getModulesForCourse = (course: Course): Module[] => {
+    const baseModules = [
+      {
+        id: 1,
+        title: "Welcome & Learning Objectives",
+        type: 'text' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="text-center">
+              <h2 class="text-2xl font-bold mb-4">Welcome to ${course.title}</h2>
+              <div class="text-4xl mb-4">${course.icon}</div>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <h3 class="font-semibold mb-2">What You'll Learn:</h3>
+              <ul class="space-y-2 text-sm">
+                <li>✓ Core concepts and terminology</li>
+                <li>✓ Real-world attack scenarios</li>
+                <li>✓ Hands-on defensive techniques</li>
+                <li>✓ Best practices for your role</li>
+                <li>✓ Emergency response procedures</li>
+              </ul>
+            </div>
+            
+            <div class="bg-green-50 p-4 rounded-lg">
+              <h3 class="font-semibold mb-2">Why This Matters:</h3>
+              <p class="text-sm">Cybersecurity incidents cost organizations an average of $4.45 million per breach. This training will help you become a human firewall, protecting your organization from the 95% of attacks that target people, not technology.</p>
+            </div>
+          </div>
+        `,
+        duration: 8
+      },
+      {
+        id: 2,
+        title: "Interactive Video Learning",
+        type: 'video' as const,
+        content: `
+          <div class="space-y-4">
+            <div class="aspect-video bg-gradient-to-br from-blue-900 to-purple-900 rounded-lg flex items-center justify-center text-white">
+              <div class="text-center">
+                <div class="text-6xl mb-4">🎬</div>
+                <h3 class="text-xl font-bold mb-2">Expert-Led Training Video</h3>
+                <p class="text-sm opacity-90">Interactive lessons with real cybersecurity experts</p>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-gray-50 p-3 rounded text-center">
+                <div class="text-2xl mb-1">📊</div>
+                <div class="text-xs font-medium">Interactive Slides</div>
+              </div>
+              <div class="bg-gray-50 p-3 rounded text-center">
+                <div class="text-2xl mb-1">🎯</div>
+                <div class="text-xs font-medium">Real Examples</div>
+              </div>
+            </div>
+            
+            <div class="bg-yellow-50 p-4 rounded-lg">
+              <h4 class="font-semibold mb-2">🎥 Video Chapters:</h4>
+              <ul class="text-sm space-y-1">
+                <li>• Introduction to ${course.title}</li>
+                <li>• Common Attack Vectors</li>
+                <li>• Recognition Techniques</li>
+                <li>• Response Protocols</li>
+                <li>• Case Studies & Examples</li>
+              </ul>
+            </div>
+          </div>
+        `,
+        duration: 25
+      },
+      {
+        id: 3,
+        title: "Hands-On Simulation",
+        type: 'simulation' as const,
+        content: `
+          <div class="space-y-4">
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+              <h3 class="font-bold text-red-800 mb-2">🚨 LIVE SIMULATION</h3>
+              <p class="text-red-700 text-sm">You're about to experience a realistic cybersecurity scenario. Make decisions as if this were happening in your actual workplace.</p>
+            </div>
+            
+            <div class="bg-white border-2 border-gray-300 rounded-lg p-4">
+              <div class="flex items-center mb-3">
+                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span class="ml-2 text-sm font-medium">Outlook - Inbox</span>
+              </div>
+              
+              <div class="border-l-4 border-red-500 pl-4 mb-4">
+                <div class="text-sm font-medium mb-1">From: ceo@company.com</div>
+                <div class="text-sm font-medium mb-1">Subject: URGENT - Need Gift Cards ASAP</div>
+                <div class="text-xs text-gray-500 mb-3">Received: 2 minutes ago</div>
+                <div class="text-sm">
+                  Hi,<br><br>
+                  I need you to purchase 5 x $100 Amazon gift cards for a client meeting TODAY. Please send me the codes ASAP as I'm in meetings all day and can't do this myself.<br><br>
+                  Thanks!<br>
+                  CEO
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <h4 class="font-semibold mb-2">🎯 Your Mission:</h4>
+              <p class="text-sm">This is a sophisticated social engineering attack. Choose your response carefully - your decision will affect your organization's security posture.</p>
+            </div>
+          </div>
+        `,
+        duration: 30
+      }
+    ];
+
+    // Add course-specific advanced modules
+    if (course.title === "Phishing Awareness") {
+      baseModules.push({
+        id: 4,
+        title: "Advanced Phishing Detection",
+        type: 'quiz' as const,
+        content: "Master the art of spotting sophisticated phishing attempts",
+        duration: 15,
+        questions: [
+          {
+            id: 1,
+            question: "You receive an email claiming to be from your bank asking you to verify your account. The email looks legitimate with proper logos and formatting. What's the FIRST thing you should do?",
+            options: [
+              "Click the link and verify your account immediately",
+              "Check the sender's email address carefully",
+              "Call your bank directly using the number on your card",
+              "Forward the email to your IT department"
+            ],
+            correctAnswer: 2,
+            explanation: "Always verify suspicious requests through a separate, trusted communication channel. Banks will never ask for sensitive information via email."
+          },
+          {
+            id: 2,
+            question: "Which of these URL patterns is MOST LIKELY to be a phishing attempt?",
+            options: [
+              "https://amazon.com/account/signin",
+              "https://arnazon.com/account/signin",
+              "https://secure.amazon.com/signin",
+              "https://amazon.com/secure/account"
+            ],
+            correctAnswer: 1,
+            explanation: "Typosquatting (arnazon vs amazon) is a common phishing technique. Always double-check URLs for subtle misspellings."
+          },
+          {
+            id: 3,
+            question: "Your colleague forwards you an email with a suspicious attachment claiming to be an invoice. The email has urgency language. What should you do?",
+            options: [
+              "Open the attachment to see what it contains",
+              "Save the attachment and scan it with antivirus",
+              "Ask your colleague to verify they actually sent it",
+              "Delete the email immediately"
+            ],
+            correctAnswer: 2,
+            explanation: "Email accounts can be compromised. Always verify suspicious emails with the sender through a different communication method."
+          }
+        ]
+      });
     }
-  ];
+
+    // Board-Level Cybersecurity Leadership - Premium Interactive TTX
+    if (course.title === "Board-Level Cybersecurity Leadership") {
+      baseModules.splice(2, 0, {
+        id: 3,
+        title: "Executive Crisis Decision Simulator",
+        type: 'simulation' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="bg-red-50 border-l-4 border-red-500 p-6">
+              <h3 class="font-bold text-red-800 mb-3">🚨 BOARD CRISIS SIMULATION</h3>
+              <p class="text-red-700">A major ransomware attack has just hit your organization. You are the CEO in an emergency board meeting. The clock is ticking and critical decisions must be made NOW.</p>
+            </div>
+            
+            <div class="bg-gray-900 text-white p-6 rounded-lg">
+              <div class="flex items-center mb-4">
+                <div class="w-3 h-3 bg-red-500 rounded-full mr-2 animate-pulse"></div>
+                <span class="text-red-400 font-bold">LIVE INCIDENT - T+02:47:33</span>
+              </div>
+              
+              <div class="space-y-4">
+                <div class="bg-gray-800 p-4 rounded">
+                  <div class="text-yellow-400 font-semibold">CISO Report:</div>
+                  <div class="text-sm mt-2">
+                    • All production systems encrypted<br>
+                    • Customer database compromised<br>
+                    • Ransom demand: $2.5M Bitcoin<br>
+                    • Recovery time: 72+ hours without backups
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded">
+                  <div class="text-blue-400 font-semibold">Legal Counsel:</div>
+                  <div class="text-sm mt-2">
+                    • GDPR notification required within 72 hours<br>
+                    • Potential regulatory fines: €20M+<br>
+                    • Class action lawsuit risk: HIGH
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded">
+                  <div class="text-green-400 font-semibold">Communications:</div>
+                  <div class="text-sm mt-2">
+                    • Media inquiries flooding in<br>
+                    • Stock price down 12% in pre-market<br>
+                    • Customer service overwhelmed
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+              <h4 class="font-semibold text-yellow-800 mb-2">⏰ IMMEDIATE DECISION REQUIRED</h4>
+              <p class="text-yellow-700 text-sm">The board must make a unanimous decision on ransomware payment. What is your recommendation as CEO?</p>
+            </div>
+          </div>
+        `,
+        duration: 45
+      });
+      
+      baseModules.push({
+        id: 5,
+        title: "Reputational Risk Assessment",
+        type: 'quiz' as const,
+        content: "Strategic decision-making for cybersecurity incidents with reputational impact",
+        duration: 20,
+        questions: [
+          {
+            id: 1,
+            question: "Your company faces a data breach affecting 100,000 customers. The media is already reporting it. What should be your FIRST communication priority?",
+            options: [
+              "Issue a statement minimizing the impact",
+              "Coordinate with legal before any communication",
+              "Immediately notify affected customers directly",
+              "Hold a press conference to control the narrative"
+            ],
+            correctAnswer: 2,
+            explanation: "Customer notification should be the first priority. Transparency and direct communication build trust, while delays worsen reputational damage."
+          },
+          {
+            id: 2,
+            question: "The incident response team estimates 2 weeks for full recovery, but customers are demanding immediate answers. How do you balance transparency with uncertainty?",
+            options: [
+              "Provide daily updates even if there's no progress",
+              "Wait until you have complete information before communicating",
+              "Communicate what you know and commit to regular updates",
+              "Redirect customer concerns to your legal team"
+            ],
+            correctAnswer: 2,
+            explanation: "Balanced transparency involves sharing confirmed information while committing to regular updates. This builds trust without creating false expectations."
+          },
+          {
+            id: 3,
+            question: "Three months after the incident, you're considering cyber insurance premium increases of 300%. How should the board approach this decision?",
+            options: [
+              "Accept the increase to maintain coverage",
+              "Shop for alternative insurers immediately",
+              "Implement security improvements first, then renegotiate",
+              "Self-insure to avoid premium increases"
+            ],
+            correctAnswer: 2,
+            explanation: "Demonstrating improved security posture through concrete measures can help negotiate better terms and shows insurers your commitment to risk reduction."
+          }
+        ]
+      });
+    }
+
+    // Zero-to-One Security Maturity - Comprehensive Foundation
+    if (course.title === "Zero-to-One Security Maturity") {
+      baseModules.splice(2, 0, {
+        id: 3,
+        title: "Security Program Blueprint",
+        type: 'text' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-6">
+              <h3 class="font-bold text-blue-800 mb-3">🏗️ BUILDING YOUR SECURITY FOUNDATION</h3>
+              <p class="text-blue-700">This module provides a step-by-step blueprint for organizations starting from zero cybersecurity infrastructure.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-green-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-green-800 mb-2">✅ Phase 1: Immediate Actions (Week 1-2)</h4>
+                <ul class="text-sm text-green-700 space-y-1">
+                  <li>• Enable multi-factor authentication</li>
+                  <li>• Implement password managers</li>
+                  <li>• Basic endpoint protection</li>
+                  <li>• Email security configuration</li>
+                </ul>
+              </div>
+              
+              <div class="bg-yellow-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-yellow-800 mb-2">⚠️ Phase 2: Foundation Building (Week 3-8)</h4>
+                <ul class="text-sm text-yellow-700 space-y-1">
+                  <li>• Security policy development</li>
+                  <li>• Employee training program</li>
+                  <li>• Incident response planning</li>
+                  <li>• Backup and recovery systems</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="bg-white border-2 border-gray-200 p-6 rounded-lg">
+              <h4 class="font-bold mb-4">📋 Interactive Security Maturity Checklist</h4>
+              <div class="space-y-3">
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600">
+                  <span class="text-sm">Password policy implemented (8+ characters, complexity requirements)</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600">
+                  <span class="text-sm">MFA enabled for all administrative accounts</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600">
+                  <span class="text-sm">Employee security awareness training scheduled</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <input type="checkbox" class="mr-3 h-4 w-4 text-blue-600">
+                  <span class="text-sm">Incident response contact list created</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-purple-50 p-6 rounded-lg">
+              <h4 class="font-bold text-purple-800 mb-3">🎯 Budget Planning Tool</h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded border">
+                  <div class="text-2xl font-bold text-green-600">$2,500</div>
+                  <div class="text-sm text-gray-600">Small Business<br>(1-10 employees)</div>
+                </div>
+                <div class="bg-white p-4 rounded border">
+                  <div class="text-2xl font-bold text-yellow-600">$15,000</div>
+                  <div class="text-sm text-gray-600">Medium Business<br>(11-50 employees)</div>
+                </div>
+                <div class="bg-white p-4 rounded border">
+                  <div class="text-2xl font-bold text-red-600">$50,000+</div>
+                  <div class="text-sm text-gray-600">Enterprise<br>(50+ employees)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+        duration: 35
+      });
+    }
+
+    // Global Privacy Laws Navigator - International Compliance
+    if (course.title === "Global Privacy Laws Navigator") {
+      baseModules.push({
+        id: 4,
+        title: "Jurisdiction-Specific Compliance",
+        type: 'simulation' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-6 rounded-lg">
+              <h3 class="font-bold mb-3">🌍 GLOBAL PRIVACY COMPLIANCE SIMULATOR</h3>
+              <p>Your multinational company operates across different jurisdictions. Navigate the complex web of privacy laws to ensure compliance.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                <h4 class="font-semibold text-blue-800 mb-2">🇪🇺 European Operations</h4>
+                <ul class="text-sm text-blue-700 space-y-1">
+                  <li>• GDPR compliance required</li>
+                  <li>• Data Protection Officer needed</li>
+                  <li>• 72-hour breach notification</li>
+                  <li>• Right to be forgotten</li>
+                </ul>
+              </div>
+              
+              <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+                <h4 class="font-semibold text-yellow-800 mb-2">🇺🇸 California Operations</h4>
+                <ul class="text-sm text-yellow-700 space-y-1">
+                  <li>• CCPA compliance required</li>
+                  <li>• Consumer rights notices</li>
+                  <li>• Data sale opt-out options</li>
+                  <li>• Privacy policy updates</li>
+                </ul>
+              </div>
+              
+              <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                <h4 class="font-semibold text-green-800 mb-2">🇸🇬 Singapore Operations</h4>
+                <ul class="text-sm text-green-700 space-y-1">
+                  <li>• PDPA compliance required</li>
+                  <li>• Data breach notification</li>
+                  <li>• Consent management</li>
+                  <li>• Data localization rules</li>
+                </ul>
+              </div>
+              
+              <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+                <h4 class="font-semibold text-red-800 mb-2">🇬🇧 UK Operations</h4>
+                <ul class="text-sm text-red-700 space-y-1">
+                  <li>• UK GDPR compliance</li>
+                  <li>• ICO registration</li>
+                  <li>• Brexit implications</li>
+                  <li>• Data transfer agreements</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="bg-white border-2 border-gray-200 p-6 rounded-lg">
+              <h4 class="font-bold mb-4">🎯 Scenario: International Data Transfer</h4>
+              <p class="text-sm text-gray-700 mb-4">You need to transfer customer data from your EU subsidiary to your US headquarters for analysis. What compliance steps are required?</p>
+            </div>
+          </div>
+        `,
+        duration: 40
+      });
+    }
+
+    baseModules.push({
+      id: 5,
+      title: "Action Plan & Certification",
+      type: 'text' as const,
+      content: `
+        <div class="space-y-6">
+          <div class="text-center">
+            <div class="text-4xl mb-4">🎉</div>
+            <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
+            <p class="text-gray-600">You've completed the ${course.title} training</p>
+          </div>
+          
+          <div class="bg-green-50 p-6 rounded-lg">
+            <h3 class="font-bold text-green-800 mb-4">🎯 Your Action Plan:</h3>
+            <div class="space-y-3">
+              <div class="flex items-start space-x-3">
+                <div class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">1</div>
+                <div>
+                  <div class="font-medium">Implement Daily Practices</div>
+                  <div class="text-sm text-gray-600">Apply the security mindset to your daily work routines</div>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">2</div>
+                <div>
+                  <div class="font-medium">Share Knowledge</div>
+                  <div class="text-sm text-gray-600">Educate your team about what you've learned</div>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">3</div>
+                <div>
+                  <div class="font-medium">Stay Updated</div>
+                  <div class="text-sm text-gray-600">Continue learning about emerging threats</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-blue-50 p-6 rounded-lg">
+            <h3 class="font-bold text-blue-800 mb-2">📜 Digital Certificate</h3>
+            <p class="text-sm text-blue-700">Your completion certificate is being generated and will be available for download and LinkedIn sharing.</p>
+          </div>
+          
+          <div class="bg-purple-50 p-6 rounded-lg">
+            <h3 class="font-bold text-purple-800 mb-2">🚀 Next Steps</h3>
+            <p class="text-sm text-purple-700">Continue your cybersecurity journey with our advanced courses and specialized training programs.</p>
+          </div>
+        </div>
+      `,
+      duration: 10
+    });
+
+    return baseModules;
+  };
+
+  const modules = getModulesForCourse(course);
 
   const currentModuleData = modules[currentModule];
   const progress = ((currentModule + 1) / modules.length) * 100;
@@ -165,13 +560,14 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
           <div className="space-y-6">
             <div className="flex items-center space-x-2">
               <Book className="w-5 h-5 text-blue-600" />
-              <span className="text-sm font-medium text-gray-600">Reading Material</span>
+              <span className="text-sm font-medium text-gray-600">Interactive Learning</span>
             </div>
-            <div className="prose prose-sm max-w-none">
-              <p className="text-gray-700 leading-relaxed">{currentModuleData.content}</p>
-            </div>
-            <Button onClick={handleModuleComplete} className="w-full">
-              Continue <ArrowRight className="w-4 h-4 ml-2" />
+            <div 
+              className="prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: currentModuleData.content }}
+            />
+            <Button onClick={handleModuleComplete} className="w-full bg-blue-600 hover:bg-blue-700 btn-touch">
+              Continue Learning <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
         );
@@ -181,15 +577,23 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
           <div className="space-y-6">
             <div className="flex items-center space-x-2">
               <PlayCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm font-medium text-gray-600">Video Content</span>
+              <span className="text-sm font-medium text-gray-600">Expert Video Training</span>
             </div>
-            <div className="bg-gray-100 rounded-lg p-8 text-center">
-              <PlayCircle className="w-16 h-16 mx-auto mb-4 text-green-600" />
-              <p className="text-gray-700 mb-4">{currentModuleData.content}</p>
-              <p className="text-sm text-gray-500">Duration: {currentModuleData.duration} minutes</p>
+            <div 
+              className="prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: currentModuleData.content }}
+            />
+            <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white p-4 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-semibold">Ready to Watch?</div>
+                  <div className="text-sm opacity-90">Duration: {currentModuleData.duration} minutes</div>
+                </div>
+                <PlayCircle className="w-8 h-8" />
+              </div>
             </div>
-            <Button onClick={handleModuleComplete} className="w-full btn-touch">
-              Mark as Watched <ArrowRight className="w-4 h-4 ml-2" />
+            <Button onClick={handleModuleComplete} className="w-full bg-green-600 hover:bg-green-700 btn-touch">
+              Complete Video Training <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
         );
@@ -198,40 +602,59 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
         return (
           <div className="space-y-6">
             <div className="flex items-center space-x-2">
-              <Award className="w-5 h-5 text-purple-600" />
-              <span className="text-sm font-medium text-gray-600">Interactive Simulation</span>
+              <Award className="w-5 h-5 text-orange-600" />
+              <span className="text-sm font-medium text-gray-600">Live Simulation Exercise</span>
             </div>
-            <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg p-8">
-              <div className="text-center mb-6">
-                <Award className="w-16 h-16 mx-auto mb-4 text-purple-600" />
-                <h3 className="text-lg font-semibold mb-2">Scenario-Based Learning</h3>
-                <p className="text-gray-700">{currentModuleData.content}</p>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-white rounded-lg p-4 border-l-4 border-purple-500">
-                  <h4 className="font-medium mb-2">Scenario:</h4>
-                  <p className="text-sm text-gray-600">
-                    You receive an email that appears to be from your IT department asking you to verify your credentials. 
-                    The email looks legitimate but has some suspicious elements. What should you do?
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 gap-3">
-                  <Button variant="outline" className="text-left justify-start btn-touch p-4 h-auto">
-                    Click the link and verify credentials
-                  </Button>
-                  <Button variant="outline" className="text-left justify-start btn-touch p-4 h-auto">
-                    Forward to a colleague for verification
-                  </Button>
-                  <Button variant="outline" className="text-left justify-start btn-touch p-4 h-auto">
-                    Contact IT department directly
-                  </Button>
-                  <Button variant="outline" className="text-left justify-start btn-touch p-4 h-auto">
-                    Delete the email immediately
-                  </Button>
-                </div>
+            <div 
+              className="prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: currentModuleData.content }}
+            />
+            <div className="space-y-3">
+              <div className="text-sm font-semibold text-gray-700">Choose your response:</div>
+              <div className="grid grid-cols-1 gap-3">
+                <Button 
+                  variant="outline" 
+                  className="text-left justify-start p-4 h-auto hover:bg-red-50 border-red-200"
+                  onClick={() => alert("❌ Incorrect! This is exactly what the attacker wants. Never purchase gift cards based on email requests, even from executives.")}
+                >
+                  <div className="flex items-center">
+                    <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-medium mr-3">A</span>
+                    <span>Buy the gift cards immediately</span>
+                  </div>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="text-left justify-start p-4 h-auto hover:bg-yellow-50 border-yellow-200"
+                  onClick={() => alert("⚠️ Better, but still risky. Your manager might fall for the same trick. Always verify directly with the supposed sender.")}
+                >
+                  <div className="flex items-center">
+                    <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-medium mr-3">B</span>
+                    <span>Forward to your manager</span>
+                  </div>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="text-left justify-start p-4 h-auto hover:bg-green-50 border-green-200"
+                  onClick={() => alert("✅ Excellent! This is the correct response. Always verify unusual requests through a separate communication channel.")}
+                >
+                  <div className="flex items-center">
+                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium mr-3">C</span>
+                    <span>Call the CEO directly to verify</span>
+                  </div>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="text-left justify-start p-4 h-auto hover:bg-blue-50 border-blue-200"
+                  onClick={() => alert("🤔 Not the best approach. You should verify first, then report to IT if confirmed malicious.")}
+                >
+                  <div className="flex items-center">
+                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium mr-3">D</span>
+                    <span>Report to IT security</span>
+                  </div>
+                </Button>
               </div>
             </div>
-            <Button onClick={handleModuleComplete} className="w-full btn-touch">
+            <Button onClick={handleModuleComplete} className="w-full bg-orange-600 hover:bg-orange-700 btn-touch">
               Complete Simulation <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>

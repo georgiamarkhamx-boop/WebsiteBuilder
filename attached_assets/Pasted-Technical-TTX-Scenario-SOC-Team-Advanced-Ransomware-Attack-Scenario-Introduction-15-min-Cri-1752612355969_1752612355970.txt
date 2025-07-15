@@ -1,0 +1,114 @@
+Technical TTX Scenario (SOC Team): Advanced Ransomware Attack
+Scenario Introduction (15 min):
+	•	Critical servers and endpoints exhibit unusual encryption activities. Initial alerts suggest a sophisticated ransomware attack exploiting recent vulnerabilities.
+	•	Briefly discuss initial insights and immediate concerns.
+Decision Pathway (75 min):
+Step 1: Immediate Action (15 min)
+	•	Option A (Immediate Isolation): Limits immediate spread, but ransomware starts attacking backup systems.
+	•	Option B (Detailed Investigation First): Malware spreads further, now impacting cloud infrastructure.
+Scenario Twist:
+	•	New variant of ransomware identified, using lateral movement exploiting zero-day vulnerabilities.
+Step 2: Technical Analysis and Forensics (20 min)
+	•	Option A (In-depth Forensics): Identifies the exact infection vector, but during the analysis, attackers escalate privileges and threaten data exfiltration.
+	•	Option B (Rapid Remediation Attempt): Stops immediate spread but fails to identify root cause, leading to reinfection.
+Scenario Twist:
+	•	Ransom demand received, threatening public release of sensitive data unless paid within 12 hours.
+Step 3: Ransom Negotiation and External Notification (20 min)
+	•	Option A (Negotiate and Stall): Provides additional response time, attackers start leaking small data samples publicly.
+	•	Option B (Immediate Public Disclosure): Alerts authorities and stakeholders, triggering regulatory oversight and potential reputational damage.
+Scenario Twist:
+	•	Attackers claim internal insider cooperation, increasing internal tension and suspicion.
+Step 4: System Restoration & Mitigation (20 min)
+	•	Option A (Restore from Backup with Validation): Longer downtime, thorough recovery, but some data corruption is found.
+	•	Option B (Rapid Decryption via Provided Tool): Quick restoration, but leaves persistent backdoors enabling future attacks.
+Scenario Review & Maturity Recommendations (30 min):
+	•	Comprehensive discussion on optimal choices, preventive measures, internal security practices, IR improvements, and maturity model advancement.
+
+Strategic TTX Scenario (C-Suite & Board): Third-Party Malware Incident
+Scenario Introduction (15 min):
+	•	Third-party vendor software update introduces stealthy malware, silently exfiltrating sensitive customer data over several weeks.
+Decision Pathway (75 min):
+Step 1: Crisis Team Activation (15 min)
+	•	Immediate Gold Team Activation: Coordinated response, but creates media speculation.
+	•	Delayed Activation: Malware exfiltration intensifies, compromising significantly more data.
+Scenario Twist:
+	•	News leak occurs through external security researchers, prompting sudden media attention.
+Step 2: Communication Strategy (20 min)
+	•	Proactive Public Statement: Controls narrative but prompts immediate regulator inquiry.
+	•	Reactive Communication: Increased negative perception, media backlash, and regulatory fines risk.
+Scenario Twist:
+	•	GDPR regulator initiates immediate investigation, highlighting legal exposure.
+Step 3: Regulatory & Legal Handling (20 min)
+	•	Full Cooperation with Regulators Immediately: Regulatory leniency but exposes organizational weaknesses publicly.
+	•	Limited Cooperation: Short-term protection but risks heavy fines and severe sanctions.
+Scenario Twist:
+	•	Major customers threaten litigation over breached contracts.
+Step 4: Operational Continuity & Vendor Management (20 min)
+	•	Immediate Transition to Alternative Vendors: Significant short-term disruption, mitigates long-term risks.
+	•	Staying with Current Vendor Temporarily: Operational stability in short term, but risk of additional compromise.
+Scenario Review & Maturity Recommendations (30 min):
+	•	Evaluate decision outcomes, discuss strategic crisis management best practices, regulatory alignment, vendor management, and enhance organizational maturity.
+
+Professional-Level TTX Scenario: Zero-Day Exploit Leading to Network Outage
+Scenario Introduction (15 min):
+	•	Zero-day vulnerability discovered and exploited on critical networking infrastructure, rapidly escalating to total network outage affecting global operations.
+Decision Pathway (75 min):
+Step 1: Initial Response (15 min)
+	•	Immediate Segmentation and Containment: Limits immediate impact but leaves teams disconnected, impairing incident response.
+	•	Prioritized Investigation: Attack propagates rapidly, disabling additional critical systems.
+Scenario Twist:
+	•	Communications platforms internally impacted, teams struggle with internal coordination.
+Step 2: Communication Strategy (20 min)
+	•	Activate Alternate Communication Channels Immediately: Ensures critical communications, but unfamiliarity causes confusion.
+	•	Delayed Activation of Alternate Comms: Internal communication blackout, exacerbating operational paralysis.
+Scenario Twist:
+	•	Zero-day exploit leaked publicly, attracting external scrutiny and potential exploitation by additional threat actors.
+Step 3: Business Continuity & Disaster Recovery (20 min)
+	•	Immediate DR Activation: Quickly restores core operations but reveals untested DR processes.
+	•	Delayed DR Activation: Thorough preparation, but results in extended operational downtime and significant revenue loss.
+Scenario Twist:
+	•	Additional undetected vulnerabilities identified during DR activation.
+Step 4: Post-Incident Reporting & Analysis (20 min)
+	•	Detailed and Transparent Incident Analysis: Facilitates trust restoration, highlights procedural weaknesses.
+	•	Restricted Incident Report: Protects internal reputation short-term but results in unresolved vulnerabilities and future risks.
+Scenario Review & Maturity Recommendations (30 min):
+	•	Detailed analysis of decisions, business continuity strategies, crisis communication effectiveness, vulnerability management, and BCM & DR maturity improvement recommendations.
+
+
+
+Detailed TTX Scenario 1: Insider Threat Incident
+Scenario Introduction (15 min):
+Present initial scenario:
+	•	A senior employee flagged by automated detection systems for suspicious data access and potential data exfiltration.
+	•	Highlight sensitive data types involved (client information, financial records, intellectual property).
+	•	Discuss potential impacts and critical immediate considerations.
+Decision Pathway (75 min):
+Step 1: Immediate Action (20 min)
+	•	Option A (Immediate Suspension):
+	•	Present potential consequences: retaliation, data exposure.
+	•	Key considerations: employee rights, evidence sufficiency.
+	•	Option B (Covert Monitoring):
+	•	Potential benefits: additional evidence, clearer intent identification.
+	•	Risks: increased data leakage during monitoring.
+Scenario twist: Insider escalates actions by attempting access to additional systems and exfiltrating further sensitive data.
+Step 2: Investigation Strategy (20 min)
+	•	Option A (Engage HR/Legal Immediately):
+	•	Ensure procedural correctness, potential prevention of legal backlash.
+	•	Risk prolonged investigation, further internal tension.
+	•	Option B (Internal Security Team Only):
+	•	Faster response, immediate containment.
+	•	Risk mishandling evidence, procedural mistakes.
+Scenario twist: Insider employs external channels to anonymously threaten public exposure unless demands are met.
+Step 3: External Communication Strategy (20 min)
+	•	Option A (Proactive Public Disclosure):
+	•	Transparency, trust retention.
+	•	Immediate reputational risks, potential panic.
+	•	Option B (Confidential Handling Initially):
+	•	Controlled narrative, minimized immediate reputational harm.
+	•	Severe repercussions if exposed publicly later.
+Scenario twist: Media leak occurs, external scrutiny intensifies, regulators become involved.
+Step 4: Response and Mitigation Actions (15 min)
+	•	Discuss comprehensive incident response plans, legal actions, communication strategies, and future insider-threat prevention measures.
+Scenario Review & Maturity Recommendations (30 min):
+	•	Comprehensive review of each decision point.
+	•	Present best practices: Insider threat program development, employee monitoring strategies, and incident response policy improvements.

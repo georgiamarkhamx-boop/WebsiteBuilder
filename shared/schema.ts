@@ -9,6 +9,10 @@ export const users = pgTable("users", {
   password: text("password").notNull(), // bcrypt hashed
   companyName: text("company_name"),
   employeeCount: text("employee_count"),
+  role: text("role"),
+  department: text("department"),
+  subscriptionTier: text("subscription_tier").default("basic"),
+  isActive: boolean("is_active").default(true),
   mfaSecret: text("mfa_secret"), // TOTP secret for MFA
   mfaEnabled: boolean("mfa_enabled").default(false),
   lastLogin: timestamp("last_login"),

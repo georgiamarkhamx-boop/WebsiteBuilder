@@ -1,0 +1,264 @@
+Cyber Security Basics
+
+Section
+Purpose
+Intro
+Explain what cybersecurity is and why it matters
+Role-based Risk
+Let user choose their job type for tailored examples
+Threat Awareness
+Show common threats (phishing, ransomware, insider threats, etc.)
+Behavior
+Teach good habits (passwords, MFA, updates, device safety)
+Compliance Selector
+User picks the compliance standard their company uses
+Country Selector
+Switch laws/regulations based on user’s country
+End Quiz
+Reinforce learning and give feedback
+Completion Message
+Show what they did well + what to improve
+
+🔀 Step-by-Step Flow with Customization Logic
+1. Welcome & Personalization Setup
+Ask the user:
+
+
+✅ “What country are you in?” → Changes legal/regulatory parts
+
+
+✅ “Which compliance standard applies to your company?”
+
+
+Options: Cyber Essentials / NIST / ISO 27001 / None
+
+
+✅ “What’s your role?” → Show examples relevant to their job:
+
+
+Employee / Manager / IT / HR / C-Suite
+
+
+Use these answers to set branching logic for later.
+
+2. What is Cybersecurity? (Core Content)
+Simple explanation: “Cybersecurity is how we protect computers, data, and systems from being attacked.”
+
+
+Include:
+
+
+What’s a threat?
+
+
+What’s a vulnerability?
+
+
+What is risk?
+
+
+Interactive Tip: Add a drag-and-drop or fill-in-the-blank for the definitions.
+
+3. Common Threats
+Based on their role, change the examples:
+
+
+Employee: phishing, unsafe websites, USB malware
+
+
+IT: misconfigurations, patching, insider threat
+
+
+C-Suite: ransomware, reputation damage, CEO fraud
+
+
+Threats to cover:
+Phishing (show 2 examples – one obvious, one subtle)
+
+
+Malware (ransomware, trojans, etc.)
+
+
+Social engineering
+
+
+Weak passwords
+
+
+Shadow IT (unauthorized apps/devices)
+
+
+Interactive: “Which of these is a safe email to click?” → multiple-choice.
+
+4. Cyber Hygiene (Best Practices)
+Use role-based examples:
+
+
+Strong password tips
+
+
+Why updates matter
+
+
+Locking your screen
+
+
+Not using personal email/apps for work
+
+
+Turning on MFA (maybe link to your MFA guide)
+
+
+Scenario Game: Choose a good or bad action and see the result (e.g. “I reused my password” → got hacked).
+
+5. Compliance Module (Auto-switch based on selection)
+Cyber Essentials
+
+
+Covers: Firewalls, secure settings, access control, malware protection, patch management.
+
+
+Short quiz: “Which control helps prevent ransomware?”
+
+
+NIST
+
+
+Use NIST Cybersecurity Framework (Identify, Protect, Detect, Respond, Recover)
+
+
+Ask: “Which function helps detect a threat quickly?”
+
+
+ISO 27001
+
+
+Covers risk management, policies, and controls.
+
+
+Ask: “What’s the purpose of an ISMS?”
+
+
+If they choose “None” → give simplified best-practice version.
+
+6. Legal/Regulation (Auto-switch by Country)
+UK → GDPR, Cyber Essentials, ICO contact
+
+
+USA → CCPA, HIPAA (optional), NIST
+
+
+EU → GDPR, ENISA
+
+
+Canada → PIPEDA
+
+
+APAC → APRA, PDPA, etc.
+
+
+Scenario: “Your company suffers a data breach. What do you do?” → route based on correct law.
+
+7. Final Quiz + Feedback
+Mix role-based questions and scenario questions.
+
+
+Include instant feedback:
+
+
+“Correct – you stopped a phishing attack!”
+
+
+“Not quite – in ISO 27001, you would report this to your ISMS manager.”
+
+
+
+8. Completion Screen
+Show: ✅ Completed ✅ Score ✅ What they got wrong ✅ Tips to improve
+
+
+Add: “Contact your cybersecurity lead at [company_email_here]”
+
+
+
+Data Protection Basics
+
+Section
+Purpose
+What is personal data?
+Define with examples
+Legal rules
+Swap by country
+Handling data properly
+Principles, real examples
+Data subject rights
+GDPR-style scenarios
+What to do in a breach
+Walkthrough decision tree
+End quiz & feedback
+Assess + improve
+
+Key Topics
+Personal Data
+
+
+Quiz: “Which of these is personal data?”
+
+
+Show names, emails, IPs, HR info, etc.
+
+
+Principles of Data Protection
+
+
+Lawfulness, Fairness, Transparency, etc.
+
+
+Show example: “Is this marketing email lawful?”
+
+
+Who’s Responsible?
+
+
+You as a user: don’t over-share, report concerns
+
+
+Your company: DP policies, secure storage
+
+
+Laws by Country
+
+
+UK/EU → GDPR
+
+
+US → CCPA
+
+
+Canada → PIPEDA
+
+
+Add others as needed
+
+
+What If There’s a Breach?
+
+
+Interactive decision tree:
+
+
+“Do you report it now or wait?” → Show consequence
+
+
+“Who do you tell internally?”
+
+
+Final Quiz
+
+
+Pull from scenarios above
+
+
+Reinforce country-specific and job-specific takeaways
+
+
