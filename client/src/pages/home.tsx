@@ -58,11 +58,19 @@ export default function Home() {
         />
         <StatsSection />
         <FeaturesSection />
-        <DashboardSection />
-        <SpecializedSolutions />
+        <section id="dashboard">
+          <DashboardSection />
+        </section>
+        <section id="services">
+          <SpecializedSolutions />
+        </section>
         <CertificationSection />
-        <CoursesSection onShowSignup={handleShowSignup} />
-        <PricingSection onShowSignup={handleShowSignup} />
+        <section id="courses">
+          <CoursesSection onShowSignup={handleShowSignup} />
+        </section>
+        <section id="pricing">
+          <PricingSection onShowSignup={handleShowSignup} />
+        </section>
         <CTASection 
           onShowTryIt={() => setShowTryItModal(true)}
           onShowSignup={() => handleShowSignup('growth')}
