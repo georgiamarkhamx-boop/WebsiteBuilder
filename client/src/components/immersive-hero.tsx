@@ -350,7 +350,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
                 {threat.type === 'insider' && <Eye className="w-6 h-6 text-white" />}
               </div>
               {detectedThreats.includes(threat.id) && (
-                <div className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full animate-ping" />
+                <div className="absolute -top-2 -right-2 w-4 h-4 bg-orange-400 rounded-full opacity-60" />
               )}
             </div>
           ))}
@@ -559,7 +559,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
           )}
 
           {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-12 px-4">
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-400 mb-2">
                 {detectedThreats.length}
@@ -582,7 +582,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
               <div className="text-3xl font-bold text-red-400 mb-2">
                 {securityNodes.filter(n => n.status === 'compromised').length}
               </div>
-              <div className="text-gray-400">Compromised</div>
+              <div className="text-gray-400 px-2">Compromised</div>
             </div>
           </div>
         </div>
