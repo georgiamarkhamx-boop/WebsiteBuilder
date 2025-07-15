@@ -433,3 +433,52 @@
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Digital/Cyber Animations */
+@keyframes matrix-scan {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(25px, 25px);
+  }
+}
+
+@keyframes digital-rain {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes circuit-pulse {
+  0%, 100% {
+    opacity: 0.1;
+    transform: scaleX(0.8);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scaleX(1.2);
+  }
+}
+
+@keyframes hex-glow {
+  0% {
+    opacity: 0.1;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1.2);
+  }
+}

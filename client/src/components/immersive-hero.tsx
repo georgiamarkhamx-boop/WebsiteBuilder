@@ -215,16 +215,68 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 overflow-hidden">
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-20">
+      {/* Digital Matrix Background */}
+      <div className="absolute inset-0 opacity-15">
         <div className="absolute inset-0" style={{
           backgroundImage: `
-            linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px)
+            linear-gradient(rgba(0, 255, 128, 0.4) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 128, 0.4) 1px, transparent 1px)
           `,
-          backgroundSize: '50px 50px',
-          animation: 'grid-move 20s linear infinite'
+          backgroundSize: '25px 25px',
+          animation: 'matrix-scan 12s linear infinite'
         }} />
+      </div>
+      
+      {/* Digital Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Binary Rain */}
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div
+            key={`binary-${i}`}
+            className="absolute text-green-400 opacity-20 font-mono text-sm"
+            style={{
+              left: `${(i * 5) % 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 8}s`,
+              animation: `digital-rain ${6 + Math.random() * 8}s linear infinite`
+            }}
+          >
+            {Math.random() > 0.5 ? '1' : '0'}
+          </div>
+        ))}
+        
+        {/* Circuit Lines */}
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={`circuit-${i}`}
+            className="absolute bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-25"
+            style={{
+              height: '1px',
+              width: `${30 + Math.random() * 40}%`,
+              left: `${Math.random() * 60}%`,
+              top: `${20 + (i * 15)}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animation: `circuit-pulse ${2 + Math.random() * 3}s ease-in-out infinite`
+            }}
+          />
+        ))}
+        
+        {/* Hexagonal Tech Pattern */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={`hex-${i}`}
+            className="absolute border border-blue-400 opacity-10"
+            style={{
+              width: '20px',
+              height: '20px',
+              left: `${10 + (i * 12)}%`,
+              top: `${10 + Math.random() * 80}%`,
+              clipPath: 'polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%)',
+              animationDelay: `${Math.random() * 5}s`,
+              animation: `hex-glow ${3 + Math.random() * 4}s ease-in-out infinite alternate`
+            }}
+          />
+        ))}
       </div>
 
       {/* 3D Cyber Environment */}
@@ -338,7 +390,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
-            <Badge variant="outline" className="mb-4 bg-blue-500/20 border-blue-400 text-blue-100">
+            <Badge variant="outline" className="mb-4 bg-green-500/20 border-green-400 text-green-200 px-4 py-2">
               <Zap className="w-4 h-4 mr-2" />
               Next-Generation Cybersecurity Training
             </Badge>
