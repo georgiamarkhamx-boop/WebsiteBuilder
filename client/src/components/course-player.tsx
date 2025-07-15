@@ -505,6 +505,253 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
       duration: 10
     });
 
+    // Add 3D Interactive Labs for AI & Business Courses
+    if (course.category === "ai_business") {
+      baseModules.splice(1, 0, {
+        id: 99,
+        title: "3D AI Command Center",
+        type: 'simulation' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-lg">
+              <h3 class="font-bold mb-3">🚀 IMMERSIVE AI COMMAND CENTER</h3>
+              <p>Enter a virtual AI laboratory where you'll interact with cutting-edge tools in a 3D workspace environment.</p>
+            </div>
+            
+            <div class="bg-gray-900 text-white p-6 rounded-lg">
+              <div class="flex items-center mb-4">
+                <div class="w-3 h-3 bg-cyan-500 rounded-full mr-2 animate-pulse"></div>
+                <span class="text-cyan-400 font-bold">AI SYSTEMS ONLINE - NEURAL NETWORK ACTIVE</span>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-gray-800 p-4 rounded border border-blue-500">
+                  <div class="text-blue-400 font-semibold mb-2">🎯 Prompt Lab</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-blue-900 p-2 rounded">
+                      <div class="text-blue-300">Input Quality: 94%</div>
+                      <div class="text-blue-300">Response Time: 0.3s</div>
+                    </div>
+                    <div class="text-xs text-gray-400">Optimizing prompts for maximum efficiency</div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-green-500">
+                  <div class="text-green-400 font-semibold mb-2">📊 Analytics Hub</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-green-900 p-2 rounded">
+                      <div class="text-green-300">ROI Impact: +247%</div>
+                      <div class="text-green-300">Time Saved: 15.2h/week</div>
+                    </div>
+                    <div class="text-xs text-gray-400">Real-time business metrics</div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-purple-500">
+                  <div class="text-purple-400 font-semibold mb-2">🔬 Testing Chamber</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-purple-900 p-2 rounded">
+                      <div class="text-purple-300">Success Rate: 89%</div>
+                      <div class="text-purple-300">Iterations: 1,247</div>
+                    </div>
+                    <div class="text-xs text-gray-400">A/B testing AI outputs</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+              <h4 class="font-bold text-yellow-800 mb-2">🎮 Interactive Challenge</h4>
+              <p class="text-yellow-700 text-sm">Navigate the virtual workspace to configure AI tools for your specific business needs. Click and drag elements to customize your AI workflow.</p>
+            </div>
+          </div>
+        `,
+        duration: 30
+      });
+      
+      // Add AI Business Quiz
+      baseModules.push({
+        id: 97,
+        title: "AI Business Implementation Quiz",
+        type: 'quiz' as const,
+        content: "Test your understanding of AI business applications",
+        duration: 15,
+        questions: [
+          {
+            id: 1,
+            question: "In the AI Command Center simulation, what was the most important factor for prompt optimization?",
+            options: [
+              "Using complex technical language",
+              "Providing specific context and clear instructions",
+              "Making prompts as short as possible",
+              "Using multiple AI models simultaneously"
+            ],
+            correctAnswer: 1,
+            explanation: "✅ Specificity and clear context are crucial for effective AI prompts. The simulation showed 94% input quality when prompts included detailed instructions and specific requirements."
+          },
+          {
+            id: 2,
+            question: "Based on the Analytics Hub in the 3D lab, what was the average ROI impact of properly implemented AI?",
+            options: [
+              "+150%",
+              "+200%",
+              "+247%",
+              "+300%"
+            ],
+            correctAnswer: 2,
+            explanation: "✅ The Analytics Hub showed a +247% ROI impact when AI tools are properly configured and integrated into business workflows."
+          },
+          {
+            id: 3,
+            question: "The Testing Chamber demonstrated that successful AI implementation requires:",
+            options: [
+              "Perfect results on the first try",
+              "Continuous iteration and testing",
+              "Expensive enterprise software",
+              "Technical expertise only"
+            ],
+            correctAnswer: 1,
+            explanation: "✅ The Testing Chamber showed 1,247 iterations with 89% success rate, demonstrating that continuous testing and refinement are key to AI success."
+          }
+        ]
+      });
+    }
+
+    // Add 3D Interactive Labs for Tech for Founders Courses
+    if (course.category === "founders") {
+      baseModules.splice(1, 0, {
+        id: 98,
+        title: "3D Tech Stack Builder",
+        type: 'simulation' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-lg">
+              <h3 class="font-bold mb-3">🏗️ IMMERSIVE TECH STACK BUILDER</h3>
+              <p>Step into a 3D virtual environment where you'll architect and build your technology stack from the ground up.</p>
+            </div>
+            
+            <div class="bg-gray-900 text-white p-6 rounded-lg">
+              <div class="flex items-center mb-4">
+                <div class="w-3 h-3 bg-orange-500 rounded-full mr-2 animate-pulse"></div>
+                <span class="text-orange-400 font-bold">DEVELOPMENT ENVIRONMENT ACTIVE</span>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-800 p-4 rounded border border-orange-500">
+                  <div class="text-orange-400 font-semibold mb-2">🎯 Frontend Layer</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-orange-900 p-2 rounded">
+                      <div class="text-orange-300">React.js - User Interface</div>
+                      <div class="text-orange-300">Next.js - Framework</div>
+                      <div class="text-orange-300">Tailwind - Styling</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Performance: 95/100</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-blue-500">
+                  <div class="text-blue-400 font-semibold mb-2">🗄️ Backend Layer</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-blue-900 p-2 rounded">
+                      <div class="text-blue-300">Node.js - Runtime</div>
+                      <div class="text-blue-300">Express - API</div>
+                      <div class="text-blue-300">PostgreSQL - Database</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Scalability: Ready</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-purple-500">
+                  <div class="text-purple-400 font-semibold mb-2">☁️ Cloud Layer</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-purple-900 p-2 rounded">
+                      <div class="text-purple-300">AWS/Vercel - Hosting</div>
+                      <div class="text-purple-300">CDN - Content Delivery</div>
+                      <div class="text-purple-300">Auto-scaling - Traffic</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Cost: $12/month</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-green-500">
+                  <div class="text-green-400 font-semibold mb-2">🔒 Security Layer</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-green-900 p-2 rounded">
+                      <div class="text-green-300">SSL/TLS - Encryption</div>
+                      <div class="text-green-300">OAuth - Authentication</div>
+                      <div class="text-green-300">Rate Limiting - Protection</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Security Score: A+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+              <h4 class="font-bold text-blue-800 mb-2">🎮 Interactive Challenge</h4>
+              <p class="text-blue-700 text-sm">Drag and drop technology components to build your optimal tech stack. Consider factors like cost, scalability, and team expertise.</p>
+            </div>
+          </div>
+        `,
+        duration: 35
+      });
+      
+      // Add Tech Stack Quiz
+      baseModules.push({
+        id: 96,
+        title: "Tech Stack Architecture Quiz",
+        type: 'quiz' as const,
+        content: "Test your knowledge of building scalable tech stacks",
+        duration: 15,
+        questions: [
+          {
+            id: 1,
+            question: "In the 3D Tech Stack Builder, what was the estimated monthly cost for a complete scalable stack?",
+            options: [
+              "$5/month",
+              "$12/month",
+              "$50/month",
+              "$200/month"
+            ],
+            correctAnswer: 1,
+            explanation: "✅ The Cloud Layer showed $12/month for a complete scalable stack including hosting, CDN, and auto-scaling capabilities."
+          },
+          {
+            id: 2,
+            question: "According to the Security Layer in the simulation, what achieved an A+ security score?",
+            options: [
+              "Password protection only",
+              "SSL/TLS, OAuth, and Rate Limiting combined",
+              "Expensive security software",
+              "Manual security reviews"
+            ],
+            correctAnswer: 1,
+            explanation: "✅ The combination of SSL/TLS encryption, OAuth authentication, and rate limiting protection achieved the A+ security score."
+          },
+          {
+            id: 3,
+            question: "The Frontend Layer showed 95/100 performance. What was the key to this high score?",
+            options: [
+              "Using expensive hosting",
+              "React.js + Next.js + Tailwind CSS combination",
+              "Hiring senior developers",
+              "Complex architecture"
+            ],
+            correctAnswer: 1,
+            explanation: "✅ The modern stack combination of React.js for UI, Next.js for framework, and Tailwind for styling achieved 95/100 performance."
+          }
+        ]
+      });
+    }
+
     return baseModules;
   };
 
@@ -855,7 +1102,14 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                     )}
                   </div>
                   <div className="flex-1">
-                    <div className="text-sm font-medium text-gray-900">{module.title}</div>
+                    <div className="text-sm font-medium text-gray-900 flex items-center">
+                      {module.title}
+                      {(module.title.includes('3D') || module.title.includes('Command Center') || module.title.includes('Tech Stack Builder')) && (
+                        <span className="ml-2 px-2 py-1 text-xs bg-purple-100 text-purple-600 rounded-full">
+                          3D Lab
+                        </span>
+                      )}
+                    </div>
                     <div className="text-xs text-gray-500">{module.duration} min</div>
                   </div>
                 </div>

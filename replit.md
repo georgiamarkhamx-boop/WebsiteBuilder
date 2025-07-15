@@ -4,6 +4,8 @@
 
 Security Enhance is an advanced, AI-driven training platform that has evolved beyond traditional cybersecurity to become a comprehensive business technology education platform. It features cybersecurity training, AI for business growth, tech for founders, and other business technology topics. The platform revolutionizes education through gamified learning, adaptive content, and intelligent analytics, featuring highly interactive modules, AI-driven tabletop exercises (TTX), predictive risk analytics, customizable learning paths, emerging technology coverage, and a centralized dashboard integrating e-learning, assessments, and threat monitoring.
 
+**Latest Enhancement (July 2025)**: All AI & Business and Tech for Founders courses now include immersive 3D interactive labs with virtual command centers, tech stack builders, and hands-on simulation environments.
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -59,7 +61,7 @@ Preferred communication style: Simple, everyday language.
    - Cross-platform data visualization and reporting
 
 5. **Enhanced Course Catalog**
-   - 30+ comprehensive courses addressing market gaps
+   - 35+ comprehensive courses addressing market gaps
    - Board-level cybersecurity leadership training
    - Zero-to-one security maturity building for organizations
    - Sector-specific training for healthcare, education, and non-profits
@@ -67,6 +69,7 @@ Preferred communication style: Simple, everyday language.
    - AI & Business Growth courses covering AI tools, ChatGPT, marketing automation, and ML
    - Tech for Founders courses including tech stacks, no-code solutions, analytics, and team scaling
    - Cross-platform business technology training beyond traditional cybersecurity
+   - **3D Interactive Labs**: Virtual command centers, tech stack builders, and immersive simulation environments for hands-on learning
 
 ## Data Flow
 
