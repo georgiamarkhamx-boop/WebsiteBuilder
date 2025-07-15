@@ -404,12 +404,12 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
           </div>
 
           {/* Interactive Controls */}
-          <div className="flex flex-col gap-4 items-center justify-center mb-8 px-4">
+          <div className="flex flex-col gap-4 items-center justify-center mb-8 px-4 relative z-20">
             <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
               <Button 
                 onClick={startSimulation}
                 disabled={simulationRunning}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base flex-1"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base flex-1 relative z-30 backdrop-blur-sm border border-blue-500/30"
               >
                 {simulationRunning ? (
                   <>
@@ -428,7 +428,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
               <Button 
                 onClick={onShowDemo}
                 variant="outline"
-                className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base flex-1"
+                className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base flex-1 relative z-30 backdrop-blur-sm bg-black/20"
               >
                 <Maximize2 className="w-4 h-4 mr-2" />
                 <span className="hidden sm:inline">Enter Virtual World</span>
@@ -438,7 +438,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
           </div>
 
           {/* Scenario Selection */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 px-4 relative z-20">
             {scenarios.map((scenario, index) => (
               <Card 
                 key={index} 
@@ -472,7 +472,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
 
           {/* Real-time Threat Panel */}
           {(selectedThreat || selectedNode) && (
-            <Card className="bg-black/70 backdrop-blur-md border-gray-500 max-w-2xl mx-auto">
+            <Card className="bg-black/70 backdrop-blur-md border-gray-500 max-w-2xl mx-auto relative z-20">
               <CardContent className="p-4 sm:p-6">
                 {selectedThreat && (
                   <div>
