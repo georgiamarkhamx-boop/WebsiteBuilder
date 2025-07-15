@@ -161,16 +161,16 @@ export default function EnhancedCoursePlayer() {
       questions: [
         {
           id: 'phishing',
-          question: 'Which of these is a safe email to click?',
+          question: 'You receive a suspicious email asking for confidential information. What should you do in a large company?',
           type: 'multiple_choice',
           options: [
-            'Urgent: Your account will be suspended',
-            'Monthly security newsletter from IT',
-            'Click here to claim your prize!',
-            'Verify your password immediately'
+            'Reply asking for verification',
+            'Forward it to IT security/report through proper channels',
+            'Delete it immediately without reporting',
+            'Call the sender to verify authenticity'
           ],
           correctAnswer: 1,
-          explanation: 'Legitimate emails from known sources are generally safe.',
+          explanation: 'In large companies, IT security teams need to know about phishing attempts to protect the entire organization. Reporting helps them identify patterns and prevent future attacks.',
           roleSpecific: true
         }
       ]
@@ -302,13 +302,13 @@ export default function EnhancedCoursePlayer() {
           question: 'You receive a suspicious email asking for confidential information. What\'s your best response?',
           type: 'scenario',
           options: [
-            'Forward it to IT security',
+            'Delete it immediately without reporting',
             'Reply asking for verification',
-            'Delete it immediately',
-            'Report it through proper channels'
+            'Forward it to IT security/report through proper channels',
+            'Call the sender to verify authenticity'
           ],
-          correctAnswer: 3,
-          explanation: 'Reporting through proper channels helps protect the organization.'
+          correctAnswer: 2,
+          explanation: 'Reporting through proper channels helps IT security teams protect the entire organization and identify attack patterns.'
         }
       ]
     },
@@ -465,55 +465,65 @@ export default function EnhancedCoursePlayer() {
 
             {/* Interactive Elements */}
             {module.interactive && module.questions && (
-              <div className="space-y-6">
+              <div className="space-y-6 max-h-[60vh] overflow-y-auto">
                 {module.questions.map((question, index) => (
                   <Card key={question.id} className="border-2 border-blue-100">
                     <CardContent className="pt-6">
                       <div className="space-y-4">
                         <div className="flex items-start gap-2">
-                          <Target className="w-5 h-5 text-blue-500 mt-1" />
-                          <div className="flex-1">
-                            <h3 className="font-semibold mb-2">{question.question}</h3>
+                          <Target className="w-5 h-5 text-blue-500 mt-1 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold mb-4">{question.question}</h3>
                             
                             {question.type === 'multiple_choice' && (
-                              <RadioGroup
-                                value={answers[question.id] || ''}
-                                onValueChange={(value) => handleAnswer(question.id, value)}
-                              >
+                              <div className="space-y-3">
                                 {question.options.map((option, optionIndex) => (
-                                  <div key={optionIndex} className="flex items-center space-x-2">
-                                    <RadioGroupItem value={option} id={`${question.id}-${optionIndex}`} />
-                                    <Label htmlFor={`${question.id}-${optionIndex}`}>{option}</Label>
+                                  <div key={optionIndex} className="flex items-start space-x-3">
+                                    <input
+                                      type="radio"
+                                      id={`${question.id}-${optionIndex}`}
+                                      name={question.id}
+                                      value={option}
+                                      checked={answers[question.id] === option}
+                                      onChange={() => handleAnswer(question.id, option)}
+                                      className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                                    />
+                                    <label 
+                                      htmlFor={`${question.id}-${optionIndex}`}
+                                      className="flex-1 text-sm font-medium leading-5 cursor-pointer hover:text-blue-600"
+                                    >
+                                      {option}
+                                    </label>
                                   </div>
                                 ))}
-                              </RadioGroup>
+                              </div>
                             )}
                             
                             {question.type === 'scenario' && (
-                              <div className="space-y-2">
+                              <div className="space-y-3">
                                 {question.options.map((option, optionIndex) => (
                                   <button
                                     key={optionIndex}
                                     onClick={() => handleAnswer(question.id, option)}
-                                    className={`w-full p-3 text-left rounded-lg border-2 transition-colors ${
+                                    className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
                                       answers[question.id] === option
-                                        ? 'border-blue-500 bg-blue-50'
-                                        : 'border-gray-200 hover:border-gray-300'
+                                        ? 'border-blue-500 bg-blue-50 text-blue-900'
+                                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                                     }`}
                                   >
-                                    {option}
+                                    <div className="text-sm font-medium">{option}</div>
                                   </button>
                                 ))}
                               </div>
                             )}
                             
                             {answers[question.id] && (
-                              <div className="mt-4 p-3 bg-green-50 rounded-lg">
-                                <div className="flex items-center gap-2 text-green-800">
-                                  <CheckCircle2 className="w-4 h-4" />
+                              <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                                <div className="flex items-center gap-2 text-green-800 mb-2">
+                                  <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
                                   <span className="font-medium">Explanation:</span>
                                 </div>
-                                <p className="text-green-700 mt-1">{question.explanation}</p>
+                                <p className="text-green-700 text-sm leading-relaxed">{question.explanation}</p>
                               </div>
                             )}
                           </div>
@@ -630,37 +640,43 @@ export default function EnhancedCoursePlayer() {
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between pt-6 border-t">
-            <Button 
-              variant="outline" 
-              onClick={prevModule}
-              disabled={currentModule === 0}
-            >
-              Previous
-            </Button>
-            
-            <div className="flex items-center gap-2">
-              {module.type === 'personalization' && (
-                <Button 
-                  onClick={handlePersonalizationComplete}
-                  disabled={!answers['country'] || !answers['role'] || !answers['compliance']}
-                >
-                  Continue
-                </Button>
-              )}
+          <div className="sticky bottom-0 bg-white border-t pt-6 mt-8">
+            <div className="flex items-center justify-between">
+              <Button 
+                variant="outline" 
+                onClick={prevModule}
+                disabled={currentModule === 0}
+              >
+                Previous
+              </Button>
               
-              {module.type !== 'personalization' && module.type !== 'completion' && (
-                <Button onClick={nextModule}>
-                  Next Module
-                </Button>
-              )}
-              
-              {module.type === 'completion' && (
-                <Button className="bg-green-500 hover:bg-green-600">
-                  <Award className="w-4 h-4 mr-2" />
-                  Get Certificate
-                </Button>
-              )}
+              <div className="flex items-center gap-2">
+                {module.type === 'personalization' && (
+                  <Button 
+                    onClick={handlePersonalizationComplete}
+                    disabled={!answers['country'] || !answers['role'] || !answers['compliance']}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    Continue to Course
+                  </Button>
+                )}
+                
+                {module.type !== 'personalization' && module.type !== 'completion' && (
+                  <Button 
+                    onClick={nextModule}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    Next Module
+                  </Button>
+                )}
+                
+                {module.type === 'completion' && (
+                  <Button className="bg-green-500 hover:bg-green-600">
+                    <Award className="w-4 h-4 mr-2" />
+                    Get Certificate
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </CardContent>
