@@ -137,6 +137,9 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
       ...prev,
       [questionId]: answerIndex
     }));
+    
+    // Add visual feedback for selection
+    console.log(`Selected answer ${answerIndex} for question ${questionId}`);
   };
 
   const handleQuizSubmit = () => {
@@ -255,17 +258,24 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        {question.options.map((option, optionIndex) => (
-                          <Button
-                            key={optionIndex}
-                            variant={quizAnswers[question.id] === optionIndex ? "default" : "outline"}
-                            className="w-full text-left justify-start btn-touch p-4 h-auto text-sm"
-                            onClick={() => handleQuizAnswer(question.id, optionIndex)}
-                          >
-                            <span className="font-medium mr-2">{String.fromCharCode(65 + optionIndex)}.</span>
-                            <span className="flex-1">{option}</span>
-                          </Button>
-                        ))}
+                        {question.options.map((option, optionIndex) => {
+                          const isSelected = quizAnswers[question.id] === optionIndex;
+                          return (
+                            <Button
+                              key={optionIndex}
+                              variant={isSelected ? "default" : "outline"}
+                              className={cn(
+                                "w-full text-left justify-start btn-touch p-4 h-auto text-sm transition-all duration-200",
+                                isSelected ? "bg-blue-600 hover:bg-blue-700 text-white" : "hover:bg-blue-50"
+                              )}
+                              onClick={() => handleQuizAnswer(question.id, optionIndex)}
+                            >
+                              <span className="font-medium mr-2">{String.fromCharCode(65 + optionIndex)}.</span>
+                              <span className="flex-1">{option}</span>
+                              {isSelected && <CheckCircle className="w-4 h-4 ml-2 text-white" />}
+                            </Button>
+                          );
+                        })}
                       </div>
                       
                       {showQuizResults && (
