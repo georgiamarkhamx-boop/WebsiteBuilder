@@ -161,16 +161,16 @@ export default function EnhancedCoursePlayer() {
       questions: [
         {
           id: 'phishing',
-          question: 'You receive a suspicious email asking for confidential information. What should you do in a large company?',
+          question: 'You receive this email from your CEO: "Hi, I need you to purchase 5 x $100 Amazon gift cards for a client meeting. Please send me the codes ASAP. Thanks!" What should you do?',
           type: 'multiple_choice',
           options: [
-            'Reply asking for verification',
-            'Forward it to IT security/report through proper channels',
-            'Delete it immediately without reporting',
-            'Call the sender to verify authenticity'
+            'Buy the gift cards immediately - The CEO needs them urgently',
+            'Forward to your manager - Let someone else handle it',
+            'Call the CEO directly to verify - Verify through a different channel',
+            'Report to IT security - Flag as potential phishing'
           ],
-          correctAnswer: 1,
-          explanation: 'In large companies, IT security teams need to know about phishing attempts to protect the entire organization. Reporting helps them identify patterns and prevent future attacks.',
+          correctAnswer: 3,
+          explanation: 'This is a classic CEO fraud/phishing attack. In large companies, you should ALWAYS report suspicious emails to IT security, even if they appear to come from executives. IT security teams need to know about these attempts to protect the entire organization.',
           roleSpecific: true
         }
       ]
@@ -299,16 +299,16 @@ export default function EnhancedCoursePlayer() {
       questions: [
         {
           id: 'final-scenario',
-          question: 'You receive a suspicious email asking for confidential information. What\'s your best response?',
+          question: 'Final scenario: You get an urgent email from the "CFO" asking you to wire $50,000 to a vendor immediately. The email looks legitimate but something feels off. What\'s your best response?',
           type: 'scenario',
           options: [
             'Delete it immediately without reporting',
-            'Reply asking for verification',
-            'Forward it to IT security/report through proper channels',
-            'Call the sender to verify authenticity'
+            'Wire the money - it\'s from the CFO',
+            'Report to IT security - Flag as potential phishing',
+            'Call the CFO to verify - then report to IT security'
           ],
           correctAnswer: 2,
-          explanation: 'Reporting through proper channels helps IT security teams protect the entire organization and identify attack patterns.'
+          explanation: 'This is a classic business email compromise (BEC) attack. The correct response is to report it to IT security immediately. Large companies rely on their security teams to identify and stop these sophisticated attacks that target multiple employees.'
         }
       ]
     },
@@ -477,43 +477,81 @@ export default function EnhancedCoursePlayer() {
                             
                             {question.type === 'multiple_choice' && (
                               <div className="space-y-3">
-                                {question.options.map((option, optionIndex) => (
-                                  <div key={optionIndex} className="flex items-start space-x-3">
-                                    <input
-                                      type="radio"
-                                      id={`${question.id}-${optionIndex}`}
-                                      name={question.id}
-                                      value={option}
-                                      checked={answers[question.id] === option}
-                                      onChange={() => handleAnswer(question.id, option)}
-                                      className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                                    />
-                                    <label 
-                                      htmlFor={`${question.id}-${optionIndex}`}
-                                      className="flex-1 text-sm font-medium leading-5 cursor-pointer hover:text-blue-600"
+                                {question.options.map((option, optionIndex) => {
+                                  const isSelected = answers[question.id] === option;
+                                  const isCorrect = optionIndex === question.correctAnswer;
+                                  const showResult = answers[question.id] && answers[question.id] !== '';
+                                  
+                                  return (
+                                    <button
+                                      key={optionIndex}
+                                      onClick={() => handleAnswer(question.id, option)}
+                                      className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
+                                        isSelected && showResult && isCorrect
+                                          ? 'border-green-500 bg-green-50 text-green-900'
+                                          : isSelected && showResult && !isCorrect
+                                          ? 'border-red-500 bg-red-50 text-red-900'
+                                          : isSelected
+                                          ? 'border-blue-500 bg-blue-50 text-blue-900'
+                                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                      }`}
                                     >
-                                      {option}
-                                    </label>
-                                  </div>
-                                ))}
+                                      <div className="flex items-center justify-between">
+                                        <div className="flex-1">
+                                          <div className="text-sm font-medium">{option}</div>
+                                        </div>
+                                        {showResult && isSelected && isCorrect && (
+                                          <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                                        )}
+                                        {showResult && isSelected && !isCorrect && (
+                                          <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0">
+                                            <span className="text-white text-xs">✗</span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </button>
+                                  );
+                                })}
                               </div>
                             )}
                             
                             {question.type === 'scenario' && (
                               <div className="space-y-3">
-                                {question.options.map((option, optionIndex) => (
-                                  <button
-                                    key={optionIndex}
-                                    onClick={() => handleAnswer(question.id, option)}
-                                    className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
-                                      answers[question.id] === option
-                                        ? 'border-blue-500 bg-blue-50 text-blue-900'
-                                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                                    }`}
-                                  >
-                                    <div className="text-sm font-medium">{option}</div>
-                                  </button>
-                                ))}
+                                {question.options.map((option, optionIndex) => {
+                                  const isSelected = answers[question.id] === option;
+                                  const isCorrect = optionIndex === question.correctAnswer;
+                                  const showResult = answers[question.id] && answers[question.id] !== '';
+                                  
+                                  return (
+                                    <button
+                                      key={optionIndex}
+                                      onClick={() => handleAnswer(question.id, option)}
+                                      className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
+                                        isSelected && showResult && isCorrect
+                                          ? 'border-green-500 bg-green-50 text-green-900'
+                                          : isSelected && showResult && !isCorrect
+                                          ? 'border-red-500 bg-red-50 text-red-900'
+                                          : isSelected
+                                          ? 'border-blue-500 bg-blue-50 text-blue-900'
+                                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                      }`}
+                                    >
+                                      <div className="flex items-center justify-between">
+                                        <div className="flex-1">
+                                          <div className="text-sm font-medium">{option}</div>
+                                        </div>
+                                        {showResult && isSelected && isCorrect && (
+                                          <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                                        )}
+                                        {showResult && isSelected && !isCorrect && (
+                                          <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0">
+                                            <span className="text-white text-xs">✗</span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </button>
+                                  );
+                                })}
                               </div>
                             )}
                             
