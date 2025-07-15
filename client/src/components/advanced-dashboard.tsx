@@ -101,20 +101,20 @@ export default function AdvancedDashboard() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 px-4 sm:px-0">
       {/* Gamification Header */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <Card className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="w-5 h-5" />
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+              <Trophy className="w-4 h-4 sm:w-5 sm:h-5" />
               Level {gamificationData.level}
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             <div className="space-y-2">
               <Progress value={(gamificationData.xp / gamificationData.nextLevelXp) * 100} className="bg-white/20" />
-              <p className="text-sm opacity-90">{gamificationData.xp}/{gamificationData.nextLevelXp} XP</p>
+              <p className="text-xs sm:text-sm opacity-90">{gamificationData.xp}/{gamificationData.nextLevelXp} XP</p>
             </div>
           </CardContent>
         </Card>
@@ -158,13 +158,13 @@ export default function AdvancedDashboard() {
       </div>
 
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="learning">Learning</TabsTrigger>
-          <TabsTrigger value="ttx">TTX Sessions</TabsTrigger>
-          <TabsTrigger value="assessment">Assessment</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 text-xs sm:text-sm">
+          <TabsTrigger value="overview" className="px-2 sm:px-3">Overview</TabsTrigger>
+          <TabsTrigger value="learning" className="px-2 sm:px-3">Learning</TabsTrigger>
+          <TabsTrigger value="ttx" className="px-2 sm:px-3">TTX Sessions</TabsTrigger>
+          <TabsTrigger value="assessment" className="px-2 sm:px-3">Assessment</TabsTrigger>
+          <TabsTrigger value="analytics" className="px-2 sm:px-3">Analytics</TabsTrigger>
+          <TabsTrigger value="monitoring" className="px-2 sm:px-3">Monitoring</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -182,17 +182,17 @@ export default function AdvancedDashboard() {
             <CardContent>
               <div className="space-y-4">
                 {aiInsights.map((insight, index) => (
-                  <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-semibold">{insight.title}</h4>
-                        <p className="text-sm text-gray-600">{insight.description}</p>
+                  <div key={index} className="border-l-4 border-blue-500 pl-3 sm:pl-4 py-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-sm sm:text-base">{insight.title}</h4>
+                        <p className="text-xs sm:text-sm text-gray-600 mt-1">{insight.description}</p>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant={insight.priority === "high" ? "destructive" : "secondary"}>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <Badge variant={insight.priority === "high" ? "destructive" : "secondary"} className="text-xs">
                           {insight.priority}
                         </Badge>
-                        <Button size="sm" variant="outline">
+                        <Button size="sm" variant="outline" className="text-xs sm:text-sm px-2 sm:px-3">
                           {insight.action}
                         </Button>
                       </div>
