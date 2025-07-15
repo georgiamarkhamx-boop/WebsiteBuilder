@@ -41,7 +41,7 @@ export default function HeroSection({ onShowDemo }: HeroSectionProps) {
                 size="lg" 
                 variant="outline" 
                 onClick={scrollToPricing}
-                className="border-2 border-white text-white bg-white/20 backdrop-blur-sm hover:bg-white hover:text-primary btn-touch w-full sm:w-auto font-medium shadow-lg"
+                className="border-2 border-white text-white bg-white/20 backdrop-blur-sm hover:bg-white hover:text-gray-900 btn-touch w-full sm:w-auto font-medium shadow-lg"
               >
                 View Pricing
               </Button>
