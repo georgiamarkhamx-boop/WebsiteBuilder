@@ -66,11 +66,7 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
     return matchesCategory && matchesSearch;
   });
 
-  // Debug logging
-  console.log("Selected category:", selectedCategory);
-  console.log("Total courses:", courses.length);
-  console.log("Filtered courses:", filteredCourses.length);
-  console.log("Sample course categories:", courses.slice(0, 5).map(c => c.category));
+
 
   const handleStartCourse = (course: Course) => {
     setSelectedCourse(course);
@@ -223,6 +219,11 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                     </Card>
                   ))}
                 </div>
+              ) : filteredCourses.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-gray-500 text-lg">No courses found in this category.</p>
+                  <p className="text-gray-400 text-sm mt-2">Try selecting a different category or check back soon for new courses.</p>
+                </div>
               ) : (
                 <div className="space-y-4">
                   {filteredCourses.map(course => {
@@ -309,7 +310,7 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                               <Button 
                                 onClick={() => handleStartCourse(course)}
                                 className={cn(
-                                  "flex-1 font-medium btn-touch transition-all duration-200 text-sm sm:text-base",
+                                  "flex-1 font-medium transition-all duration-200 text-sm sm:text-base px-4 py-2",
                                   course.difficulty === 'Beginner' && "bg-pink-500 hover:bg-pink-600",
                                   course.difficulty === 'Intermediate' && "bg-purple-500 hover:bg-purple-600",
                                   course.difficulty === 'Advanced' && "bg-blue-500 hover:bg-blue-600"
@@ -321,7 +322,7 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                               <Button 
                                 onClick={() => setSelectedCourse({ ...course, showLab: true })}
                                 variant="outline"
-                                className="px-4 border-purple-500 text-purple-600 hover:bg-purple-50 text-sm sm:text-base sm:w-auto w-full"
+                                className="px-4 py-2 border-purple-500 text-purple-600 hover:bg-purple-50 text-sm sm:text-base sm:w-auto w-full"
                                 disabled={enrollMutation.isPending}
                               >
                                 <Beaker className="w-4 h-4 mr-2 sm:mr-0" />
