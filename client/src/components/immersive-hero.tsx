@@ -85,7 +85,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
     {
       id: 'phishing-1',
       name: 'Spear Phishing',
-      position: { x: 10, y: 15, z: 5 },
+      position: { x: 5, y: 15, z: 5 },
       type: 'phishing',
       severity: 'high',
       active: true,
@@ -94,7 +94,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
     {
       id: 'malware-1',
       name: 'Trojan',
-      position: { x: 25, y: 30, z: 8 },
+      position: { x: 85, y: 25, z: 8 },
       type: 'malware',
       severity: 'critical',
       active: simulationRunning,
@@ -103,7 +103,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
     {
       id: 'ransomware-1',
       name: 'Crypto Locker',
-      position: { x: 40, y: 20, z: 12 },
+      position: { x: 90, y: 45, z: 12 },
       type: 'ransomware',
       severity: 'critical',
       active: false,
@@ -112,7 +112,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
     {
       id: 'insider-1',
       name: 'Privilege Escalation',
-      position: { x: 55, y: 35, z: 6 },
+      position: { x: 8, y: 75, z: 6 },
       type: 'insider',
       severity: 'medium',
       active: false,
@@ -124,7 +124,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
     {
       id: 'firewall-1',
       name: 'Perimeter Firewall',
-      position: { x: 15, y: 50, z: 10 },
+      position: { x: 12, y: 85, z: 10 },
       type: 'firewall',
       status: 'secure',
       connections: ['endpoint-1', 'server-1']
@@ -132,7 +132,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
     {
       id: 'endpoint-1',
       name: 'Employee Workstation',
-      position: { x: 30, y: 25, z: 7 },
+      position: { x: 88, y: 15, z: 7 },
       type: 'endpoint',
       status: selectedThreat?.type === 'phishing' ? 'compromised' : 'secure',
       connections: ['server-1', 'user-1']
@@ -140,7 +140,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
     {
       id: 'server-1',
       name: 'Application Server',
-      position: { x: 45, y: 40, z: 15 },
+      position: { x: 85, y: 70, z: 15 },
       type: 'server',
       status: simulationRunning ? 'warning' : 'secure',
       connections: ['firewall-1', 'endpoint-1']
@@ -148,7 +148,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
     {
       id: 'user-1',
       name: 'User Account',
-      position: { x: 20, y: 35, z: 5 },
+      position: { x: 10, y: 40, z: 5 },
       type: 'user',
       status: 'secure',
       connections: ['endpoint-1']
@@ -386,6 +386,16 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
         </div>
       </div>
 
+      {/* Text Readability Overlay */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div 
+          className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/20"
+          style={{
+            background: `radial-gradient(ellipse 70% 50% at center, rgba(0,0,0,0.3), transparent 70%)`
+          }}
+        />
+      </div>
+
       {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center pt-20">
         <div className="max-w-6xl mx-auto">
@@ -397,10 +407,13 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Immersive Cyber Defense
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto px-4 text-shadow-strong">
-              Experience cybersecurity like never before. Step into a 3D virtual environment where you'll face real-world threats, 
-              make critical decisions, and learn through interactive simulations that adapt to your responses.
-            </p>
+            <div className="relative">
+              <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-xl -mx-8 -my-4"></div>
+              <p className="relative text-base sm:text-lg md:text-xl text-white mb-8 max-w-3xl mx-auto px-4 font-medium">
+                Experience cybersecurity like never before. Step into a 3D virtual environment where you'll face real-world threats, 
+                make critical decisions, and learn through interactive simulations that adapt to your responses.
+              </p>
+            </div>
           </div>
 
           {/* Interactive Controls */}
