@@ -42,14 +42,27 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
 
   // Generate comprehensive course modules based on course content
   const getModulesForCourse = (course: Course): Module[] => {
-    // Tech for Founders Courses
-    if (course.category === "founders") {
+    // Check course title for specific content routing
+    const title = course.title.toLowerCase();
+    
+    // Cybersecurity-focused courses (including startup-specific)
+    if (title.includes('cybersecurity') || title.includes('security') || title.includes('cyber')) {
+      return getCybersecurityCourseModules(course);
+    }
+    
+    // Tech stack and infrastructure courses
+    if (title.includes('tech stack') || title.includes('no-code') || title.includes('analytics') || title.includes('scaling tech')) {
       return getFoundersCourseModules(course);
     }
     
     // AI & Business Courses  
-    if (course.category === "ai_business") {
+    if (course.category === "ai_business" || title.includes('ai') || title.includes('chatgpt') || title.includes('automation')) {
       return getAIBusinessCourseModules(course);
+    }
+    
+    // Default based on category for other courses
+    if (course.category === "founders") {
+      return getFoundersCourseModules(course);
     }
     
     // Default cybersecurity courses
@@ -475,6 +488,9 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
   };
 
   const getCybersecurityCourseModules = (course: Course): Module[] => {
+    // Check if this is a startup-specific cybersecurity course
+    const isStartupFocused = course.title.toLowerCase().includes('startup');
+    
     const baseModules = [
       {
         id: 1,
@@ -490,17 +506,28 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
             <div class="bg-blue-50 p-4 rounded-lg">
               <h3 class="font-semibold mb-2">What You'll Learn:</h3>
               <ul class="space-y-2 text-sm">
+                ${isStartupFocused ? `
+                <li>✓ Essential cybersecurity practices for early-stage companies</li>
+                <li>✓ Cost-effective security solutions for limited budgets</li>
+                <li>✓ Data protection and compliance fundamentals</li>
+                <li>✓ Building security culture from day one</li>
+                <li>✓ Risk management for rapid growth</li>
+                ` : `
                 <li>✓ Core concepts and terminology</li>
                 <li>✓ Real-world attack scenarios</li>
                 <li>✓ Hands-on defensive techniques</li>
                 <li>✓ Best practices for your role</li>
                 <li>✓ Emergency response procedures</li>
+                `}
               </ul>
             </div>
             
             <div class="bg-green-50 p-4 rounded-lg">
               <h3 class="font-semibold mb-2">Why This Matters:</h3>
-              <p class="text-sm">Cybersecurity incidents cost organizations an average of $4.45 million per breach. This training will help you become a human firewall, protecting your organization from the 95% of attacks that target people, not technology.</p>
+              <p class="text-sm">${isStartupFocused ? 
+                '60% of small businesses close within 6 months of a cyber attack. Startups are 3x more likely to be targeted due to weaker security. Implementing security early saves $200K+ in potential breach costs.' : 
+                'Cybersecurity incidents cost organizations an average of $4.45 million per breach. This training will help you become a human firewall, protecting your organization from the 95% of attacks that target people, not technology.'
+              }</p>
             </div>
           </div>
         `,
@@ -508,9 +535,69 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
       },
       {
         id: 2,
-        title: "Interactive Video Learning",
-        type: 'video' as const,
-        content: `
+        title: isStartupFocused ? "Startup Security Essentials" : "Interactive Video Learning",
+        type: 'text' as const,
+        content: isStartupFocused ? `
+          <div class="space-y-6">
+            <div class="bg-gradient-to-r from-red-600 to-orange-600 text-white p-6 rounded-lg">
+              <h3 class="font-bold mb-3">🚀 STARTUP SECURITY FUNDAMENTALS</h3>
+              <p>Build security into your startup from day one without breaking the bank.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-red-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-red-800 mb-2">🔐 Essential Security Controls</h4>
+                <ul class="text-sm text-red-700 space-y-1">
+                  <li>• Multi-factor authentication on all accounts</li>
+                  <li>• Password managers for team passwords</li>
+                  <li>• Regular software updates and patches</li>
+                  <li>• Secure cloud storage configuration</li>
+                  <li>• Employee security awareness training</li>
+                </ul>
+              </div>
+              
+              <div class="bg-orange-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-orange-800 mb-2">💰 Budget-Friendly Solutions</h4>
+                <ul class="text-sm text-orange-700 space-y-1">
+                  <li>• Google Workspace/Microsoft 365 security</li>
+                  <li>• Free antivirus and endpoint protection</li>
+                  <li>• Built-in cloud security features</li>
+                  <li>• Open-source security tools</li>
+                  <li>• Cyber insurance for small businesses</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+              <h4 class="font-bold text-yellow-800 mb-2">⚠️ Common Startup Security Mistakes</h4>
+              <ul class="text-sm text-yellow-700 space-y-1">
+                <li>• Using personal accounts for business data</li>
+                <li>• Sharing passwords in plain text messages</li>
+                <li>• No backup strategy for critical data</li>
+                <li>• Ignoring software updates due to time constraints</li>
+                <li>• No incident response plan</li>
+              </ul>
+            </div>
+            
+            <div class="bg-green-50 p-4 rounded-lg">
+              <h4 class="font-bold text-green-800 mb-2">✅ 30-Day Security Quick Start</h4>
+              <div class="text-sm text-green-700 space-y-2">
+                <div class="flex items-center">
+                  <input type="checkbox" class="mr-2"> Week 1: Enable MFA on all business accounts
+                </div>
+                <div class="flex items-center">
+                  <input type="checkbox" class="mr-2"> Week 2: Implement password manager for team
+                </div>
+                <div class="flex items-center">
+                  <input type="checkbox" class="mr-2"> Week 3: Set up automated backups
+                </div>
+                <div class="flex items-center">
+                  <input type="checkbox" class="mr-2"> Week 4: Create basic incident response plan
+                </div>
+              </div>
+            </div>
+          </div>
+        ` : `
           <div class="space-y-4">
             <div class="aspect-video bg-gradient-to-br from-blue-900 to-purple-900 rounded-lg flex items-center justify-center text-white">
               <div class="text-center">
