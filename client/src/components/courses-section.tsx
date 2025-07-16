@@ -29,6 +29,7 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCourse, setSelectedCourse] = useState<ExtendedCourse | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: courses = [], isLoading, error } = useQuery<Course[]>({
@@ -75,8 +76,17 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
 
 
   const handleStartCourse = (course: Course) => {
-    setSelectedCourse(course);
-    enrollMutation.mutate(course.id);
+    setIsTransitioning(true);
+    
+    // Smooth scroll to top before showing course player
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Add a delay to let the scroll animation complete
+    setTimeout(() => {
+      setSelectedCourse(course);
+      enrollMutation.mutate(course.id);
+      setIsTransitioning(false);
+    }, 300);
   };
 
   const handleCompleteCourse = (courseId: number, score: number) => {
@@ -353,27 +363,35 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                                   course.difficulty === 'Intermediate' && "bg-purple-500 hover:bg-purple-600",
                                   course.difficulty === 'Advanced' && "bg-blue-500 hover:bg-blue-600"
                                 )}
-                                disabled={enrollMutation.isPending}
+                                disabled={enrollMutation.isPending || isTransitioning}
                               >
-                                Try Sample
+                                {isTransitioning ? 'Loading...' : 'Try Sample'}
                               </Button>
                               <Button 
                                 onClick={() => {
-                                  let labType: 'cyber_command' | 'tech_stack' | 'ai_workspace' | 'security_ops' = 'cyber_command';
+                                  setIsTransitioning(true);
                                   
-                                  if (course.category.includes('AI & Business')) {
-                                    labType = 'ai_workspace';
-                                  } else if (course.category.includes('Tech for Founders')) {
-                                    labType = 'tech_stack';
-                                  } else if (course.title.toLowerCase().includes('security')) {
-                                    labType = 'security_ops';
-                                  }
+                                  // Smooth scroll to top before showing 3D lab
+                                  window.scrollTo({ top: 0, behavior: 'smooth' });
                                   
-                                  setSelectedCourse({ ...course, show3DLab: true, labType });
+                                  setTimeout(() => {
+                                    let labType: 'cyber_command' | 'tech_stack' | 'ai_workspace' | 'security_ops' = 'cyber_command';
+                                    
+                                    if (course.category.includes('AI & Business')) {
+                                      labType = 'ai_workspace';
+                                    } else if (course.category.includes('Tech for Founders')) {
+                                      labType = 'tech_stack';
+                                    } else if (course.title.toLowerCase().includes('security')) {
+                                      labType = 'security_ops';
+                                    }
+                                    
+                                    setSelectedCourse({ ...course, show3DLab: true, labType });
+                                    setIsTransitioning(false);
+                                  }, 300);
                                 }}
                                 variant="outline"
                                 className="px-4 py-2 border-purple-500 text-purple-600 hover:bg-purple-50 text-sm sm:text-base sm:w-auto w-full"
-                                disabled={enrollMutation.isPending}
+                                disabled={enrollMutation.isPending || isTransitioning}
                               >
                                 <Beaker className="w-4 h-4 mr-2 sm:mr-0" />
                                 <span className="sm:hidden">3D Lab</span>
