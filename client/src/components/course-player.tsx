@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { CheckCircle, PlayCircle, Book, Award, ArrowRight, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Course } from "@shared/schema";
+import CourseCompletionCertificate from "./course-completion-certificate";
 
 interface CoursePlayerProps {
   course: Course;
@@ -37,6 +38,7 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
   const [showQuizResults, setShowQuizResults] = useState(false);
   const [courseScore, setCourseScore] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [showCertificate, setShowCertificate] = useState(false);
 
   // Generate comprehensive course modules based on course content
   const getModulesForCourse = (course: Course): Module[] => {
@@ -768,9 +770,10 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
     if (currentModule < modules.length - 1) {
       setCurrentModule(currentModule + 1);
     } else {
-      // Course completed
+      // Course completed - show certificate
       const finalScore = calculateFinalScore();
       setCourseScore(finalScore);
+      setShowCertificate(true);
       onComplete(course.id, finalScore);
     }
   };
@@ -1049,6 +1052,25 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
         return null;
     }
   };
+
+  // Show certificate when course is completed
+  if (showCertificate) {
+    return (
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="mb-6 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-900">Course Complete!</h1>
+          <Button variant="outline" onClick={onClose}>
+            Back to Courses
+          </Button>
+        </div>
+        <CourseCompletionCertificate 
+          course={course} 
+          score={courseScore} 
+          studentName="Sarah Johnson" 
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">

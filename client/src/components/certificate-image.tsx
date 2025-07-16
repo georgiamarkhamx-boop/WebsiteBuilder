@@ -58,19 +58,19 @@ export default function CertificateImage({
       
       default: // Intermediate
         return {
-          containerClass: "w-full max-w-4xl mx-auto bg-white shadow-xl overflow-hidden relative",
+          containerClass: "w-full max-w-4xl mx-auto bg-white shadow-xl overflow-hidden relative border-2 border-blue-400",
           bgGradients: {
-            top: "bg-gradient-to-br from-slate-700 via-blue-800 to-cyan-900",
-            bottom: "bg-gradient-to-tl from-blue-900 via-purple-800 to-slate-700",
-            accent: "bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500"
+            top: "bg-gradient-to-br from-blue-600 via-cyan-700 to-blue-800",
+            bottom: "bg-gradient-to-tl from-blue-800 via-cyan-800 to-blue-700",
+            accent: "bg-gradient-to-r from-cyan-400 via-blue-400 to-blue-500"
           },
           badge: {
-            outer: "bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500",
-            inner: "bg-gradient-to-br from-yellow-300 to-orange-400",
+            outer: "bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600",
+            inner: "bg-gradient-to-br from-yellow-300 to-amber-400",
             text: "CYBER\nEXPERT"
           },
           title: "CERTIFICATE",
-          subtitle: "OF CYBER EXCELLENCE",
+          subtitle: "OF EXCELLENCE",
           patternColor: "bg-blue-400"
         };
     }

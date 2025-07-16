@@ -70,12 +70,12 @@ export default function CertificationSection() {
               
               {/* Intermediate Certificate Preview */}
               <div className="text-center">
-                <div className="bg-white border-2 border-blue-200 rounded-lg shadow-xl p-4 mb-3 transform hover:scale-105 transition-transform">
-                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                <div className="bg-white border-2 border-blue-400 rounded-lg shadow-xl p-4 mb-3 transform hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full mx-auto mb-2 flex items-center justify-center">
                     <span className="text-white text-xs font-bold">EXPERT</span>
                   </div>
-                  <h4 className="font-semibold text-blue-700 text-sm">Intermediate</h4>
-                  <p className="text-xs text-gray-600">Enhanced Design</p>
+                  <h4 className="font-semibold text-blue-600 text-sm">Intermediate</h4>
+                  <p className="text-xs text-gray-600">Gold & Tech Blue</p>
                 </div>
                 <div className="text-xs text-gray-500">Professional Level</div>
               </div>
