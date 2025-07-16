@@ -11,8 +11,12 @@ export const users = pgTable("users", {
   employeeCount: text("employee_count"),
   role: text("role"),
   department: text("department"),
-  subscriptionTier: text("subscription_tier").default("basic"),
+  subscriptionTier: text("subscription_tier").default("trial"),
   isActive: boolean("is_active").default(true),
+  trialStartDate: timestamp("trial_start_date").defaultNow(),
+  trialEndDate: timestamp("trial_end_date"),
+  isTrialExpired: boolean("is_trial_expired").default(false),
+  lastTrialNotification: timestamp("last_trial_notification"),
   mfaSecret: text("mfa_secret"), // TOTP secret for MFA
   mfaEnabled: boolean("mfa_enabled").default(false),
   lastLogin: timestamp("last_login"),

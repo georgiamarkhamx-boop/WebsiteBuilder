@@ -61,6 +61,26 @@ app.use("/api/auth", async (req, res, next) => {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
+// Session configuration
+import session from "express-session";
+import MemoryStore from "memorystore";
+
+const MemStore = MemoryStore(session);
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'cybershield-dev-secret-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  store: new MemStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+  }
+}));
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;

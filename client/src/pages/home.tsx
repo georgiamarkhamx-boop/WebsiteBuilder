@@ -18,6 +18,10 @@ import TryItModal from "@/components/modals/try-it-modal";
 import MaturityModal from "@/components/modals/maturity-modal";
 import LoginModal from "@/components/modals/login-modal";
 import SignupModal from "@/components/modals/signup-modal";
+import LoginForm from "@/components/login-form";
+import TrialNotification from "@/components/trial-notification";
+import { useAuth } from "@/components/auth-wrapper";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export default function Home() {
   const [showDemoModal, setShowDemoModal] = useState(false);
@@ -27,19 +31,33 @@ export default function Home() {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<'overview' | 'learning' | 'ttx' | 'assessment'>('overview');
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const { user, isAuthenticated, isLoading } = useAuth();
 
   const handleShowSignup = (plan?: string) => {
     setSelectedPlan(plan || null);
+    if (!isAuthenticated) {
+      setShowAuthDialog(true);
+      return;
+    }
     setShowLoginModal(false);
     setShowSignupModal(true);
   };
 
   const handleShowLogin = () => {
+    if (!isAuthenticated) {
+      setShowAuthDialog(true);
+      return;
+    }
     setShowSignupModal(false);
     setShowLoginModal(true);
   };
 
   const handleShowTryIt = () => {
+    if (!isAuthenticated) {
+      setShowAuthDialog(true);
+      return;
+    }
     setShowDemoModal(false);
     setShowTryItModal(true);
   };
@@ -47,6 +65,16 @@ export default function Home() {
   const handleShowMaturity = () => {
     setShowTryItModal(false);
     setShowMaturityModal(true);
+  };
+
+  const handleAuthSuccess = () => {
+    setShowAuthDialog(false);
+    setShowLoginModal(false);
+    setShowSignupModal(false);
+  };
+
+  const handleUpgradeClick = () => {
+    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -57,6 +85,13 @@ export default function Home() {
       />
       
       <main className="flex-grow">
+        {/* Trial Notification */}
+        {isAuthenticated && user && user.trialStatus && (
+          <div className="container mx-auto px-4 pt-4">
+            <TrialNotification user={user} onUpgrade={handleUpgradeClick} />
+          </div>
+        )}
+        
         <HeroSection 
           onShowDemo={() => setShowDemoModal(true)}
         />
@@ -197,6 +232,16 @@ export default function Home() {
         onShowLogin={handleShowLogin}
         selectedPlan={selectedPlan}
       />
+
+      {/* Authentication Dialog */}
+      <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
+        <DialogContent className="max-w-md">
+          <LoginForm 
+            onSuccess={handleAuthSuccess}
+            onClose={() => setShowAuthDialog(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

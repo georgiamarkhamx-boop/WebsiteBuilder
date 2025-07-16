@@ -110,7 +110,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Secure user registration
+  // Secure user registration with trial setup
   app.post("/api/auth/register", async (req, res) => {
     try {
       const validatedData = insertUserSchema.parse(req.body);
@@ -126,15 +126,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Hash password
       const hashedPassword = await AuthService.hashPassword(validatedData.password);
       
-      // Create user
+      // Set up 30-day trial
+      const trialStartDate = new Date();
+      const trialEndDate = new Date();
+      trialEndDate.setDate(trialStartDate.getDate() + 30);
+      
+      // Create user with trial setup
       const user = await storage.createUser({
         ...validatedData,
-        password: hashedPassword
+        password: hashedPassword,
+        subscriptionTier: "trial",
+        trialStartDate,
+        trialEndDate,
+        isTrialExpired: false
       });
 
+      // Set up session
+      req.session.userId = user.id;
+      req.session.user = {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        subscriptionTier: user.subscriptionTier,
+        trialEndDate: user.trialEndDate
+      };
+
       res.status(201).json({ 
-        message: "User created successfully",
-        userId: user.id 
+        message: "Account created successfully! Your 30-day free trial has started.",
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          subscriptionTier: user.subscriptionTier,
+          trialEndDate: user.trialEndDate,
+          daysRemaining: Math.ceil((trialEndDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+        }
       });
     } catch (error: any) {
       if (error instanceof z.ZodError) {
@@ -180,6 +206,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: error || "Authentication failed" });
       }
 
+      // Check trial status
+      let trialStatus = null;
+      if (user.subscriptionTier === "trial" && user.trialEndDate) {
+        const daysRemaining = Math.ceil((new Date(user.trialEndDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        const isExpired = daysRemaining <= 0;
+        
+        trialStatus = {
+          daysRemaining: Math.max(0, daysRemaining),
+          isExpired,
+          endDate: user.trialEndDate
+        };
+        
+        if (isExpired) {
+          return res.status(403).json({ 
+            message: "Your 30-day trial has expired. Please upgrade to continue access.",
+            trialExpired: true,
+            redirectTo: "/pricing"
+          });
+        }
+      }
+
       // Check MFA if enabled
       if (user.mfaEnabled && user.mfaSecret) {
         if (!mfaToken) {
@@ -192,14 +239,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
+      // Set up session
+      req.session.userId = user.id;
+      req.session.user = {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        subscriptionTier: user.subscriptionTier,
+        trialEndDate: user.trialEndDate
+      };
+
       res.json({ 
         message: "Login successful",
         user: {
           id: user.id,
           username: user.username,
           email: user.email,
-          mfaEnabled: user.mfaEnabled
+          subscriptionTier: user.subscriptionTier,
+          mfaEnabled: user.mfaEnabled,
+          trialStatus
         }
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get current user session/profile
+  app.get("/api/auth/profile", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const user = await storage.getUser(req.session.userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Calculate trial status
+      let trialStatus = null;
+      if (user.subscriptionTier === "trial" && user.trialEndDate) {
+        const daysRemaining = Math.ceil((new Date(user.trialEndDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        trialStatus = {
+          daysRemaining: Math.max(0, daysRemaining),
+          isExpired: daysRemaining <= 0,
+          endDate: user.trialEndDate
+        };
+      }
+
+      res.json({
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          subscriptionTier: user.subscriptionTier,
+          companyName: user.companyName,
+          trialStatus
+        }
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Logout
+  app.post("/api/auth/logout", async (req, res) => {
+    try {
+      req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).json({ message: "Could not log out" });
+        }
+        res.clearCookie('connect.sid');
+        res.json({ message: "Logged out successfully" });
       });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
