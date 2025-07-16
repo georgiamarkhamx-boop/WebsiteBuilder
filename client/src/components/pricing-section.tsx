@@ -8,6 +8,7 @@ interface PricingSectionProps {
 
 export default function PricingSection({ onShowSignup }: PricingSectionProps) {
   const [isYearly, setIsYearly] = useState(false);
+  const [membershipDuration, setMembershipDuration] = useState<1 | 3 | 5>(1);
 
   const handleContactSales = () => {
     alert('Contact sales modal would be shown here with a form to get in touch with our sales team.');
@@ -87,7 +88,7 @@ export default function PricingSection({ onShowSignup }: PricingSectionProps) {
           <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">Choose the plan that fits your organization's needs</p>
           
           {/* Pricing Toggle */}
-          <div className="flex justify-center mt-6 md:mt-8">
+          <div className="flex flex-col items-center mt-6 md:mt-8 space-y-4">
             <div className="pricing-toggle w-56 md:w-64 h-12 relative">
               <div className={`pricing-toggle-slider ${isYearly ? 'yearly' : ''}`}></div>
               <button 
@@ -107,6 +108,30 @@ export default function PricingSection({ onShowSignup }: PricingSectionProps) {
                 Yearly (Save 20%)
               </button>
             </div>
+            
+            {/* Membership Duration Selection for Yearly */}
+            {isYearly && (
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-600">Contract length:</span>
+                <div className="flex space-x-2">
+                  {[1, 3, 5].map((duration) => (
+                    <button
+                      key={duration}
+                      onClick={() => setMembershipDuration(duration as 1 | 3 | 5)}
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                        membershipDuration === duration
+                          ? 'bg-purple-500 text-white'
+                          : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                      }`}
+                    >
+                      {duration} year{duration > 1 ? 's' : ''}
+                      {duration === 3 && <span className="ml-1 text-xs">(Extra 5% off)</span>}
+                      {duration === 5 && <span className="ml-1 text-xs">(Extra 10% off)</span>}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
         
@@ -135,11 +160,18 @@ export default function PricingSection({ onShowSignup }: PricingSectionProps) {
                       <span>Custom</span>
                     ) : (
                       <>
-                        £{price}
-                        <span className="text-sm text-gray-500">/month</span>
+                        £{isYearly ? Math.round(price * 12 * membershipDuration * (membershipDuration === 1 ? 0.8 : membershipDuration === 3 ? 0.75 : 0.7)) : price}
+                        <span className="text-sm text-gray-500">
+                          {isYearly ? `/${membershipDuration} year${membershipDuration > 1 ? 's' : ''}` : '/month'}
+                        </span>
                       </>
                     )}
                   </div>
+                  {isYearly && !plan.isCustom && (
+                    <div className="text-xs text-green-600 mb-2">
+                      Save £{Math.round(price * 12 * membershipDuration * (membershipDuration === 1 ? 0.2 : membershipDuration === 3 ? 0.25 : 0.3))} vs monthly billing
+                    </div>
+                  )}
                   <p className="text-sm text-gray-500 mb-6">{plan.employees}</p>
                 </div>
                 
