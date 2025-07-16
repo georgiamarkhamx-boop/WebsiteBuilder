@@ -84,9 +84,9 @@ export default function Home() {
         <section id="dashboard" className="cyber-dark-section py-16">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Centralized Security Command Center</h2>
+              <h2 className="text-3xl font-bold mb-4">Security Training Command Center</h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Integrated dashboard combining e-learning, TTX exercises, security assessments, analytics, and real-time threat monitoring
+                Integrated dashboard tracking your learning progress, TTX exercise results, skill assessments, and training achievements to build your security expertise
               </p>
             </div>
             

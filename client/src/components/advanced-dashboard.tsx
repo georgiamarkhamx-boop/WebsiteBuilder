@@ -43,8 +43,8 @@ export default function AdvancedDashboard() {
   const aiInsights = [
     {
       type: "risk",
-      title: "Emerging Threat Detected",
-      description: "New phishing campaign targeting your industry. Recommend immediate awareness training.",
+      title: "Training Opportunity Identified",
+      description: "New phishing techniques emerging in your industry. Learn how to recognize and respond to these threats.",
       priority: "high",
       action: "Start Advanced Email Security Module"
     },
@@ -91,10 +91,10 @@ export default function AdvancedDashboard() {
     }
   ];
 
-  const realTimeMetrics = {
-    activeThreats: 47,
-    blockedAttacks: 1247,
-    vulnerabilities: 12,
+  const trainingMetrics = {
+    threatsIdentified: 47,
+    attacksRecognized: 1247,
+    skillsLearned: 12,
     complianceStatus: "78% Complete",
     teamTrainingProgress: 85,
     lastAssessment: "2 days ago"
@@ -203,18 +203,18 @@ export default function AdvancedDashboard() {
             </CardContent>
           </Card>
 
-          {/* Real-Time Security Metrics */}
+          {/* Training Achievement Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-red-500" />
-                  Active Threats
+                  <Eye className="w-5 h-5 text-blue-500" />
+                  Threats Identified
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-red-600">{realTimeMetrics.activeThreats}</div>
-                <p className="text-sm text-gray-600">Detected in last 24h</p>
+                <div className="text-3xl font-bold text-blue-600">{trainingMetrics.threatsIdentified}</div>
+                <p className="text-sm text-gray-600">Successfully spotted in simulations</p>
               </CardContent>
             </Card>
 
@@ -222,12 +222,12 @@ export default function AdvancedDashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-green-500" />
-                  Blocked Attacks
+                  Attacks Recognized
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-green-600">{realTimeMetrics.blockedAttacks}</div>
-                <p className="text-sm text-gray-600">Successfully prevented</p>
+                <div className="text-3xl font-bold text-green-600">{trainingMetrics.attacksRecognized}</div>
+                <p className="text-sm text-gray-600">Correctly identified in training</p>
               </CardContent>
             </Card>
 
@@ -239,8 +239,8 @@ export default function AdvancedDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-blue-600">{realTimeMetrics.teamTrainingProgress}%</div>
-                <Progress value={realTimeMetrics.teamTrainingProgress} className="mt-2" />
+                <div className="text-3xl font-bold text-blue-600">{trainingMetrics.teamTrainingProgress}%</div>
+                <Progress value={trainingMetrics.teamTrainingProgress} className="mt-2" />
               </CardContent>
             </Card>
           </div>
@@ -466,61 +466,61 @@ export default function AdvancedDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Eye className="w-5 h-5" />
-                Real-Time Threat Monitoring
+                <Activity className="w-5 h-5" />
+                Training Progress Monitoring
               </CardTitle>
               <CardDescription>
-                Continuous monitoring with automated response capabilities
+                Track your learning journey and skill development in real-time
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-red-50 rounded-lg">
+                  <div className="p-4 bg-blue-50 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold text-red-800">Critical Alerts</h4>
-                      <Badge variant="destructive">3</Badge>
+                      <h4 className="font-semibold text-blue-800">Learning Goals</h4>
+                      <Badge variant="secondary">5</Badge>
                     </div>
-                    <ul className="text-sm text-red-700 space-y-1">
-                      <li>• Unusual login pattern detected</li>
-                      <li>• Malware signature identified</li>
-                      <li>• Suspicious file download</li>
+                    <ul className="text-sm text-blue-700 space-y-1">
+                      <li>• Complete Phishing Awareness by Jan 25</li>
+                      <li>• Achieve 85% on Incident Response quiz</li>
+                      <li>• Finish Cloud Security track this month</li>
                     </ul>
                   </div>
                   
-                  <div className="p-4 bg-yellow-50 rounded-lg">
+                  <div className="p-4 bg-green-50 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold text-yellow-800">Warnings</h4>
-                      <Badge variant="secondary">7</Badge>
+                      <h4 className="font-semibold text-green-800">Recent Achievements</h4>
+                      <Badge variant="default" className="bg-green-500">New</Badge>
                     </div>
-                    <ul className="text-sm text-yellow-700 space-y-1">
-                      <li>• Password expiration reminder</li>
-                      <li>• Software update available</li>
-                      <li>• Training module overdue</li>
+                    <ul className="text-sm text-green-700 space-y-1">
+                      <li>• Completed Data Protection module (92%)</li>
+                      <li>• Earned "Threat Hunter" badge</li>
+                      <li>• Reached Level 7 in gamification</li>
                     </ul>
                   </div>
                 </div>
                 
-                <div className="p-4 bg-green-50 rounded-lg">
+                <div className="p-4 bg-purple-50 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-green-800">System Status</h4>
-                    <Badge variant="default" className="bg-green-500">
-                      <Zap className="w-4 h-4 mr-1" />
-                      Active
+                    <h4 className="font-semibold text-purple-800">Learning Analytics</h4>
+                    <Badge variant="default" className="bg-purple-500">
+                      <TrendingUp className="w-4 h-4 mr-1" />
+                      Improving
                     </Badge>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
-                      <span className="font-medium">Firewall:</span> Active
+                      <span className="font-medium">Study Streak:</span> 15 days
                     </div>
                     <div>
-                      <span className="font-medium">Antivirus:</span> Updated
+                      <span className="font-medium">Weekly Hours:</span> 4.5h
                     </div>
                     <div>
-                      <span className="font-medium">Backup:</span> Completed
+                      <span className="font-medium">Avg Score:</span> 89%
                     </div>
                     <div>
-                      <span className="font-medium">VPN:</span> Connected
+                      <span className="font-medium">Skills Gained:</span> 12
                     </div>
                   </div>
                 </div>
