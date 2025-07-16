@@ -48,13 +48,14 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
   });
 
   const completeMutation = useMutation({
-    mutationFn: async ({ courseId, score }: { courseId: number; score: number }) => {
+    mutationFn: async ({ courseId, score, difficulty }: { courseId: number; score: number; difficulty: string }) => {
       return apiRequest("POST", "/api/assessments", {
         type: "course_completion",
         courseId,
         score,
+        difficulty,
         answers: {},
-        results: { score, completed: true }
+        results: { score, completed: true, difficulty }
       }).then(res => res.json());
     },
     onSuccess: () => {
@@ -79,7 +80,9 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
   };
 
   const handleCompleteCourse = (courseId: number, score: number) => {
-    completeMutation.mutate({ courseId, score });
+    const course = courses.find(c => c.id === courseId);
+    const courseDifficulty = course?.difficulty || 'Intermediate';
+    completeMutation.mutate({ courseId, score, difficulty: courseDifficulty });
     setSelectedCourse(null);
   };
 

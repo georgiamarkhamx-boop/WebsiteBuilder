@@ -49,8 +49,52 @@ export default function CertificationSection() {
             </div>
           </div>
           
-          <div className="flex justify-center">
-            <div className="certificate-preview w-full max-w-lg">
+          <div className="space-y-6">
+            <div className="text-center">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">Three Levels of Recognition</h3>
+              <p className="text-gray-600">Certificates get more impressive as you advance through difficulty levels</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Beginner Certificate Preview */}
+              <div className="text-center">
+                <div className="bg-white border-2 border-green-200 rounded-lg shadow-lg p-4 mb-3 transform hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">STARTER</span>
+                  </div>
+                  <h4 className="font-semibold text-green-700 text-sm">Beginner</h4>
+                  <p className="text-xs text-gray-600">Clean & Professional</p>
+                </div>
+                <div className="text-xs text-gray-500">Foundation Level</div>
+              </div>
+              
+              {/* Intermediate Certificate Preview */}
+              <div className="text-center">
+                <div className="bg-white border-2 border-blue-200 rounded-lg shadow-xl p-4 mb-3 transform hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">EXPERT</span>
+                  </div>
+                  <h4 className="font-semibold text-blue-700 text-sm">Intermediate</h4>
+                  <p className="text-xs text-gray-600">Enhanced Design</p>
+                </div>
+                <div className="text-xs text-gray-500">Professional Level</div>
+              </div>
+              
+              {/* Advanced Certificate Preview */}
+              <div className="text-center">
+                <div className="bg-black border-2 border-purple-400 rounded-lg shadow-2xl p-4 mb-3 transform hover:scale-105 transition-transform relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-lg"></div>
+                  <div className="relative w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">MASTER</span>
+                  </div>
+                  <h4 className="font-semibold text-purple-400 text-sm">Advanced</h4>
+                  <p className="text-xs text-gray-300">Premium & Elite</p>
+                </div>
+                <div className="text-xs text-gray-500">Elite Level</div>
+              </div>
+            </div>
+
+            <div className="certificate-preview w-full max-w-lg mx-auto">
               <div className="transform hover:scale-105 transition-transform duration-300">
                 <div className="w-full bg-white border-4 border-gradient-to-br from-purple-200 to-blue-200 rounded-lg shadow-2xl p-6">
                   {/* Certificate Header */}
@@ -69,7 +113,7 @@ export default function CertificationSection() {
 
                   {/* Certificate Content */}
                   <div className="text-center mb-4">
-                    <h2 className="text-xl font-bold text-gray-800 mb-2">Certificate of Completion</h2>
+                    <h2 className="text-xl font-bold text-gray-800 mb-2">Certificate of Excellence</h2>
                     <p className="text-gray-600 text-sm mb-3">This certifies that</p>
                     <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 mb-3">
                       Sarah Johnson
