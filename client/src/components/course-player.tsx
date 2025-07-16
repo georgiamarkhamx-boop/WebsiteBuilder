@@ -42,6 +42,439 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
 
   // Generate comprehensive course modules based on course content
   const getModulesForCourse = (course: Course): Module[] => {
+    // Tech for Founders Courses
+    if (course.category === "founders") {
+      return getFoundersCourseModules(course);
+    }
+    
+    // AI & Business Courses  
+    if (course.category === "ai_business") {
+      return getAIBusinessCourseModules(course);
+    }
+    
+    // Default cybersecurity courses
+    return getCybersecurityCourseModules(course);
+  };
+
+  const getFoundersCourseModules = (course: Course): Module[] => {
+    return [
+      {
+        id: 1,
+        title: "Welcome & Learning Objectives",
+        type: 'text' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="text-center">
+              <h2 class="text-2xl font-bold mb-4">Welcome to ${course.title}</h2>
+              <div class="text-4xl mb-4">${course.icon}</div>
+            </div>
+            
+            <div class="bg-orange-50 p-4 rounded-lg">
+              <h3 class="font-semibold mb-2">What You'll Learn:</h3>
+              <ul class="space-y-2 text-sm">
+                <li>✓ Essential technology stack components</li>
+                <li>✓ Cost-effective scaling strategies</li>
+                <li>✓ Security best practices for startups</li>
+                <li>✓ Team collaboration tools</li>
+                <li>✓ Performance optimization techniques</li>
+              </ul>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <h3 class="font-semibold mb-2">Why This Matters:</h3>
+              <p class="text-sm">90% of startups fail due to poor technology decisions. The right tech stack can save you $50K+ and 6 months of development time while ensuring scalability for growth.</p>
+            </div>
+          </div>
+        `,
+        duration: 8
+      },
+      {
+        id: 2,
+        title: "3D Tech Stack Builder",
+        type: 'simulation' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-lg">
+              <h3 class="font-bold mb-3">🏗️ IMMERSIVE TECH STACK BUILDER</h3>
+              <p>Step into a 3D virtual environment where you'll architect and build your technology stack from the ground up.</p>
+            </div>
+            
+            <div class="bg-gray-900 text-white p-6 rounded-lg">
+              <div class="flex items-center mb-4">
+                <div class="w-3 h-3 bg-orange-500 rounded-full mr-2 animate-pulse"></div>
+                <span class="text-orange-400 font-bold">DEVELOPMENT ENVIRONMENT ACTIVE</span>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-800 p-4 rounded border border-orange-500">
+                  <div class="text-orange-400 font-semibold mb-2">🎯 Frontend Layer</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-orange-900 p-2 rounded">
+                      <div class="text-orange-300">React.js - User Interface</div>
+                      <div class="text-orange-300">Next.js - Framework</div>
+                      <div class="text-orange-300">Tailwind - Styling</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Performance: 95/100</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-blue-500">
+                  <div class="text-blue-400 font-semibold mb-2">🗄️ Backend Layer</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-blue-900 p-2 rounded">
+                      <div class="text-blue-300">Node.js - Runtime</div>
+                      <div class="text-blue-300">Express - API</div>
+                      <div class="text-blue-300">PostgreSQL - Database</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Scalability: Ready</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-purple-500">
+                  <div class="text-purple-400 font-semibold mb-2">☁️ Cloud Layer</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-purple-900 p-2 rounded">
+                      <div class="text-purple-300">AWS/Vercel - Hosting</div>
+                      <div class="text-purple-300">CDN - Content Delivery</div>
+                      <div class="text-purple-300">Auto-scaling - Traffic</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Cost: $12/month</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-green-500">
+                  <div class="text-green-400 font-semibold mb-2">🔒 Security Layer</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-green-900 p-2 rounded">
+                      <div class="text-green-300">SSL/TLS - Encryption</div>
+                      <div class="text-green-300">OAuth - Authentication</div>
+                      <div class="text-green-300">Rate Limiting - Protection</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Security Score: A+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+              <h4 class="font-bold text-blue-800 mb-2">🎮 Interactive Challenge</h4>
+              <p class="text-blue-700 text-sm">Drag and drop technology components to build your optimal tech stack. Consider factors like cost, scalability, and team expertise.</p>
+            </div>
+          </div>
+        `,
+        duration: 35
+      },
+      {
+        id: 3,
+        title: "Tech Stack Architecture Quiz",
+        type: 'quiz' as const,
+        content: "Test your knowledge of building scalable tech stacks",
+        duration: 15,
+        questions: [
+          {
+            id: 1,
+            question: "In the 3D Tech Stack Builder, what was the estimated monthly cost for a complete scalable stack?",
+            options: [
+              "$5/month",
+              "$12/month", 
+              "$50/month",
+              "$200/month"
+            ],
+            correctAnswer: 1,
+            explanation: "✅ The Cloud Layer showed $12/month for a complete scalable stack including hosting, CDN, and auto-scaling capabilities."
+          },
+          {
+            id: 2,
+            question: "According to the Security Layer in the simulation, what achieved an A+ security score?",
+            options: [
+              "Password protection only",
+              "SSL/TLS, OAuth, and Rate Limiting combined",
+              "Expensive security software", 
+              "Manual security reviews"
+            ],
+            correctAnswer: 1,
+            explanation: "✅ The combination of SSL/TLS encryption, OAuth authentication, and rate limiting protection achieved the A+ security score."
+          },
+          {
+            id: 3,
+            question: "What was the performance score achieved by the Frontend Layer in the tech stack builder?",
+            options: [
+              "85/100",
+              "90/100",
+              "95/100", 
+              "100/100"
+            ],
+            correctAnswer: 2,
+            explanation: "✅ The Frontend Layer with React.js, Next.js, and Tailwind achieved a 95/100 performance score, showing excellent optimization."
+          }
+        ]
+      },
+      {
+        id: 4,
+        title: "Action Plan & Certification",
+        type: 'text' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="text-center">
+              <div class="text-4xl mb-4">🎉</div>
+              <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
+              <p class="text-gray-600">You've completed the ${course.title} training</p>
+            </div>
+            
+            <div class="bg-orange-50 p-6 rounded-lg">
+              <h3 class="font-bold text-orange-800 mb-4">🚀 Your Tech Stack Action Plan:</h3>
+              <div class="space-y-3">
+                <div class="flex items-start space-x-3">
+                  <div class="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">1</div>
+                  <div>
+                    <div class="font-medium">Start with MVP Stack</div>
+                    <div class="text-sm text-gray-600">Begin with React + Node.js + PostgreSQL for rapid prototyping</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">2</div>
+                  <div>
+                    <div class="font-medium">Implement Security First</div>
+                    <div class="text-sm text-gray-600">Set up SSL, OAuth, and rate limiting from day one</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">3</div>
+                  <div>
+                    <div class="font-medium">Plan for Scale</div>
+                    <div class="text-sm text-gray-600">Design your architecture to handle 10x growth from the start</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-blue-50 p-6 rounded-lg">
+              <h3 class="font-bold text-blue-800 mb-2">📜 Digital Certificate</h3>
+              <p class="text-sm text-blue-700">Your tech stack certification is being generated and will be available for download and LinkedIn sharing.</p>
+            </div>
+          </div>
+        `,
+        duration: 10
+      }
+    ];
+  };
+
+  const getAIBusinessCourseModules = (course: Course): Module[] => {
+    return [
+      {
+        id: 1,
+        title: "Welcome & Learning Objectives",
+        type: 'text' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="text-center">
+              <h2 class="text-2xl font-bold mb-4">Welcome to ${course.title}</h2>
+              <div class="text-4xl mb-4">${course.icon}</div>
+            </div>
+            
+            <div class="bg-purple-50 p-4 rounded-lg">
+              <h3 class="font-semibold mb-2">What You'll Learn:</h3>
+              <ul class="space-y-2 text-sm">
+                <li>✓ AI tools for business automation</li>
+                <li>✓ ROI measurement and optimization</li>
+                <li>✓ Practical implementation strategies</li>
+                <li>✓ Risk management and compliance</li>
+                <li>✓ Future-proofing your business</li>
+              </ul>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <h3 class="font-semibold mb-2">Why This Matters:</h3>
+              <p class="text-sm">Companies using AI see 247% average ROI increase and 40% productivity gains. Don't get left behind - learn to leverage AI for competitive advantage.</p>
+            </div>
+          </div>
+        `,
+        duration: 8
+      },
+      {
+        id: 2,
+        title: "3D AI Command Center",
+        type: 'simulation' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-lg">
+              <h3 class="font-bold mb-3">🚀 IMMERSIVE AI COMMAND CENTER</h3>
+              <p>Enter a virtual AI laboratory where you'll interact with cutting-edge tools in a 3D workspace environment.</p>
+            </div>
+            
+            <div class="bg-gray-900 text-white p-6 rounded-lg">
+              <div class="flex items-center mb-4">
+                <div class="w-3 h-3 bg-cyan-500 rounded-full mr-2 animate-pulse"></div>
+                <span class="text-cyan-400 font-bold">AI SYSTEMS ONLINE - NEURAL NETWORK ACTIVE</span>
+              </div>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-gray-800 p-4 rounded border border-blue-500">
+                  <div class="text-blue-400 font-semibold mb-2">🎯 Prompt Lab</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-blue-900 p-2 rounded">
+                      <div class="text-blue-300">ChatGPT Integration</div>
+                      <div class="text-blue-300">Custom Prompt Library</div>
+                      <div class="text-blue-300">A/B Testing Suite</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Input Quality: 94%</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-purple-500">
+                  <div class="text-purple-400 font-semibold mb-2">🤖 Automation Hub</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-purple-900 p-2 rounded">
+                      <div class="text-purple-300">Workflow Automation</div>
+                      <div class="text-purple-300">Email Processing</div>
+                      <div class="text-purple-300">Data Analysis</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ Efficiency: +340%</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded border border-green-500">
+                  <div class="text-green-400 font-semibold mb-2">📊 Analytics Hub</div>
+                  <div class="text-sm space-y-2">
+                    <div class="bg-green-900 p-2 rounded">
+                      <div class="text-green-300">Performance Metrics</div>
+                      <div class="text-green-300">ROI Tracking</div>
+                      <div class="text-green-300">Predictive Insights</div>
+                    </div>
+                    <div class="bg-green-800 p-2 rounded">
+                      <div class="text-green-300">✅ ROI Impact: +247%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-4 bg-gray-800 p-4 rounded border border-yellow-500">
+                <div class="text-yellow-400 font-semibold mb-2">🧪 Testing Chamber</div>
+                <div class="text-sm">
+                  <div class="text-yellow-300 mb-2">Running 1,247 AI optimization iterations...</div>
+                  <div class="bg-yellow-900 p-2 rounded">
+                    <div class="text-yellow-300">Success Rate: 89% | Processing Speed: 12.3x faster</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+              <h4 class="font-bold text-blue-800 mb-2">🎮 Interactive Challenge</h4>
+              <p class="text-blue-700 text-sm">Configure AI models and optimization parameters to maximize business ROI. Monitor real-time performance metrics.</p>
+            </div>
+          </div>
+        `,
+        duration: 35
+      },
+      {
+        id: 3,
+        title: "AI Business Implementation Quiz",
+        type: 'quiz' as const,
+        content: "Test your understanding of AI business applications",
+        duration: 15,
+        questions: [
+          {
+            id: 1,
+            question: "In the AI Command Center simulation, what was the most important factor for prompt optimization?",
+            options: [
+              "Using complex technical language",
+              "Providing specific context and clear instructions",
+              "Making prompts as short as possible",
+              "Using multiple AI models simultaneously"
+            ],
+            correctAnswer: 1,
+            explanation: "✅ Specificity and clear context are crucial for effective AI prompts. The simulation showed 94% input quality when prompts included detailed instructions and specific requirements."
+          },
+          {
+            id: 2,
+            question: "Based on the Analytics Hub in the 3D lab, what was the average ROI impact of properly implemented AI?",
+            options: [
+              "+150%",
+              "+200%",
+              "+247%",
+              "+300%"
+            ],
+            correctAnswer: 2,
+            explanation: "✅ The Analytics Hub showed a +247% ROI impact when AI tools are properly configured and integrated into business workflows."
+          },
+          {
+            id: 3,
+            question: "The Testing Chamber demonstrated that successful AI implementation requires:",
+            options: [
+              "Perfect results on the first try",
+              "Continuous iteration and testing",
+              "Expensive enterprise software",
+              "Technical expertise only"
+            ],
+            correctAnswer: 1,
+            explanation: "✅ The Testing Chamber showed 1,247 iterations with 89% success rate, demonstrating that continuous testing and refinement are key to AI success."
+          }
+        ]
+      },
+      {
+        id: 4,
+        title: "Action Plan & Certification",
+        type: 'text' as const,
+        content: `
+          <div class="space-y-6">
+            <div class="text-center">
+              <div class="text-4xl mb-4">🎉</div>
+              <h2 class="text-2xl font-bold mb-2">Congratulations!</h2>
+              <p class="text-gray-600">You've completed the ${course.title} training</p>
+            </div>
+            
+            <div class="bg-purple-50 p-6 rounded-lg">
+              <h3 class="font-bold text-purple-800 mb-4">🤖 Your AI Implementation Action Plan:</h3>
+              <div class="space-y-3">
+                <div class="flex items-start space-x-3">
+                  <div class="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">1</div>
+                  <div>
+                    <div class="font-medium">Start with ChatGPT Integration</div>
+                    <div class="text-sm text-gray-600">Begin automating content creation and customer service</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">2</div>
+                  <div>
+                    <div class="font-medium">Measure and Optimize</div>
+                    <div class="text-sm text-gray-600">Track ROI metrics and continuously refine your AI workflows</div>
+                  </div>
+                </div>
+                <div class="flex items-start space-x-3">
+                  <div class="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">3</div>
+                  <div>
+                    <div class="font-medium">Scale Strategically</div>
+                    <div class="text-sm text-gray-600">Expand AI integration based on proven results and business needs</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-blue-50 p-6 rounded-lg">
+              <h3 class="font-bold text-blue-800 mb-2">📜 Digital Certificate</h3>
+              <p class="text-sm text-blue-700">Your AI business certification is being generated and will be available for download and LinkedIn sharing.</p>
+            </div>
+          </div>
+        `,
+        duration: 10
+      }
+    ];
+  };
+
+  const getCybersecurityCourseModules = (course: Course): Module[] => {
     const baseModules = [
       {
         id: 1,
@@ -507,253 +940,6 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
       duration: 10
     });
 
-    // Add 3D Interactive Labs for AI & Business Courses
-    if (course.category === "ai_business") {
-      baseModules.splice(1, 0, {
-        id: 99,
-        title: "3D AI Command Center",
-        type: 'simulation' as const,
-        content: `
-          <div class="space-y-6">
-            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-lg">
-              <h3 class="font-bold mb-3">🚀 IMMERSIVE AI COMMAND CENTER</h3>
-              <p>Enter a virtual AI laboratory where you'll interact with cutting-edge tools in a 3D workspace environment.</p>
-            </div>
-            
-            <div class="bg-gray-900 text-white p-6 rounded-lg">
-              <div class="flex items-center mb-4">
-                <div class="w-3 h-3 bg-cyan-500 rounded-full mr-2 animate-pulse"></div>
-                <span class="text-cyan-400 font-bold">AI SYSTEMS ONLINE - NEURAL NETWORK ACTIVE</span>
-              </div>
-              
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-gray-800 p-4 rounded border border-blue-500">
-                  <div class="text-blue-400 font-semibold mb-2">🎯 Prompt Lab</div>
-                  <div class="text-sm space-y-2">
-                    <div class="bg-blue-900 p-2 rounded">
-                      <div class="text-blue-300">Input Quality: 94%</div>
-                      <div class="text-blue-300">Response Time: 0.3s</div>
-                    </div>
-                    <div class="text-xs text-gray-400">Optimizing prompts for maximum efficiency</div>
-                  </div>
-                </div>
-                
-                <div class="bg-gray-800 p-4 rounded border border-green-500">
-                  <div class="text-green-400 font-semibold mb-2">📊 Analytics Hub</div>
-                  <div class="text-sm space-y-2">
-                    <div class="bg-green-900 p-2 rounded">
-                      <div class="text-green-300">ROI Impact: +247%</div>
-                      <div class="text-green-300">Time Saved: 15.2h/week</div>
-                    </div>
-                    <div class="text-xs text-gray-400">Real-time business metrics</div>
-                  </div>
-                </div>
-                
-                <div class="bg-gray-800 p-4 rounded border border-purple-500">
-                  <div class="text-purple-400 font-semibold mb-2">🔬 Testing Chamber</div>
-                  <div class="text-sm space-y-2">
-                    <div class="bg-purple-900 p-2 rounded">
-                      <div class="text-purple-300">Success Rate: 89%</div>
-                      <div class="text-purple-300">Iterations: 1,247</div>
-                    </div>
-                    <div class="text-xs text-gray-400">A/B testing AI outputs</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
-              <h4 class="font-bold text-yellow-800 mb-2">🎮 Interactive Challenge</h4>
-              <p class="text-yellow-700 text-sm">Navigate the virtual workspace to configure AI tools for your specific business needs. Click and drag elements to customize your AI workflow.</p>
-            </div>
-          </div>
-        `,
-        duration: 30
-      });
-      
-      // Add AI Business Quiz
-      baseModules.push({
-        id: 97,
-        title: "AI Business Implementation Quiz",
-        type: 'quiz' as const,
-        content: "Test your understanding of AI business applications",
-        duration: 15,
-        questions: [
-          {
-            id: 1,
-            question: "In the AI Command Center simulation, what was the most important factor for prompt optimization?",
-            options: [
-              "Using complex technical language",
-              "Providing specific context and clear instructions",
-              "Making prompts as short as possible",
-              "Using multiple AI models simultaneously"
-            ],
-            correctAnswer: 1,
-            explanation: "✅ Specificity and clear context are crucial for effective AI prompts. The simulation showed 94% input quality when prompts included detailed instructions and specific requirements."
-          },
-          {
-            id: 2,
-            question: "Based on the Analytics Hub in the 3D lab, what was the average ROI impact of properly implemented AI?",
-            options: [
-              "+150%",
-              "+200%",
-              "+247%",
-              "+300%"
-            ],
-            correctAnswer: 2,
-            explanation: "✅ The Analytics Hub showed a +247% ROI impact when AI tools are properly configured and integrated into business workflows."
-          },
-          {
-            id: 3,
-            question: "The Testing Chamber demonstrated that successful AI implementation requires:",
-            options: [
-              "Perfect results on the first try",
-              "Continuous iteration and testing",
-              "Expensive enterprise software",
-              "Technical expertise only"
-            ],
-            correctAnswer: 1,
-            explanation: "✅ The Testing Chamber showed 1,247 iterations with 89% success rate, demonstrating that continuous testing and refinement are key to AI success."
-          }
-        ]
-      });
-    }
-
-    // Add 3D Interactive Labs for Tech for Founders Courses
-    if (course.category === "founders") {
-      baseModules.splice(1, 0, {
-        id: 98,
-        title: "3D Tech Stack Builder",
-        type: 'simulation' as const,
-        content: `
-          <div class="space-y-6">
-            <div class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-lg">
-              <h3 class="font-bold mb-3">🏗️ IMMERSIVE TECH STACK BUILDER</h3>
-              <p>Step into a 3D virtual environment where you'll architect and build your technology stack from the ground up.</p>
-            </div>
-            
-            <div class="bg-gray-900 text-white p-6 rounded-lg">
-              <div class="flex items-center mb-4">
-                <div class="w-3 h-3 bg-orange-500 rounded-full mr-2 animate-pulse"></div>
-                <span class="text-orange-400 font-bold">DEVELOPMENT ENVIRONMENT ACTIVE</span>
-              </div>
-              
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-gray-800 p-4 rounded border border-orange-500">
-                  <div class="text-orange-400 font-semibold mb-2">🎯 Frontend Layer</div>
-                  <div class="text-sm space-y-2">
-                    <div class="bg-orange-900 p-2 rounded">
-                      <div class="text-orange-300">React.js - User Interface</div>
-                      <div class="text-orange-300">Next.js - Framework</div>
-                      <div class="text-orange-300">Tailwind - Styling</div>
-                    </div>
-                    <div class="bg-green-800 p-2 rounded">
-                      <div class="text-green-300">✅ Performance: 95/100</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="bg-gray-800 p-4 rounded border border-blue-500">
-                  <div class="text-blue-400 font-semibold mb-2">🗄️ Backend Layer</div>
-                  <div class="text-sm space-y-2">
-                    <div class="bg-blue-900 p-2 rounded">
-                      <div class="text-blue-300">Node.js - Runtime</div>
-                      <div class="text-blue-300">Express - API</div>
-                      <div class="text-blue-300">PostgreSQL - Database</div>
-                    </div>
-                    <div class="bg-green-800 p-2 rounded">
-                      <div class="text-green-300">✅ Scalability: Ready</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="bg-gray-800 p-4 rounded border border-purple-500">
-                  <div class="text-purple-400 font-semibold mb-2">☁️ Cloud Layer</div>
-                  <div class="text-sm space-y-2">
-                    <div class="bg-purple-900 p-2 rounded">
-                      <div class="text-purple-300">AWS/Vercel - Hosting</div>
-                      <div class="text-purple-300">CDN - Content Delivery</div>
-                      <div class="text-purple-300">Auto-scaling - Traffic</div>
-                    </div>
-                    <div class="bg-green-800 p-2 rounded">
-                      <div class="text-green-300">✅ Cost: $12/month</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="bg-gray-800 p-4 rounded border border-green-500">
-                  <div class="text-green-400 font-semibold mb-2">🔒 Security Layer</div>
-                  <div class="text-sm space-y-2">
-                    <div class="bg-green-900 p-2 rounded">
-                      <div class="text-green-300">SSL/TLS - Encryption</div>
-                      <div class="text-green-300">OAuth - Authentication</div>
-                      <div class="text-green-300">Rate Limiting - Protection</div>
-                    </div>
-                    <div class="bg-green-800 p-2 rounded">
-                      <div class="text-green-300">✅ Security Score: A+</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
-              <h4 class="font-bold text-blue-800 mb-2">🎮 Interactive Challenge</h4>
-              <p class="text-blue-700 text-sm">Drag and drop technology components to build your optimal tech stack. Consider factors like cost, scalability, and team expertise.</p>
-            </div>
-          </div>
-        `,
-        duration: 35
-      });
-      
-      // Add Tech Stack Quiz
-      baseModules.push({
-        id: 96,
-        title: "Tech Stack Architecture Quiz",
-        type: 'quiz' as const,
-        content: "Test your knowledge of building scalable tech stacks",
-        duration: 15,
-        questions: [
-          {
-            id: 1,
-            question: "In the 3D Tech Stack Builder, what was the estimated monthly cost for a complete scalable stack?",
-            options: [
-              "$5/month",
-              "$12/month",
-              "$50/month",
-              "$200/month"
-            ],
-            correctAnswer: 1,
-            explanation: "✅ The Cloud Layer showed $12/month for a complete scalable stack including hosting, CDN, and auto-scaling capabilities."
-          },
-          {
-            id: 2,
-            question: "According to the Security Layer in the simulation, what achieved an A+ security score?",
-            options: [
-              "Password protection only",
-              "SSL/TLS, OAuth, and Rate Limiting combined",
-              "Expensive security software",
-              "Manual security reviews"
-            ],
-            correctAnswer: 1,
-            explanation: "✅ The combination of SSL/TLS encryption, OAuth authentication, and rate limiting protection achieved the A+ security score."
-          },
-          {
-            id: 3,
-            question: "The Frontend Layer showed 95/100 performance. What was the key to this high score?",
-            options: [
-              "Using expensive hosting",
-              "React.js + Next.js + Tailwind CSS combination",
-              "Hiring senior developers",
-              "Complex architecture"
-            ],
-            correctAnswer: 1,
-            explanation: "✅ The modern stack combination of React.js for UI, Next.js for framework, and Tailwind for styling achieved 95/100 performance."
-          }
-        ]
-      });
-    }
-
     return baseModules;
   };
 
@@ -945,51 +1131,41 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                         <div className="space-y-3">
                           {question.options.map((option, optionIndex) => {
                             const isSelected = quizAnswers[question.id] === optionIndex;
+                            const isCorrect = showQuizResults && optionIndex === question.correctAnswer;
+                            const isIncorrect = showQuizResults && isSelected && optionIndex !== question.correctAnswer;
+                            
                             return (
-                              <button
+                              <Button
                                 key={optionIndex}
-                                className={cn(
-                                  "w-full text-left p-4 rounded-lg border-2 transition-all duration-200 btn-touch",
-                                  "flex items-center justify-between min-h-[60px] text-sm sm:text-base",
-                                  isSelected 
-                                    ? "bg-blue-600 border-blue-600 text-white shadow-lg" 
-                                    : "bg-white border-gray-300 text-gray-800 hover:border-blue-400 hover:bg-blue-50"
-                                )}
-                                onClick={() => handleQuizAnswer(question.id, optionIndex)}
+                                variant={isSelected ? "default" : "outline"}
+                                className={`w-full text-left justify-start p-4 h-auto ${
+                                  isCorrect ? 'bg-green-100 border-green-500 text-green-800' : 
+                                  isIncorrect ? 'bg-red-100 border-red-500 text-red-800' : ''
+                                }`}
+                                onClick={() => !showQuizResults && handleQuizAnswer(question.id, optionIndex)}
+                                disabled={showQuizResults}
                               >
-                                <div className="flex items-center">
-                                  <span className="font-bold text-base sm:text-lg mr-3 flex-shrink-0">
-                                    {String.fromCharCode(65 + optionIndex)}.
+                                <div className="flex items-center w-full">
+                                  <span className={`px-2 py-1 rounded text-xs font-medium mr-3 ${
+                                    isCorrect ? 'bg-green-200 text-green-800' : 
+                                    isIncorrect ? 'bg-red-200 text-red-800' : 
+                                    'bg-gray-100 text-gray-800'
+                                  }`}>
+                                    {String.fromCharCode(65 + optionIndex)}
                                   </span>
-                                  <span className="flex-1 text-sm sm:text-base font-medium leading-tight">{option}</span>
+                                  <span className="flex-1">{option}</span>
+                                  {isCorrect && <CheckCircle className="w-5 h-5 ml-2 text-green-600" />}
+                                  {isIncorrect && <X className="w-5 h-5 ml-2 text-red-600" />}
                                 </div>
-                                {isSelected && (
-                                  <CheckCircle className="w-5 h-5 text-white flex-shrink-0 ml-2" />
-                                )}
-                              </button>
+                              </Button>
                             );
                           })}
                         </div>
                         
-                        {showQuizResults && quizAnswers[question.id] !== undefined && (
-                          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                            <div className="flex items-center space-x-2 mb-3">
-                              <CheckCircle className={cn(
-                                "w-5 h-5",
-                                quizAnswers[question.id] === question.correctAnswer 
-                                  ? "text-green-600" 
-                                  : "text-red-600"
-                              )} />
-                              <span className={cn(
-                                "text-base font-semibold",
-                                quizAnswers[question.id] === question.correctAnswer 
-                                  ? "text-green-600" 
-                                  : "text-red-600"
-                              )}>
-                                {quizAnswers[question.id] === question.correctAnswer ? "✅ Correct!" : "❌ Incorrect"}
-                              </span>
-                            </div>
-                            <p className="text-sm text-gray-700 leading-relaxed">{question.explanation}</p>
+                        {showQuizResults && (
+                          <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                            <div className="font-medium text-blue-800 mb-2">Explanation:</div>
+                            <div className="text-sm text-blue-700" dangerouslySetInnerHTML={{ __html: question.explanation }} />
                           </div>
                         )}
                       </CardContent>
@@ -997,194 +1173,132 @@ export default function CoursePlayer({ course, onComplete, onClose }: CoursePlay
                   );
                 })()}
                 
-                {/* Navigation Buttons */}
+                {/* Navigation */}
                 <div className="flex justify-between items-center">
-                  <Button 
+                  <Button
                     variant="outline"
-                    onClick={() => setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1))}
+                    onClick={() => {
+                      setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1));
+                      setShowQuizResults(false);
+                    }}
                     disabled={currentQuestionIndex === 0}
-                    className="btn-touch"
                   >
                     <ArrowLeft className="w-4 h-4 mr-2" />
-                    Previous
+                    Previous Question
                   </Button>
                   
                   {currentQuestionIndex < currentModuleData.questions.length - 1 ? (
-                    <Button 
-                      onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
-                      disabled={quizAnswers[currentModuleData.questions[currentQuestionIndex].id] === undefined}
-                      className="btn-touch"
+                    <Button
+                      onClick={() => {
+                        setCurrentQuestionIndex(currentQuestionIndex + 1);
+                        setShowQuizResults(false);
+                      }}
+                      disabled={!quizAnswers[currentModuleData.questions[currentQuestionIndex].id] || showQuizResults === false}
                     >
-                      Next
+                      Next Question
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   ) : (
-                    <Button 
-                      onClick={handleQuizSubmit} 
-                      className="btn-touch bg-green-600 hover:bg-green-700 text-white font-medium"
+                    <Button
+                      onClick={handleQuizSubmit}
                       disabled={Object.keys(quizAnswers).length < currentModuleData.questions.length}
+                      className="bg-green-600 hover:bg-green-700"
                     >
-                      Submit Quiz
+                      Complete Quiz
+                      <CheckCircle className="w-4 h-4 ml-2" />
                     </Button>
                   )}
                 </div>
-                
-                {showQuizResults && (
-                  <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <h3 className="font-semibold text-green-800 mb-2">Quiz Results</h3>
-                    <p className="text-green-700">
-                      You scored {Math.round(calculateFinalScore())}% on this assessment.
-                    </p>
-                    <Button 
-                      onClick={handleModuleComplete} 
-                      className="w-full mt-4 btn-touch bg-green-600 hover:bg-green-700"
-                    >
-                      Continue to Next Module
-                    </Button>
-                  </div>
-                )}
               </div>
             )}
           </div>
         );
 
       default:
-        return null;
+        return <div>Unknown module type</div>;
     }
   };
 
-  // Show certificate when course is completed
   if (showCertificate) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="mb-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Course Complete!</h1>
-          <Button variant="outline" onClick={onClose}>
-            Back to Courses
-          </Button>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <CourseCompletionCertificate 
+            course={course} 
+            score={courseScore}
+          />
+          <div className="p-6 border-t">
+            <Button onClick={onClose} className="w-full">
+              Return to Courses
+            </Button>
+          </div>
         </div>
-        <CourseCompletionCertificate 
-          course={course} 
-          score={courseScore} 
-          studentName="Sarah Johnson" 
-        />
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
-            <p className="text-gray-600">{course.description}</p>
-          </div>
-          <Button variant="outline" onClick={onClose}>
-            Close Course
-          </Button>
-        </div>
-        
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600">Course Progress</span>
-            <span className="font-medium">{Math.round(progress)}%</span>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Course Navigation */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="text-lg">Course Modules</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {modules.map((module, index) => (
-                <div
-                  key={module.id}
-                  className={cn(
-                    "flex items-center space-x-2 p-2 rounded-lg cursor-pointer transition-colors",
-                    index === currentModule ? "bg-blue-50 border border-blue-200" : "hover:bg-gray-50",
-                    completedModules.has(module.id) && "bg-green-50 border border-green-200"
-                  )}
-                  onClick={() => setCurrentModule(index)}
-                >
-                  <div className={cn(
-                    "w-6 h-6 rounded-full flex items-center justify-center text-xs",
-                    index === currentModule ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600",
-                    completedModules.has(module.id) && "bg-green-600 text-white"
-                  )}>
-                    {completedModules.has(module.id) ? (
-                      <CheckCircle className="w-4 h-4" />
-                    ) : (
-                      index + 1
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-gray-900 flex items-center">
-                      {module.title}
-                      {(module.title.includes('3D') || module.title.includes('Command Center') || module.title.includes('Tech Stack Builder')) && (
-                        <span className="ml-2 px-2 py-1 text-xs bg-purple-100 text-purple-600 rounded-full">
-                          3D Lab
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-xs text-gray-500">{module.duration} min</div>
-                  </div>
-                </div>
-              ))}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="border-b p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold">{course.title}</h2>
+              <p className="text-gray-600 mt-1">{currentModuleData.title}</p>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Main Content */}
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-xl">{currentModuleData.title}</CardTitle>
-                <CardDescription>
-                  Module {currentModule + 1} of {modules.length}
-                </CardDescription>
-              </div>
-              <Badge variant="secondary" className="capitalize">
-                {currentModuleData.type}
-              </Badge>
+            <Button variant="ghost" onClick={onClose} className="p-2">
+              <X className="w-6 h-6" />
+            </Button>
+          </div>
+          
+          {/* Progress Bar */}
+          <div className="mt-4">
+            <div className="flex justify-between text-sm text-gray-600 mb-2">
+              <span>Progress</span>
+              <span>{Math.round(progress)}% Complete</span>
             </div>
-          </CardHeader>
-          <CardContent>
-            {renderModuleContent()}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Navigation Footer */}
-      <div className="flex justify-between items-center mt-6">
-        <Button
-          variant="outline"
-          onClick={() => setCurrentModule(Math.max(0, currentModule - 1))}
-          disabled={currentModule === 0}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Previous
-        </Button>
-        
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-600">
-            {currentModule + 1} of {modules.length}
-          </span>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
         </div>
-        
-        <Button
-          onClick={() => setCurrentModule(Math.min(modules.length - 1, currentModule + 1))}
-          disabled={currentModule === modules.length - 1}
-        >
-          Next
-          <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
+
+        {/* Content */}
+        <div className="p-6">
+          {renderModuleContent()}
+        </div>
+
+        {/* Footer Navigation */}
+        <div className="border-t p-6">
+          <div className="flex justify-between items-center">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentModule(Math.max(0, currentModule - 1))}
+              disabled={currentModule === 0}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Previous
+            </Button>
+            
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-600">
+                {currentModule + 1} of {modules.length}
+              </span>
+            </div>
+            
+            <Button
+              onClick={() => setCurrentModule(Math.min(modules.length - 1, currentModule + 1))}
+              disabled={currentModule === modules.length - 1}
+            >
+              Next
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
