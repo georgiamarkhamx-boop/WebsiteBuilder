@@ -28,9 +28,11 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
   const [selectedCourse, setSelectedCourse] = useState<ExtendedCourse | null>(null);
   const queryClient = useQueryClient();
 
-  const { data: courses = [], isLoading } = useQuery<Course[]>({
+  const { data: courses = [], isLoading, error } = useQuery<Course[]>({
     queryKey: ['/api/courses'],
-    queryFn: () => apiRequest("GET", "/api/courses").then(res => res.json())
+    queryFn: () => apiRequest("GET", "/api/courses").then(res => res.json()),
+    retry: 3,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   const enrollMutation = useMutation({
@@ -92,6 +94,8 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
 
   const stats = getCourseStats();
 
+  console.log('CoursesSection - courses data:', courses.length, 'isLoading:', isLoading, 'error:', error);
+
   if (selectedCourse) {
     // Show interactive lab if requested
     if (selectedCourse.showLab) {
@@ -133,37 +137,49 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
         <div className="stats-grid grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4 mb-6 md:mb-8">
           <Card className="text-center">
             <CardContent className="pt-4 md:pt-6">
-              <div className="text-xl md:text-2xl font-bold text-blue-600">{stats.total}</div>
+              <div className="text-xl md:text-2xl font-bold text-blue-600">
+                {isLoading ? '...' : stats.total}
+              </div>
               <div className="text-xs md:text-sm text-gray-600">Total Courses</div>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-4 md:pt-6">
-              <div className="text-xl md:text-2xl font-bold text-green-600">{stats.beginner}</div>
+              <div className="text-xl md:text-2xl font-bold text-green-600">
+                {isLoading ? '...' : stats.beginner}
+              </div>
               <div className="text-xs md:text-sm text-gray-600">Beginner</div>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-4 md:pt-6">
-              <div className="text-xl md:text-2xl font-bold text-yellow-600">{stats.intermediate}</div>
+              <div className="text-xl md:text-2xl font-bold text-yellow-600">
+                {isLoading ? '...' : stats.intermediate}
+              </div>
               <div className="text-xs md:text-sm text-gray-600">Intermediate</div>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-4 md:pt-6">
-              <div className="text-xl md:text-2xl font-bold text-red-600">{stats.advanced}</div>
+              <div className="text-xl md:text-2xl font-bold text-red-600">
+                {isLoading ? '...' : stats.advanced}
+              </div>
               <div className="text-xs md:text-sm text-gray-600">Advanced</div>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-4 md:pt-6">
-              <div className="text-xl md:text-2xl font-bold text-purple-600">{stats.popular}</div>
+              <div className="text-xl md:text-2xl font-bold text-purple-600">
+                {isLoading ? '...' : stats.popular}
+              </div>
               <div className="text-xs md:text-sm text-gray-600">Popular</div>
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardContent className="pt-4 md:pt-6">
-              <div className="text-xl md:text-2xl font-bold text-pink-600">{stats.new}</div>
+              <div className="text-xl md:text-2xl font-bold text-pink-600">
+                {isLoading ? '...' : stats.new}
+              </div>
               <div className="text-xs md:text-sm text-gray-600">New</div>
             </CardContent>
           </Card>
