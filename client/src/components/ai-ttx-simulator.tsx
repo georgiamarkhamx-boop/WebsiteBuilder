@@ -127,8 +127,8 @@ export default function AITTXSimulator() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div className="space-y-6 w-full max-w-full overflow-hidden">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2">
@@ -183,12 +183,12 @@ export default function AITTXSimulator() {
       </div>
 
       <Tabs defaultValue="scenarios" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="scenarios">Scenarios</TabsTrigger>
-          <TabsTrigger value="live">Live Session</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="collaboration">Collaboration</TabsTrigger>
-          <TabsTrigger value="insights">AI Insights</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5">
+          <TabsTrigger value="scenarios" className="text-xs sm:text-sm">Scenarios</TabsTrigger>
+          <TabsTrigger value="live" className="text-xs sm:text-sm">Live</TabsTrigger>
+          <TabsTrigger value="analytics" className="text-xs sm:text-sm">Analytics</TabsTrigger>
+          <TabsTrigger value="collaboration" className="text-xs sm:text-sm hidden sm:block">Collaboration</TabsTrigger>
+          <TabsTrigger value="insights" className="text-xs sm:text-sm">AI Insights</TabsTrigger>
         </TabsList>
 
         <TabsContent value="scenarios" className="space-y-6">
@@ -199,24 +199,25 @@ export default function AITTXSimulator() {
                 Dynamically adaptive scenarios with real-time complexity adjustment
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-3 sm:px-6">
               <div className="space-y-4">
                 {scenarios.map((scenario) => (
-                  <div key={scenario.id} className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-semibold text-lg">{scenario.title}</h3>
+                  <div key={scenario.id} className="border rounded-lg p-3 sm:p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
+                      <h3 className="font-semibold text-base sm:text-lg">{scenario.title}</h3>
                       <div className="flex items-center gap-2">
                         <Badge variant={scenario.status === 'active' ? 'default' : 
-                                      scenario.status === 'completed' ? 'secondary' : 'outline'}>
+                                      scenario.status === 'completed' ? 'secondary' : 'outline'}
+                                className="text-xs">
                           {scenario.status}
                         </Badge>
-                        <Badge variant="outline">{scenario.difficulty}</Badge>
+                        <Badge variant="outline" className="text-xs">{scenario.difficulty}</Badge>
                       </div>
                     </div>
                     
                     <p className="text-gray-600 mb-3">{scenario.description}</p>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div className="flex flex-col sm:grid sm:grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4 mb-4">
                       <div className="flex items-center gap-2">
                         <Users className="w-4 h-4 text-blue-500" />
                         <span className="text-sm">{scenario.participants} participants</span>
@@ -252,21 +253,25 @@ export default function AITTXSimulator() {
                       </ul>
                     </div>
                     
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <Button 
                         onClick={() => setCurrentScenario(scenario)}
                         disabled={scenario.status === 'completed'}
+                        className="w-full sm:w-auto"
+                        size="sm"
                       >
                         {scenario.status === 'active' ? 'Join Session' : 'Start Scenario'}
                       </Button>
-                      <Button variant="outline">
+                      <Button variant="outline" className="w-full sm:w-auto" size="sm">
                         <FileText className="w-4 h-4 mr-2" />
-                        View Details
+                        <span className="hidden sm:inline">View Details</span>
+                        <span className="sm:hidden">Details</span>
                       </Button>
                       {scenario.status === 'completed' && (
-                        <Button variant="outline">
+                        <Button variant="outline" className="w-full sm:w-auto" size="sm">
                           <BarChart3 className="w-4 h-4 mr-2" />
-                          View Results
+                          <span className="hidden sm:inline">View Results</span>
+                          <span className="sm:hidden">Results</span>
                         </Button>
                       )}
                     </div>
