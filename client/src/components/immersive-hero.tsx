@@ -176,6 +176,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
   };
 
   const startSimulation = () => {
+    console.log('Starting simulation...');
     setSimulationRunning(true);
     setDetectedThreats([]);
     
@@ -189,12 +190,14 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
 
     detectionSequence.forEach(({ delay, threat }) => {
       setTimeout(() => {
+        console.log(`Detected threat: ${threat}`);
         setDetectedThreats(prev => [...prev, threat]);
       }, delay);
     });
 
     // Auto-stop simulation after 8 seconds
     setTimeout(() => {
+      console.log('Simulation complete');
       setSimulationRunning(false);
     }, 8000);
   };
@@ -280,14 +283,14 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
       </div>
 
       {/* 3D Cyber Environment */}
-      <div className="absolute inset-0 perspective-1000 hidden md:block">
+      <div className="absolute inset-0 perspective-1000 hidden md:block pointer-events-none">
         <div className={`relative w-full h-full transition-transform duration-1000 ${isActive ? 'transform-gpu' : ''}`}>
           
           {/* Security Nodes */}
           {securityNodes.map((node) => (
             <div
               key={node.id}
-              className={`absolute cursor-pointer transition-all duration-500 ${
+              className={`absolute cursor-pointer transition-all duration-500 pointer-events-auto ${
                 hoveredElement === node.id ? 'scale-125' : 'scale-100'
               }`}
               style={{
@@ -323,7 +326,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
           {threats.map((threat) => (
             <div
               key={threat.id}
-              className={`absolute cursor-pointer transition-all duration-500 ${
+              className={`absolute cursor-pointer transition-all duration-500 pointer-events-auto ${
                 threat.active ? 'animate-pulse' : 'opacity-50'
               } ${hoveredElement === threat.id ? 'scale-125' : 'scale-100'} hidden md:block`}
               style={{
@@ -417,7 +420,7 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
           </div>
 
           {/* Interactive Controls */}
-          <div className="flex flex-col gap-4 items-center justify-center mb-8 px-4 relative z-20">
+          <div className="flex flex-col gap-4 items-center justify-center mb-8 px-4 relative z-50">
             <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
               <Button 
                 onClick={startSimulation}
@@ -451,14 +454,17 @@ export default function ImmersiveHero({ onShowDemo }: HeroSectionProps) {
           </div>
 
           {/* Scenario Selection */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 px-4 relative z-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 px-4 relative z-50">
             {scenarios.map((scenario, index) => (
               <Card 
                 key={index} 
                 className={`bg-black/60 backdrop-blur-md border-white/30 hover:bg-black/70 transition-all duration-300 cursor-pointer ${
                   currentScenario === index ? 'ring-2 ring-green-400' : ''
                 }`}
-                onClick={() => setCurrentScenario(index)}
+                onClick={() => {
+                  console.log(`Selected scenario: ${scenario.name}`);
+                  setCurrentScenario(index);
+                }}
               >
                 <CardContent className="p-4 sm:p-6">
                   <h3 className="text-white font-semibold mb-2 text-sm sm:text-base">{scenario.name}</h3>
