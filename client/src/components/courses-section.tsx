@@ -13,6 +13,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { courseCategories, getCourseBadge, getTagColors, getDifficultyColor } from "@/lib/course-data";
 import CoursePlayer from "./course-player";
 import InteractiveLab from "./interactive-lab";
+import Immersive3DLab from "./immersive-3d-lab";
 
 interface CoursesSectionProps {
   onShowSignup: () => void;
@@ -20,6 +21,8 @@ interface CoursesSectionProps {
 
 interface ExtendedCourse extends Course {
   showLab?: boolean;
+  show3DLab?: boolean;
+  labType?: 'cyber_command' | 'tech_stack' | 'ai_workspace' | 'security_ops';
 }
 
 export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
@@ -97,6 +100,22 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
   console.log('CoursesSection - courses data:', courses.length, 'isLoading:', isLoading, 'error:', error);
 
   if (selectedCourse) {
+    // Show 3D immersive lab if requested
+    if (selectedCourse.show3DLab) {
+      return (
+        <Immersive3DLab
+          courseId={selectedCourse.id}
+          courseTitle={selectedCourse.title}
+          labType={selectedCourse.labType || 'cyber_command'}
+          onComplete={(score) => {
+            console.log(`3D Lab completed with score: ${score}`);
+            handleCompleteCourse(selectedCourse.id, score);
+          }}
+          onClose={() => setSelectedCourse(null)}
+        />
+      );
+    }
+    
     // Show interactive lab if requested
     if (selectedCourse.showLab) {
       return (
@@ -336,7 +355,19 @@ export default function CoursesSection({ onShowSignup }: CoursesSectionProps) {
                                 Try Sample
                               </Button>
                               <Button 
-                                onClick={() => setSelectedCourse({ ...course, showLab: true })}
+                                onClick={() => {
+                                  let labType: 'cyber_command' | 'tech_stack' | 'ai_workspace' | 'security_ops' = 'cyber_command';
+                                  
+                                  if (course.category.includes('AI & Business')) {
+                                    labType = 'ai_workspace';
+                                  } else if (course.category.includes('Tech for Founders')) {
+                                    labType = 'tech_stack';
+                                  } else if (course.title.toLowerCase().includes('security')) {
+                                    labType = 'security_ops';
+                                  }
+                                  
+                                  setSelectedCourse({ ...course, show3DLab: true, labType });
+                                }}
                                 variant="outline"
                                 className="px-4 py-2 border-purple-500 text-purple-600 hover:bg-purple-50 text-sm sm:text-base sm:w-auto w-full"
                                 disabled={enrollMutation.isPending}
