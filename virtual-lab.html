@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Virtual Lab | Your Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/PointerLockControls.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+        }
+        #scene-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        #instructions {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            text-align: center;
+            z-index: 10;
+            cursor: pointer;
+        }
+        #instructions.hidden {
+            display: none;
+        }
+        #crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin-top: -10px;
+            margin-left: -10px;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+        #info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            max-width: 300px;
+            display: none;
+            z-index: 5;
+        }
+        #info-panel h3 {
+            margin-top: 0;
+            color: #4ade80;
+        }
+        #info-panel p {
+            margin-bottom: 0;
+        }
+        #close-info {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 15;
+            font-weight: bold;
+            display: none;
+        }
+        #back-button:hover {
+            background-color: rgba(50, 50, 50, 0.9);
+        }
+        #instructions button {
+            background-color: #4ade80;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            margin-top: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        #instructions button:hover {
+            background-color: #22c55e;
+        }
+    </style>
+</head>
+<body>
+    <div id="scene-container"></div>
+    <div id="instructions">
+        <h1>Virtual Lab Explorer</h1>
+        <p>Explore our interactive 3D laboratory environment</p>
+        <button id="start-button">Enter Lab</button>
+        <p><strong>Controls:</strong> W, A, S, D to move, Mouse to look around</p>
+        <p>Click on objects to interact with them</p>
+    </div>
+    <button id="back-button">← Back to Website</button>
+    <div id="crosshair">+</div>
+    <div id="info-panel">
+        <span id="close-info">×</span>
+        <h3 id="info-title">Object Title</h3>
+        <p id="info-description">Description of the object will appear here.</p>
+    </div>
+
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB); // Sky blue background
+        
+        // Camera setup
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.y = 1.6; // Average eye height
+        
+        // Renderer setup
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.getElementById('scene-container').appendChild(renderer.domElement);
+        
+        // Controls setup
+        const controls = new THREE.PointerLockControls(camera, document.body);
+        
+        // Instructions panel event listener
+        const instructions = document.getElementById('instructions');
+        const startButton = document.getElementById('start-button');
+        const backButton = document.getElementById('back-button');
+        
+        startButton.addEventListener('click', function() {
+            controls.lock();
+        });
+        
+        controls.addEventListener('lock', function() {
+            instructions.classList.add('hidden');
+            document.getElementById('crosshair').style.display = 'block';
+            backButton.style.display = 'block';
+        });
+        
+        controls.addEventListener('unlock', function() {
+            instructions.classList.remove('hidden');
+            document.getElementById('crosshair').style.display = 'none';
+            backButton.style.display = 'none';
+            hideInfoPanel();
+        });
+        
+        backButton.addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+        
+        // Movement setup
+        let moveForward = false;
+        let moveBackward = false;
+        let moveLeft = false;
+        let moveRight = false;
+        
+        const onKeyDown = function(event) {
+            switch (event.code) {
+                case 'KeyW':
+                case 'ArrowUp':
+                    moveForward = true;
+                    break;
+                case 'KeyA':
+                case 'ArrowLeft':
+                    moveLeft = true;
+                    break;
+                case 'KeyS':
+                case 'ArrowDown':
+                    moveBackward = true;
+                    break;
+                case 'KeyD':
+                case 'ArrowRight':
+                    moveRight = true;
+                    break;
+            }
+        };
+        
+        const onKeyUp = function(event) {
+            switch (event.code) {
+                case 'KeyW':
+                case 'ArrowUp':
+                    moveForward = false;
+                    break;
+                case 'KeyA':
+                case 'ArrowLeft':
+                    moveLeft = false;
+                    break;
+                case 'KeyS':
+                case 'ArrowDown':
+                    moveBackward = false;
+                    break;
+                case 'KeyD':
+                case 'ArrowRight':
+                    moveRight = false;
+                    break;
+            }
+        };
+        
+        document.addEventListener('keydown', onKeyDown);
+        document.addEventListener('keyup', onKeyUp);
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 10, 7);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 1024;
+        directionalLight.shadow.mapSize.height = 1024;
+        scene.add(directionalLight);
+        
+        // Floor
+        const floorGeometry = new THREE.PlaneGeometry(20, 20);
+        const floorMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xeeeeee,
+            roughness: 0.8
+        });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+        
+        // Walls
+        function createWall(width, height, depth, x, y, z, rotationY = 0) {
+            const wallGeometry = new THREE.BoxGeometry(width, height, depth);
+            const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 });
+            const wall = new THREE.Mesh(wallGeometry, wallMaterial);
+            wall.position.set(x, y, z);
+            wall.rotation.y = rotationY;
+            wall.castShadow = true;
+            wall.receiveShadow = true;
+            scene.add(wall);
+            return wall;
+        }
+        
+        // Create room walls
+        const wallHeight = 4;
+        const roomSize = 10;
+        const wallThickness = 0.2;
+        
+        // Back wall
+        createWall(roomSize, wallHeight, wallThickness, 0, wallHeight/2, -roomSize/2);
+        
+        // Front wall with door
+        createWall(roomSize/3, wallHeight, wallThickness, -roomSize/3, wallHeight/2, roomSize/2);
+        createWall(roomSize/3, wallHeight, wallThickness, roomSize/3, wallHeight/2, roomSize/2);
+        createWall(roomSize/3, wallHeight/2, wallThickness, 0, wallHeight*0.75, roomSize/2);
+        
+        // Left wall
+        createWall(wallThickness, wallHeight, roomSize, -roomSize/2, wallHeight/2, 0, Math.PI/2);
+        
+        // Right wall
+        createWall(wallThickness, wallHeight, roomSize, roomSize/2, wallHeight/2, 0, Math.PI/2);
+        
+        // Interactive objects
+        const interactiveObjects = [];
+        
+        function createInteractiveObject(geometry, material, position, name, description) {
+            const object = new THREE.Mesh(geometry, material);
+            object.position.copy(position);
+            object.castShadow = true;
+            object.receiveShadow = true;
+            object.userData = { name: name, description: description };
+            scene.add(object);
+            interactiveObjects.push(object);
+            return object;
+        }
+        
+        // CCTV Camera
+        const cctvBase = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+        const cctvMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
+        const cctvPosition = new THREE.Vector3(-4, 3, -4.8);
+        const cctv = createInteractiveObject(
+            cctvBase, 
+            cctvMaterial, 
+            cctvPosition,
+            "CCTV Camera",
+            "This surveillance camera monitors the lab 24/7. Modern CCTV systems can use AI to detect unusual activities and alert security personnel."
+        );
+        
+        // Add camera lens
+        const lensGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.15, 16);
+        const lensMaterial = new THREE.MeshStandardMaterial({ color: 0x111111 });
+        const lens = new THREE.Mesh(lensGeometry, lensMaterial);
+        lens.rotation.x = Math.PI / 2;
+        lens.position.z = 0.15;
+        cctv.add(lens);
+        
+        // Microscope
+        const microscopeBaseGeometry = new THREE.CylinderGeometry(0.3, 0.4, 0.1, 16);
+        const microscopeMaterial = new THREE.MeshStandardMaterial({ color: 0x444444 });
+        const microscopePosition = new THREE.Vector3(3, 1, -3);
+        const microscope = createInteractiveObject(
+            microscopeBaseGeometry, 
+            microscopeMaterial, 
+            microscopePosition,
+            "Digital Microscope",
+            "This advanced digital microscope can magnify specimens up to 1000x and capture high-resolution images for analysis."
+        );
+        
+        // Add microscope body
+        const bodyGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 16);
+        const body = new THREE.Mesh(bodyGeometry, microscopeMaterial);
+        body.position.y = 0.45;
+        microscope.add(body);
+        
+        // Add microscope head
+        const headGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.5);
+        const head = new THREE.Mesh(headGeometry, microscopeMaterial);
+        head.position.y = 0.85;
+        head.position.z = 0.2;
+        microscope.add(head);
+        
+        // Computer
+        const computerBaseGeometry = new THREE.BoxGeometry(1.2, 0.05, 0.8);
+        const computerMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
+        const computerPosition = new THREE.Vector3(0, 1, -4);
+        const computer = createInteractiveObject(
+            computerBaseGeometry, 
+            computerMaterial, 
+            computerPosition,
+            "Lab Computer",
+            "This workstation runs specialized software for data analysis and experiment control. It's connected to most instruments in the lab for automated data collection."
+        );
+        
+        // Add computer screen
+        const screenGeometry = new THREE.BoxGeometry(1, 0.6, 0.05);
+        const screenMaterial = new THREE.MeshStandardMaterial({ color: 0x222222 });
+        const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+        screen.position.y = 0.35;
+        screen.position.z = -0.3;
+        computer.add(screen);
+        
+        // Add keyboard
+        const keyboardGeometry = new THREE.BoxGeometry(0.6, 0.03, 0.2);
+        const keyboardMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
+        const keyboard = new THREE.Mesh(keyboardGeometry, keyboardMaterial);
+        keyboard.position.y = 0.04;
+        keyboard.position.z = 0.2;
+        computer.add(keyboard);
+        
+        // Lab table
+        const tableGeometry = new THREE.BoxGeometry(8, 0.1, 3);
+        const tableMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+        const table = new THREE.Mesh(tableGeometry, tableMaterial);
+        table.position.set(0, 0.9, -3.5);
+        table.castShadow = true;
+        table.receiveShadow = true;
+        scene.add(table);
+        
+        // Table legs
+        const legGeometry = new THREE.BoxGeometry(0.1, 0.9, 0.1);
+        const legMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+        
+        const positions = [
+            [-3.9, 0.45, -2],
+            [-3.9, 0.45, -5],
+            [3.9, 0.45, -2],
+            [3.9, 0.45, -5]
+        ];
+        
+        positions.forEach(pos => {
+            const leg = new THREE.Mesh(legGeometry, legMaterial);
+            leg.position.set(...pos);
+            leg.castShadow = true;
+            leg.receiveShadow = true;
+            scene.add(leg);
+        });
+        
+        // Chemical cabinet
+        const cabinetGeometry = new THREE.BoxGeometry(2, 3, 1);
+        const cabinetMaterial = new THREE.MeshStandardMaterial({ color: 0x607D8B });
+        const cabinetPosition = new THREE.Vector3(4, 1.5, 4);
+        const cabinet = createInteractiveObject(
+            cabinetGeometry, 
+            cabinetMaterial, 
+            cabinetPosition,
+            "Chemical Storage Cabinet",
+            "This specialized cabinet safely stores various chemicals used in experiments. It has built-in ventilation and fire-resistant properties."
+        );
+        
+        // Add cabinet doors
+        const doorGeometry = new THREE.BoxGeometry(0.95, 2.8, 0.05);
+        const doorMaterial = new THREE.MeshStandardMaterial({ color: 0x546E7A });
+        
+        const leftDoor = new THREE.Mesh(doorGeometry, doorMaterial);
+        leftDoor.position.z = 0.5;
+        leftDoor.position.x = -0.475;
+        cabinet.add(leftDoor);
+        
+        const rightDoor = new THREE.Mesh(doorGeometry, doorMaterial);
+        rightDoor.position.z = 0.5;
+        rightDoor.position.x = 0.475;
+        cabinet.add(rightDoor);
+        
+        // Add door handles
+        const handleGeometry = new THREE.CylinderGeometry(0.02, 0.02, 0.2, 8);
+        const handleMaterial = new THREE.MeshStandardMaterial({ color: 0xC0C0C0 });
+        
+        const leftHandle = new THREE.Mesh(handleGeometry, handleMaterial);
+        leftHandle.rotation.x = Math.PI / 2;
+        leftHandle.position.z = 0.55;
+        leftHandle.position.x = -0.2;
+        leftDoor.add(leftHandle);
+        
+        const rightHandle = new THREE.Mesh(handleGeometry, handleMaterial);
+        rightHandle.rotation.x = Math.PI / 2;
+        rightHandle.position.z = 0.55;
+        rightHandle.position.x = 0.2;
+        rightDoor.add(rightHandle);
+        
+        // Raycaster for object interaction
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        
+        function onClick() {
+            if (!controls.isLocked) return;
+            
+            raycaster.setFromCamera(new THREE.Vector2(), camera);
+            const intersects = raycaster.intersectObjects(interactiveObjects);
+            
+            if (intersects.length > 0) {
+                const object = intersects[0].object;
+                showInfoPanel(object.userData.name, object.userData.description);
+            }
+        }
+        
+        document.addEventListener('click', onClick);
+        
+        // Info panel functions
+        function showInfoPanel(title, description) {
+            const panel = document.getElementById('info-panel');
+            document.getElementById('info-title').textContent = title;
+            document.getElementById('info-description').textContent = description;
+            panel.style.display = 'block';
+        }
+        
+        function hideInfoPanel() {
+            document.getElementById('info-panel').style.display = 'none';
+        }
+        
+        document.getElementById('close-info').addEventListener('click', hideInfoPanel);
+        
+        // Collision detection
+        const collisionObjects = [
+            table, cabinet, 
+            ...positions.map(pos => {
+                const collider = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.1, 0.9, 0.1),
+                    new THREE.MeshBasicMaterial({ visible: false })
+                );
+                collider.position.set(...pos);
+                scene.add(collider);
+                return collider;
+            })
+        ];
+        
+        function checkCollision(position) {
+            const playerRadius = 0.5;
+            for (const obj of collisionObjects) {
+                const box = new THREE.Box3().setFromObject(obj);
+                const sphere = new THREE.Sphere(position, playerRadius);
+                if (box.intersectsSphere(sphere)) {
+                    return true;
+                }
+            }
+            // Room boundaries
+            if (
+                Math.abs(position.x) > roomSize/2 - playerRadius || 
+                position.z < -roomSize/2 + playerRadius || 
+                position.z > roomSize/2 - playerRadius
+            ) {
+                return true;
+            }
+            return false;
+        }
+        
+        // Animation loop
+        const velocity = new THREE.Vector3();
+        const direction = new THREE.Vector3();
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (controls.isLocked) {
+                const delta = clock.getDelta();
+                
+                velocity.x = 0;
+                velocity.z = 0;
+                
+                direction.z = Number(moveForward) - Number(moveBackward);
+                direction.x = Number(moveRight) - Number(moveLeft);
+                direction.normalize();
+                
+                const speed = 3.0;
+                
+                if (moveForward || moveBackward) velocity.z -= direction.z * speed * delta;
+                if (moveLeft || moveRight) velocity.x -= direction.x * speed * delta;
+                
+                // Test new position before moving
+                const newPosition = camera.position.clone();
+                newPosition.x += velocity.x;
+                newPosition.z += velocity.z;
+                
+                if (!checkCollision(newPosition)) {
+                    controls.moveRight(-velocity.x);
+                    controls.moveForward(-velocity.z);
+                }
+            }
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Handle window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        window.addEventListener('resize', onWindowResize);
+        
+        // Start animation loop
+        animate();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9609c1b4e040ccd7',t:'MTc1Mjc1NTQ5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+
+<div class="button-container">
+  <a href="virtual-lab.html" class="button">
+    <span class="button-text">Explore 3D Virtual Lab</span>
+    <span class="button-icon">🔬</span>
+  </a>
+</div>
